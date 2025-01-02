@@ -152,7 +152,11 @@
                         <div class="col-md-6 mb-3">
                             <label for="edit-name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="edit-name" name="name" placeholder="Enter name" required>
-                            <div class="invalid-feedback">Please enter a valid name.</div>
+                            @error('name')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
                         </div>
                         <!-- Email Field -->
                         <div class="col-md-6 mb-3">

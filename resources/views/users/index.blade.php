@@ -7,13 +7,13 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1 class=""> Users</h1>
+                        <h1 class="">{{trans('users')}}</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         @parent
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active "> Users page </li>
+                            <li class="breadcrumb-item"><a href="#">{{trans('Home')}}</a></li>
+                            <li class="breadcrumb-item active "> {{trans('users table')}} </li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -26,13 +26,13 @@
                 <!-- Card for the table -->
                 <div class="card p-4">
                     <div class="card-header">
-                        <h3 class="card-title">Users Table</h3>
+                        <h3 class="card-title">{{__('users table')}}</h3>
                         <div class="card-tools">
-                            <a class="btn btn-danger btn-sm"  href="{{ route('users.trashed') }}">
-                                <i class="fas fa-trash"></i> Trashed Users
+                            <a class="btn btn-secondary btn-sm"  href="{{ route('users.trashed') }}">
+                                <i class="fas fa-trash"></i> @lang('Trashed Users')
                             </a>
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createUserModal">
-                                <i class="fas fa-user-plus"></i> Add User
+                                <i class="fas fa-user-plus"></i> @lang('add user')
                             </button>
 
 
@@ -45,14 +45,14 @@
                         <table id="user-table" class="table table-bordered table-hover w-100">
                             <thead>
                             <tr>
-                                <th>id</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Username</th>
-                                <th>Phone</th>
-                                <th>Roles</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
+                                <th><i class="fas fa-envelope"></i> {{ trans('email') }}</th>
+                                <th><i class="fas fa-at"></i> {{ trans('username') }}</th>
+                                <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
+                                <th><i class="fas fa-user-tag"></i> {{ trans('roles') }}</th>
+                                <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>
+                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
                         </table>
@@ -71,19 +71,6 @@
         @push('cssModal')
 
             <style>
-                /*.modal-header.bg-primary {*/
-                /*    border-bottom: 2px solid #004085;*/
-                /*}*/
-                /*.modal-footer {*/
-                /*    border-top: 1px solid #e9ecef;*/
-                /*}*/
-
-                /*.table th,*/
-                /*.table td {*/
-                /*    vertical-align: middle; !* توسيط النص عموديًا *!*/
-                /*    text-align: center; !* توسيط النص أفقيًا *!*/
-                /*    white-space: nowrap; !* منع تكسير النصوص *!*/
-                /*}*/
                 .table th {
                     background-color: #f8f9fa; /* لون خلفية الأعمدة */
                     font-weight: bold; /* نص عريض */
@@ -170,8 +157,33 @@
                         gap: 0.25rem; /* Reduce gap on small screens */
                     }
                 }
-
-
+                <style>
+                 .table th {
+                     background-color: #f8f9fa;
+                     font-weight: bold;
+                     text-align: center;
+                 }
+                .table tbody tr:hover {
+                    background-color: #f1f1f1;
+                }
+                .action-buttons {
+                    display: flex;
+                    gap: 0.5rem;
+                    justify-content: center;
+                }
+                .action-buttons .btn {
+                    white-space: nowrap;
+                }
+                @media (max-width: 768px) {
+                    .action-buttons .btn {
+                        font-size: 0.8rem;
+                        padding: 0.25rem 0.5rem;
+                    }
+                    .action-buttons {
+                        gap: 0.25rem;
+                    }
+                }
+            </style>
             </style>
 
         @endpush
@@ -182,12 +194,49 @@
             <script>
 
                 $(document).ready(function () {
+                    function adjustContentWrapper() {
+                        // عرض نافذة المتصفح
+                        var windowWidth = $(window).width();
+                        // عرض الشريط الجانبي (0 إذا كان مطويًا)
+                        var sidebarWidth = $('body').hasClass('sidebar-collapse') ? 0 : 250;
+                        // العرض الجديد للمحتوى
+                        var newWidth = windowWidth - sidebarWidth;
 
+                        // تحديث العرض
+                        $('.content-wrapper').css({
+                            width: newWidth + 'px',
+                            marginLeft: sidebarWidth + 'px', // تعديل الهامش الأيسر إذا كان هناك تأثير
+                        });
+                    }
 
+                    // ضبط العرض عند تحميل الصفحة
+                    adjustContentWrapper();
+
+                    // تحديث العرض عند تغيير حجم النافذة
+                    $(window).resize(function () {
+                        adjustContentWrapper();
+                    });
+
+                    // تحديث العرض عند الضغط على زر الطي/التوسيع
+                    $('.nav-item').on('click', function () {
+                        var windowWidth = $(window).width();
+                        // عرض الشريط الجانبي (0 إذا كان مطويًا)
+                        var sidebarWidth = $('body').hasClass('sidebar-collapse') ? 0 : 250;
+                        // العرض الجديد للمحتوى
+                        var newWidth = windowWidth - 90;
+                        $('.content-wrapper').css({
+                            width: newWidth + 'px',
+                            marginLeft: sidebarWidth + 'px', // تعديل الهامش الأيسر إذا كان هناك تأثير
+                        });
+                    });
+                });
+
+                $(document).ready(function () {
+                    // إعداد الجدول باستخدام DataTables
                     let table = $('#user-table').DataTable({
-                        processing: true, // Show loading indicator
-                        serverSide: true, // Enable server-side processing
-                        ajax: "{{ route('users.index') }}", // Dynamic data route
+                        processing: true,
+                        serverSide: true,
+                        ajax: "{{ route('users.index') }}",
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
@@ -198,49 +247,35 @@
                             { data: 'status', name: 'status' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
-                        dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
-                            '<"row"<"col-md-12"t>>' + // Table
-                            '<"row"<"col-md-6"i><"col-md-6"p>>', // Pagination and info
+                        dom: '<"row p-3"<"col-md-6"l><"col-md-6 text-end"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
                         buttons: [
                             {
                                 extend: 'pdfHtml5',
-                                text: 'Export to PDF',
+                                text: 'تصدير PDF',
                                 className: 'btn btn-danger btn-sm',
-                                orientation: 'portrait',
-                                pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3] // Exported columns
-                                },
-                                customize: function (doc) {
-                                    doc.content.splice(0, 0, {
-                                        text: 'User Report',
-                                        style: 'header',
-                                        alignment: 'center',
-                                        fontSize: 18,
-                                        margin: [0, 0, 0, 20]
-                                    });
+                                    columns: [0, 1, 2, 3]
                                 }
                             },
                             {
                                 extend: 'excelHtml5',
-                                text: 'Export to Excel',
+                                text: 'تصدير Excel',
                                 className: 'btn btn-success btn-sm',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3] // Exported columns
+                                    columns: [0, 1, 2, 3]
                                 }
                             }
                         ],
-                        lengthMenu: [10, 25, 50, 100], // Rows per page options
                         language: {
-                            lengthMenu: "Show _MENU_ entries",
-                            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                            lengthMenu: "عرض _MENU_ سجلات",
+                            info: "عرض _START_ إلى _END_ من _TOTAL_ سجلات",
                             search: "",
-                            searchPlaceholder: "Search...",
+                            searchPlaceholder: "بحث...",
                             paginate: {
-                                first: "First",
-                                last: "Last",
-                                next: "Next",
-                                previous: "Previous"
+                                first: "الأولى",
+                                last: "الأخيرة",
+                                next: "التالي",
+                                previous: "السابق"
                             }
                         }
                     });
@@ -272,9 +307,7 @@
 
 
                     $(document).on('click', '.toggle-status', function () {
-                        let button = $(this);
-                        let userId = button.data('id');
-
+                        let userId = $(this).data('id');
                         $.ajax({
                             url: "{{ route('users.toggleStatus') }}",
                             type: 'POST',
@@ -283,120 +316,13 @@
                                 id: userId
                             },
                             success: function (response) {
-                                if (response.success) {
-                                    button
-                                        .toggleClass('btn-success btn-danger')
-                                        .text(response.new_status === 'active' ? 'Active' : 'Inactive');
-                                } else {
-                                    Swal.fire('Error', 'Failed to update status.', 'error');
-                                }
+                                Swal.fire('{{ trans('Success') }}', '{{ trans('User status updated successfully.') }}', 'success');
+                                table.ajax.reload();
                             },
                             error: function () {
-                                Swal.fire('Error', 'An error occurred. Please try again.', 'error');
+                                Swal.fire('خطأ', 'حدث خطأ أثناء تحديث الحالة', 'error');
                             }
                         });
-                    });
-
-
-
-                    {{--document.getElementById('editUserForm').addEventListener('submit', function (e) {--}}
-                    {{--    e.preventDefault();--}}
-                    {{--    var form = this;--}}
-                    {{--    const submitButton = form.querySelector('.submit-editing-form');--}}
-                    {{--    const formData = new FormData(form);--}}
-
-                    {{--    for (let [key, value] of formData.entries()) {--}}
-                    {{--        console.log(`${key}: ${value}`); // تحقق من القيم المرسلة--}}
-                    {{--    }--}}
-
-                    {{--    var usersId = formData.get('id');--}}
-                    {{--    const updateUserRoute = "{{ route('users.update', ':id') }}";--}}
-                    {{--    const finalRoute = updateUserRoute.replace(':id', usersId);--}}
-
-                    {{--    disableButton(submitButton, true);--}}
-
-                    {{--    form.querySelectorAll('.is-invalid').forEach(input => {--}}
-                    {{--        input.classList.remove('is-invalid');--}}
-                    {{--        const errorFeedback = input.nextElementSibling;--}}
-                    {{--        if (errorFeedback && errorFeedback.classList.contains('invalid-feedback')) {--}}
-                    {{--            errorFeedback.remove();--}}
-                    {{--        }--}}
-                    {{--    });--}}
-
-                    {{--    fetch(finalRoute, {--}}
-                    {{--        method: 'PUT',--}}
-                    {{--        body: formData,--}}
-                    {{--        headers: {--}}
-                    {{--            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),--}}
-                    {{--            'Accept': 'application/json'--}}
-                    {{--        },--}}
-                    {{--    })--}}
-                    {{--        .then(response => {--}}
-                    {{--            console.log('Response Status:', response.status); // تحقق من حالة الاستجابة--}}
-                    {{--            if (!response.ok) {--}}
-                    {{--                // إذا كانت الاستجابة غير ناجحة--}}
-                    {{--                throw response;--}}
-                    {{--            }--}}
-                    {{--            return response.json();--}}
-                    {{--        })--}}
-                    {{--        .then(data => {--}}
-                    {{--            console.log('Server Response:', data);--}}
-                    {{--            if (data.success) {--}}
-                    {{--                disableButton(submitButton, true);--}}
-                    {{--                $('#editUserModal').modal('hide');--}}
-                    {{--                Swal.fire('Success', 'User updated successfully.', 'success');--}}
-                    {{--                table.ajax.reload(); // Reload DataTable--}}
-                    {{--            } else {--}}
-                    {{--                handleValidationErrors(form, data.errors);--}}
-                    {{--            }--}}
-                    {{--        })--}}
-                    {{--        .catch(async error => {--}}
-                    {{--            if (error.json) {--}}
-                    {{--                const errorData = await error.json();--}}
-                    {{--                console.error('Validation Errors:', errorData.errors);--}}
-                    {{--                Swal.fire('Validation Error', JSON.stringify(errorData.errors), 'error');--}}
-                    {{--            } else {--}}
-                    {{--                console.error('Error:', error);--}}
-                    {{--                Swal.fire('Error', 'An unexpected error occurred.', 'error');--}}
-                    {{--            }--}}
-                    {{--        })--}}
-                    {{--        .finally(() => disableButton(submitButton, false));--}}
-                    {{--});--}}
-
-
-                    document.getElementById('editUserForm').addEventListener('submit', function (e) {
-                        e.preventDefault();
-                        var form = this;
-                        const formData = new FormData(form);
-
-                        // عرض البيانات المرسلة في الكونسول
-                        for (let [key, value] of formData.entries()) {
-                            console.log(`${key}: ${value}`);
-                        }
-
-                        const updateUserRoute = "{{ route('users.update', ':id') }}";
-                        const finalRoute = updateUserRoute.replace(':id', formData.get('id'));
-
-                        console.log('Sending to:', finalRoute);
-
-                        fetch(finalRoute, {
-                            method: 'PUT',
-                            body: formData,
-                            headers: {
-                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                                'Accept': 'application/json',
-                            },
-                        })
-                            .then((response) => {
-                                console.log('Response Status:', response.status);
-                                return response.json();
-                            })
-                            .then((data) => {
-                                console.log('Server Response:', data);
-                            })
-                            .catch((error) => {
-                                console.error('Fetch Error:', error);
-                            });
                     });
 
                     //edit-user modal
@@ -422,6 +348,72 @@
                             bootstrapModal.show();
                         }
                     })
+
+                    document.getElementById('editUserForm').addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        var form = this;
+                        const formData = new FormData(form);
+
+                        // تحويل FormData إلى JSON
+                        const data = {};
+                        formData.forEach((value, key) => {
+                            data[key] = value;
+                        });
+
+                        // استبدال :id في الرابط
+                        const updateUserRoute = "{{ route('users.update', ':id') }}";
+                        const finalRoute = updateUserRoute.replace(':id', data.id);
+
+
+                        fetch(finalRoute, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json', // نوع البيانات
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'), // CSRF Token
+                            },
+                            body: JSON.stringify(data), // تحويل البيانات إلى JSON
+                        })
+                            .then((response) => {
+                                // تحقق من حالة الاستجابة
+                                if (!response.ok) {
+                                    return response.json().then((errorData) => {
+                                        throw errorData; // إرسال الأخطاء إلى الكتلة catch
+                                    });
+                                }
+                                return response.json(); // تحليل JSON إذا كانت الاستجابة ناجحة
+                            })
+                            .then((data) => {
+                                if (data.success) {
+                                    // تنفيذ عند النجاح
+                                    alert('success');
+                                    $('#editUserModal').modal('hide').removeClass('show').addClass('fade');
+
+                                    $('body').removeClass('modal-open'); // إزالة خاصية منع التمرير
+                                    $('body').css('padding-right', ''); // إعادة ضبط الحشو إذا كان مضافًا
+                                    $('.modal-backdrop').remove(); // إزالة الخلفية الداكنة
+                                    Swal.fire('Success', 'User created successfully.', 'success');
+                                    table.ajax.reload(); // Reload DataTable
+                                } else {
+                                    // تنفيذ عند الفشل
+                                    alert('faild');
+                                    handleValidationErrors(form, data.errors);
+                                }
+
+                            })
+                            .catch((error) => {
+                                if (error.errors) {
+                                    // التعامل مع أخطاء التحقق
+                                    handleValidationErrors(form, error.errors);
+                                } else {
+                                    // عرض رسالة خطأ عامة
+                                    Swal.fire('Error', 'An unexpected error occurred. Please try again.', 'error');
+                                }
+                            });
+
+
+                    });
+
+
                     // SweetAlert for success messages
                     @if(session('success'))
                     Swal.fire({
@@ -437,7 +429,6 @@
                     $(document).on('submit', 'form.delete', function (e) {
                         e.preventDefault();
                         let form = this;
-
                         Swal.fire({
                             title: 'Are you sure?',
                             text: "This action cannot be undone!",
@@ -537,6 +528,10 @@
                         button.innerHTML = 'Submit';
                     }
                 }
+
+
+
+
 
             </script>
 

@@ -5,7 +5,7 @@
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
-            <a href="index3.html" class="nav-link">Home</a>
+            <a href="index3.html" class="nav-link">{{trans('app.Home')}}</a>
         </li>
         <li class="nav-item d-none d-sm-inline-block">
             <a href="#" class="nav-link">Contact</a>
@@ -101,5 +101,43 @@
                 </form>
             </div>
         </li>
+
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link" data-toggle="dropdown" href="#" role="button">
+                <i class="fas fa-globe mr-2"></i> {{ LaravelLocalization::getCurrentLocaleNative() }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                @foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+                    <a href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}"
+                       class="dropdown-item {{ LaravelLocalization::getCurrentLocale() === $localeCode ? 'active' : '' }}">
+                        <i class="flag-icon {{ $localeCode === 'en' ? 'flag-icon-us' : 'flag-icon-sa' }} mr-2"></i>
+                        {{ $properties['native'] }}
+                    </a>
+                @endforeach
+            </div>
+        </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        {{--        <a href="{{ url('/change-language/en') }}">English</a>--}}
+{{--        <a href="{{ url('/change-language/ar') }}">العربية</a>--}}
+
+
+
+
+
     </ul>
 </nav>

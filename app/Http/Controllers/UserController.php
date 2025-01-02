@@ -6,6 +6,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use PHPUnit\Exception;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,7 +28,7 @@ class UserController extends Controller
                     return $user->roles->pluck('name')->join(', ');
                 })->addColumn('status', function ($user) {
                     $toggleButton = '<button class="btn btn-sm ' .
-                        ($user->status === 'active' ? 'btn-success' : 'btn-danger') .
+                        ($user->status === 'active' ? 'btn-success' : 'btn-light') .
                         ' toggle-status" data-id="' . $user->id . '">' .
                         ($user->status === 'active' ? 'Active' : 'Inactive') .
                         '</button>';
@@ -152,7 +155,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request);
+
 
         $request->validate([
             'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name',
@@ -190,59 +193,96 @@ class UserController extends Controller
 
 
 
-    /**
-     * Update the specified resource in storage.
-     */
+
+
+
     public function update(Request $request, string $id)
     {
+        // Define validation rules
+        $rules = [
+            'name' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                'regex:/^(?!\d+$).*$/',
+                Rule::unique('users', 'name')->ignore($id),
+            ],
+            'email' => [
+                'required',
+                'email',
+                'min:3',
+                'max:255',
+                Rule::unique('users', 'email')->ignore($id),
+            ],
+            'phone' => 'required|min:3|max:255',
+            'username' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                Rule::unique('users', 'username')->ignore($id),
+            ],
+            'password' => 'nullable|string|min:8',
+            'role' => 'nullable|string|exists:roles,name',
+            'status' => 'in:active,inactive',
+        ];
 
-        Log::info('Name:', ['name' => $request->input('name')]);
-        Log::info('Email:', ['email' => $request->input('email')]);
-        Log::info('Phone:', ['phone' => $request->input('phone')]);
-        Log::info('Username:', ['username' => $request->input('username')]);
-        Log::info('Role:', ['role' => $request->input('role')]);
+        // Validate request manually
+        $validator = Validator::make($request->all(), $rules);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation errors occurred.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
-
-
-//            $validatedData = $request->validate([
-//                'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name,' . $id,
-//                'email' => 'required|email|min:3|max:255|unique:users,email,' . $id,
-//                'phone' => 'required|min:3|max:255',
-//                'username' => 'required|string|min:3|max:255|unique:users,username,' . $id,
-//                'password' => 'nullable|min:8',
-//            ]);
-
-
+        // Find the user or return error
         $user = User::find($id);
         if (!$user) {
-            return response()->json(['success' => false, 'message' => 'User not found.'], 404);
+            return response()->json([
+                'success' => false,
+                'message' => 'User not found.',
+            ], 404);
         }
 
-//        $user->update([
-//            'name' => $validatedData['name'],
-//            'email' => $validatedData['email'],
-//            'phone' => $validatedData['phone'],
-//            'username' => $validatedData['username'],
-//        ]);
+        try {
+            // Update user details
+            $user->update([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'username' => $request->input('username'),
+            ]);
 
-             $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'username' => $request->username,
-        ]);
+            // Update password if provided
+            if ($request->filled('password')) {
+                $user->update(['password' => Hash::make($request->input('password'))]);
+            }
 
-        if ($request->filled('password')) {
-            $user->update(['password' => bcrypt($request->password)]);
+            // Sync roles if provided
+            if ($request->has('role')) {
+                $user->syncRoles($request->input('role'));
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User updated successfully.',
+                'data' => $user,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error occurred during update:', ['message' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        if ($request->has('role')) {
-            $user->syncRoles($request->role);
-        }
-
-        return response()->json(['success' => true, 'message' => 'User updated successfully.']);
     }
+
+
 
 
 

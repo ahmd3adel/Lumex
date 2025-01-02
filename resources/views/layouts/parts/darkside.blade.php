@@ -42,11 +42,11 @@
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
+                    <ul class="nav nav-treeview text-capitalize">
                         <li class="nav-item">
                             <a href="/users" class="nav-link active">
                                 <i class="far fa-user nav-icon"></i> <!-- Icon for Active Users -->
-                                <p>All Users</p>
+                                <p>users</p>
                             </a>
                         </li>
 {{--                        <li class="nav-item">--}}

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique()->nullable();
             $table->string('username')->unique()->nullable();
-            $table->string('phone')->unique();
+            $table->string('phone')->unique()->nullable();
             $table->enum('status' , ['active' , 'inactive'])->default('inactive');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
