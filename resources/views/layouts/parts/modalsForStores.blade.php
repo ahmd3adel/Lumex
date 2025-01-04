@@ -97,14 +97,14 @@
                         <!-- Role Field -->
                         <div class="col-md-6 mb-3">
                             <label for="role" class="form-label">{{trans('Role')}}</label>
-                            <select class="form-control" id="role" name="role">
-                                <option value="">Select role</option>
-                                @foreach($roles as $role)
-                                    <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>
+{{--                            <select class="form-control" id="role" name="role">--}}
+{{--                                <option value="">Select role</option>--}}
+{{--                                @foreach($roles as $role)--}}
+{{--                                    <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>--}}
 
-                                @endforeach
+{{--                                @endforeach--}}
 
-                            </select>
+{{--                            </select>--}}
                         </div>
                         <!-- Password Field -->
                         <div class="col-md-6 mb-3">
@@ -181,12 +181,12 @@
                         <!-- Role Field -->
                         <div class="col-md-6 mb-3">
                             <label for="edit-role" class="form-label">{{trans('Role')}}</label>
-                            <select class="form-control" id="edit-role" name="role" required>
-                                <option value="">Select role</option>
-                                @foreach($roles as $role)
-                                    <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>
-                                @endforeach
-                            </select>
+{{--                            <select class="form-control" id="edit-role" name="role" required>--}}
+{{--                                <option value="">Select role</option>--}}
+{{--                                @foreach($roles as $role)--}}
+{{--                                    <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
                             <div class="invalid-feedback">Please select a role.</div>
                         </div>
                     </div>

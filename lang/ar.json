@@ -13,5 +13,25 @@
     "status": "حالة التفعيل",
     "actions": "العمليات",
     "Admin Dashboard": "لوحة تحكم الادمن",
-    "Success": "بيسبسشايبنتشسبي"
+    "Success": "تم",
+    "User status updated successfully.": "تم تحديث البيانات بنجاح",
+    "processing": "جاري التحميل...",
+    "lengthMenu": "عرض _MENU_ سجلات",
+    "zeroRecords": "لا توجد سجلات مطابقة",
+    "info": "عرض _START_ إلى _END_ من إجمالي _TOTAL_ سجل",
+    "infoEmpty": "لا توجد سجلات لعرضها",
+    "infoFiltered": "(تمت تصفيتها من إجمالي _MAX_ سجل)",
+    "search": "بحث:",
+    "paginate": {
+        "first": "الأولى",
+        "last": "الأخيرة",
+        "next": "التالي",
+        "previous": "السابق"
+    },
+    "Name": "الاسم",
+    "Email": "البريد الالكتروني",
+    "Phone": "موبايل",
+    "Username": "اسم المستخدم",
+    "Role": "الدور"
+
 }

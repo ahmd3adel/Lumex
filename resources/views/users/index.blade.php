@@ -64,7 +64,7 @@
                 <!-- /.card -->
             </div>
 
-        @include('layouts.parts.modals')
+        @include('layouts.parts.modalsForUsers')
 
         @endsection
 
@@ -193,50 +193,50 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
 
-                $(document).ready(function () {
-                    function adjustContentWrapper() {
-                        // عرض نافذة المتصفح
-                        var windowWidth = $(window).width();
-                        // عرض الشريط الجانبي (0 إذا كان مطويًا)
-                        var sidebarWidth = $('body').hasClass('sidebar-collapse') ? 0 : 250;
-                        // العرض الجديد للمحتوى
-                        var newWidth = windowWidth - sidebarWidth;
-
-                        // تحديث العرض
-                        $('.content-wrapper').css({
-                            width: newWidth + 'px',
-                            marginLeft: sidebarWidth + 'px', // تعديل الهامش الأيسر إذا كان هناك تأثير
-                        });
-                    }
-
-                    // ضبط العرض عند تحميل الصفحة
-                    adjustContentWrapper();
-
-                    // تحديث العرض عند تغيير حجم النافذة
-                    $(window).resize(function () {
-                        adjustContentWrapper();
-                    });
-
-                    // تحديث العرض عند الضغط على زر الطي/التوسيع
-                    $('.nav-item').on('click', function () {
-                        var windowWidth = $(window).width();
-                        // عرض الشريط الجانبي (0 إذا كان مطويًا)
-                        var sidebarWidth = $('body').hasClass('sidebar-collapse') ? 0 : 250;
-                        // العرض الجديد للمحتوى
-                        var newWidth = windowWidth - 90;
-                        $('.content-wrapper').css({
-                            width: newWidth + 'px',
-                            marginLeft: sidebarWidth + 'px', // تعديل الهامش الأيسر إذا كان هناك تأثير
-                        });
-                    });
-                });
+                // $(document).ready(function () {
+                //     function adjustContentWrapper() {
+                //         // عرض نافذة المتصفح
+                //         var windowWidth = $(window).width();
+                //         // عرض الشريط الجانبي (0 إذا كان مطويًا)
+                //         var sidebarWidth = $('body').hasClass('sidebar-collapse') ? 0 : 250;
+                //         // العرض الجديد للمحتوى
+                //         var newWidth = windowWidth - sidebarWidth;
+                //
+                //         // تحديث العرض
+                //         $('.content-wrapper').css({
+                //             width: newWidth + 'px',
+                //             marginLeft: sidebarWidth + 'px', // تعديل الهامش الأيسر إذا كان هناك تأثير
+                //         });
+                //     }
+                //
+                //     // ضبط العرض عند تحميل الصفحة
+                //     adjustContentWrapper();
+                //
+                //     // تحديث العرض عند تغيير حجم النافذة
+                //     $(window).resize(function () {
+                //         adjustContentWrapper();
+                //     });
+                //
+                //     // تحديث العرض عند الضغط على زر الطي/التوسيع
+                //     $('.nav-item').on('click', function () {
+                //         var windowWidth = $(window).width();
+                //         // عرض الشريط الجانبي (0 إذا كان مطويًا)
+                //         var sidebarWidth = $('body').hasClass('sidebar-collapse') ? 0 : 250;
+                //         // العرض الجديد للمحتوى
+                //         var newWidth = windowWidth - 90;
+                //         $('.content-wrapper').css({
+                //             width: newWidth + 'px',
+                //             marginLeft: sidebarWidth + 'px', // تعديل الهامش الأيسر إذا كان هناك تأثير
+                //         });
+                //     });
+                // });
 
                 $(document).ready(function () {
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#user-table').DataTable({
-                        processing: true,
-                        serverSide: true,
-                        ajax: "{{ route('users.index') }}",
+                        processing: true, // Show loading indicator
+                        serverSide: true, // Enable server-side processing
+                        ajax: "{{ route('users.index') }}", // Dynamic data route
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
@@ -247,35 +247,49 @@
                             { data: 'status', name: 'status' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
-                        dom: '<"row p-3"<"col-md-6"l><"col-md-6 text-end"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
+                        dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
+                            '<"row"<"col-md-12"t>>' + // Table
+                            '<"row"<"col-md-6"i><"col-md-6"p>>', // Pagination and info
                         buttons: [
                             {
                                 extend: 'pdfHtml5',
-                                text: 'تصدير PDF',
+                                text: '{{trans("Export To PDF")}}',
                                 className: 'btn btn-danger btn-sm',
+                                orientation: 'portrait',
+                                pageSize: 'A4',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3]
+                                    columns: [0, 1, 2, 3 , 4 , 5] // Exported columns
+                                },
+                                customize: function (doc) {
+                                    doc.content.splice(0, 0, {
+                                        text: 'User Report',
+                                        style: 'header',
+                                        alignment: 'center',
+                                        fontSize: 18,
+                                        margin: [0, 0, 0, 20]
+                                    });
                                 }
                             },
                             {
                                 extend: 'excelHtml5',
-                                text: 'تصدير Excel',
+                                text: 'Export to Excel',
                                 className: 'btn btn-success btn-sm',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3]
+                                    columns: [0, 1, 2, 3] // Exported columns
                                 }
                             }
                         ],
+                        lengthMenu: [10, 25, 50, 100], // Rows per page options
                         language: {
-                            lengthMenu: "عرض _MENU_ سجلات",
-                            info: "عرض _START_ إلى _END_ من _TOTAL_ سجلات",
+                            lengthMenu: "Show _MENU_ entries",
+                            info: "Showing _START_ to _END_ of _TOTAL_ entries",
                             search: "",
-                            searchPlaceholder: "بحث...",
+                            searchPlaceholder: "Search...",
                             paginate: {
-                                first: "الأولى",
-                                last: "الأخيرة",
-                                next: "التالي",
-                                previous: "السابق"
+                                first: "First",
+                                last: "Last",
+                                next: "Next",
+                                previous: "Previous"
                             }
                         }
                     });
@@ -385,7 +399,6 @@
                             .then((data) => {
                                 if (data.success) {
                                     // تنفيذ عند النجاح
-                                    alert('success');
                                     $('#editUserModal').modal('hide').removeClass('show').addClass('fade');
 
                                     $('body').removeClass('modal-open'); // إزالة خاصية منع التمرير
@@ -395,7 +408,6 @@
                                     table.ajax.reload(); // Reload DataTable
                                 } else {
                                     // تنفيذ عند الفشل
-                                    alert('faild');
                                     handleValidationErrors(form, data.errors);
                                 }
 

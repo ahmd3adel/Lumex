@@ -24,7 +24,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 {{--        integrity="sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe"--}}
 {{--        crossorigin="anonymous" />--}}
     <!-- Load Bootstrap RTL theme from RawGit -->
-    <link rel="stylesheet" href="{{asset('dist/css/custom.css')}}">
+{{--    <link rel="stylesheet" href="{{asset('dist/css/custom.css')}}">--}}
 
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 

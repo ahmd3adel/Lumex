@@ -20,6 +20,9 @@ return new class extends Migration
             $table->enum('status' , ['active' , 'inactive'])->default('inactive');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('store_id')->nullable();
+            $table->foreign('store_id')->references('id')->on('stores')->cascadeOnDelete();
+
             $table->softDeletes();
             $table->rememberToken();
             $table->timestamps();

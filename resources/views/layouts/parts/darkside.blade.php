@@ -49,36 +49,27 @@
                                 <p>users</p>
                             </a>
                         </li>
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="/users/active" class="nav-link">--}}
-{{--                                <i class="far fa-check-circle nav-icon"></i> <!-- Icon for Active Status -->--}}
-{{--                                <p>Active Users</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
+                    </ul>
+                </li>
+                <li class="nav-item menu-open">
+                    <a href="#" class="nav-link active">
+                        <i class="nav-icon fas fa-users"></i> <!-- Updated Icon for Users -->
+                        <p>
+                            stores Management
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview text-capitalize">
                         <li class="nav-item">
-                            <a href="/users/trashed" class="nav-link">
-                                <i class="fas fa-trash nav-icon"></i> <!-- Icon for Active Status -->
-                                <p>Trashed Users</p>
+                            <a href="/stores" class="nav-link active">
+                                <i class="far fa-user nav-icon"></i> <!-- Icon for Active Users -->
+                                <p>stores</p>
                             </a>
                         </li>
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="/users/inactive" class="nav-link">--}}
-{{--                                <i class="far fa-times-circle nav-icon"></i> <!-- Icon for Inactive Status -->--}}
-{{--                                <p>Inactive Users</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
                     </ul>
                 </li>
 
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
-                        <p>
-                            Simple Link
-                            <span class="right badge badge-danger">New</span>
-                        </p>
-                    </a>
-                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
