@@ -1,13 +1,12 @@
-<!-- start show user Modal -->
-<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="userModalLabel" aria-hidden="true">
+<!-- start show store Modal -->
+<div class="modal fade" id="storeModal" tabindex="-1" role="dialog" aria-labelledby="storeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <!-- Modal Header -->
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title text-white" id="userModalLabel">
-                    <i class="fas fa-user-circle"></i> User Details
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="storeModalLabel">
+                    <i class="fas fa-store"></i> {{ trans('Store Details') }}
                 </h5>
-
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -15,26 +14,31 @@
 
             <!-- Modal Body -->
             <div class="modal-body">
-                <div class="card card-primary card-outline shadow-none">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-user"></i> {{trans('Name')}}:</strong> <span id="modal-user-name" class="text-primary"></span></p>
-                                <p><strong><i class="fas fa-envelope"></i> {{trans('Email')}}:</strong> <span id="modal-user-email" class="text-primary"></span></p>
+                            <!-- Store Information -->
+                            <div class="col-md-6 mb-3">
+                                <p>
+                                    <strong><i class="fas fa-store"></i> {{ trans('Company') }}:</strong>
+                                    <span id="modal-store-name" class="text-primary font-weight-bold"></span>
+                                </p>
+                                <p>
+                                    <strong><i class="fas fa-map-marker-alt"></i> {{ trans('Location') }}:</strong>
+                                    <span id="modal-store-location" class="text-primary font-weight-bold"></span>
+                                </p>
                             </div>
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-briefcase"></i> {{trans('Role')}}: </strong> <span id="modal-user-role" class="text-primary"></span></p>
-                                <p><strong><i class="fas fa-calendar-alt"></i> Joined:</strong> <span id="modal-user-joined" class="text-primary"></span></p>
+                            <!-- Dates Information -->
+                            <div class="col-md-6 mb-3">
+                                <p>
+                                    <strong><i class="fas fa-clock"></i> {{ trans('Created At') }}:</strong>
+                                    <span id="modal-store-created-at" class="text-primary font-weight-bold"></span>
+                                </p>
+                                <p>
+                                    <strong><i class="fas fa-sync-alt"></i> {{ trans('Updated At') }}:</strong>
+                                    <span id="modal-store-updated-at" class="text-primary font-weight-bold"></span>
+                                </p>
                             </div>
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-briefcase"></i> {{trans('Username')}}:</strong> <span id="modal-username" class="text-primary"></span></p>
-                            </div>
-
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-calendar-alt"></i> {{trans('Phone')}}:</strong> <span id="modal-phone" class="text-primary"></span></p>
-                            </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -43,27 +47,27 @@
             <!-- Modal Footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                    <i class="fas fa-times"></i> Close
+                    <i class="fas fa-times"></i> {{ trans('Close') }}
                 </button>
             </div>
         </div>
     </div>
 </div>
-<!-- end show user Modal -->
-<!-- start create user Modal -->
-<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+<!-- end show store Modal -->
+<!-- start create store Modal -->
+<div class="modal fade" id="createstoreModal" tabindex="-1" aria-labelledby="createstoreModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="createUserModalLabel"><i class="fas fa-user-plus"></i> Create New User</h5>
+                <h5 class="modal-title" id="createstoreModalLabel"><i class="fas fa-store-plus"></i> Create New store</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <!-- Modal Body -->
-            <form id="createUserForm" action="{{ route('users.store') }}" method="POST" autocomplete="off">
+            <form id="createstoreForm" action="{{ route('stores.store') }}" method="POST" autocomplete="off">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
@@ -89,22 +93,14 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="Username" class="form-label">{{trans('Username')}}</label>
-                            <input type="text" class="form-control" id="Username" name="username" placeholder="Enter username">
+                            <label for="storename" class="form-label">{{trans('storename')}}</label>
+                            <input type="text" class="form-control" id="storename" name="storename" placeholder="Enter storename">
                         </div>
                     </div>
                     <div class="row">
                         <!-- Role Field -->
                         <div class="col-md-6 mb-3">
                             <label for="role" class="form-label">{{trans('Role')}}</label>
-{{--                            <select class="form-control" id="role" name="role">--}}
-{{--                                <option value="">Select role</option>--}}
-{{--                                @foreach($roles as $role)--}}
-{{--                                    <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>--}}
-
-{{--                                @endforeach--}}
-
-{{--                            </select>--}}
                         </div>
                         <!-- Password Field -->
                         <div class="col-md-6 mb-3">
@@ -126,22 +122,22 @@
         </div>
     </div>
 </div>
-<!-- end create user Modal -->
-<!-- start edit user Modal -->
+<!-- end create store Modal -->
+<!-- start edit store Modal -->
 
-<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+<div class="modal fade" id="editstoreModal" tabindex="-1" aria-labelledby="editstoreModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="editUserModalLabel"><i class="fas fa-edit"></i> Edit User</h5>
+                <h5 class="modal-title" id="editstoreModalLabel"><i class="fas fa-edit"></i> Edit store</h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
             <!-- Modal Body -->
-            <form id="editUserForm" method="POST">
+            <form id="editstoreForm" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -172,21 +168,15 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            <label for="edit-username" class="form-label">{{trans('Username')}}</label>
-                            <input type="text" class="form-control" id="edit-username" name="username" placeholder="Enter username" required>
-                            <div class="invalid-feedback">Please enter a valid username.</div>
+                            <label for="edit-storename" class="form-label">{{trans('storename')}}</label>
+                            <input type="text" class="form-control" id="edit-storename" name="storename" placeholder="Enter storename" required>
+                            <div class="invalid-feedback">Please enter a valid storename.</div>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Role Field -->
                         <div class="col-md-6 mb-3">
                             <label for="edit-role" class="form-label">{{trans('Role')}}</label>
-{{--                            <select class="form-control" id="edit-role" name="role" required>--}}
-{{--                                <option value="">Select role</option>--}}
-{{--                                @foreach($roles as $role)--}}
-{{--                                    <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>--}}
-{{--                                @endforeach--}}
-{{--                            </select>--}}
                             <div class="invalid-feedback">Please select a role.</div>
                         </div>
                     </div>
@@ -195,11 +185,11 @@
                 <!-- Modal Footer -->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
-                    <button type="submit" class="btn btn-warning submit-editing-form" id="submitEditUserForm"><i class="fas fa-save"></i> Save Changes</button>
+                    <button type="submit" class="btn btn-warning submit-editing-form" id="submitEditstoreForm"><i class="fas fa-save"></i> Save Changes</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<!-- end edit user Modal -->
+<!-- end edit store Modal -->

@@ -17,11 +17,6 @@ class StoreController extends Controller
      */
     public function index(Request $request)
     {
-
-//        $stores = Store::select(['id', 'name', 'location', 'created_at', 'updated_at'])->get();
-//return response()->json([
-//    'stores' => $stores
-//]);
         if ($request->ajax()) {
             $stores = Store::select(['id', 'name', 'location', 'created_at', 'updated_at'])->get();
 
@@ -31,10 +26,10 @@ class StoreController extends Controller
                 })
                 ->addColumn('location', function ($store) {
                     return $store->location;
-                })->addColumn('name', function ($store) {
-                    return $store->created_at;
-                })->addColumn('name', function ($store) {
-                    return $store->updated_at;
+                })->addColumn('created_at', function ($store) {
+                    return $store->created_at->format('Y-m-d');
+                })->addColumn('updated_at', function ($store) {
+                    return $store->updated_at->format('Y-m-d');
                 })
                 ->addColumn('action', function ($store) {
                     return '
@@ -43,21 +38,18 @@ class StoreController extends Controller
                 data-id="' . $store->id . '"
                 data-name="' . $store->name . '"
                 data-location="' . $store->location . '"
+                data-created="' . $store->created_at->format('Y-m-d') . '"
                 data-updated="' . $store->updated_at . '">
             <i class="fas fa-eye"></i> View
         </button>
         <button class="btn btn-warning btn-sm edit-store"
                 data-id="' . $store->id . '"
                 data-name="' . $store->name . '"
-                data-location="' . $store->location . '">
+                data-location="' . $store->location . '"
+                data-created="' . $store->created . '"
+                data-updated="' . $store->updated_at . '">
             <i class="fas fa-edit"></i> Edit
         </button>
-        <form action="' . route('stores.destroy', $store->id) . '" method="POST" class="delete">
-            ' . csrf_field() . method_field('DELETE') . '
-            <button type="submit" class="btn btn-danger btn-sm">
-                <i class="fas fa-trash"></i> Delete
-            </button>
-        </form>
     </div>
     ';
                 })
@@ -114,6 +106,56 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+    public function trashed(Request $request)
+    {
+        if ($request->ajax()) {
+            $users = User::onlyTrashed()->get(); // جلب المستخدمين المحذوفين فقط
+
+            return DataTables::of($users)
+                ->addColumn('roles', function ($user) {
+                    return $user->roles->pluck('name')->join(', ');
+                })
+                ->addColumn('action', function ($user) {
+                    return '
+<div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
+    <button class="btn btn-info btn-sm view-user"
+            data-id="' . $user->id . '"
+            data-name="' . $user->name . '"
+            data-username="' . $user->username . '"
+            data-phone="' . $user->phone . '"
+            data-role="' . $user->roles->pluck('name')->join(', ') . '"
+            data-joined="' . $user->created_at . '"
+            data-email="' . $user->email . '">
+        <i class="fas fa-eye"></i> View
+    </button>
+<form action="' . route('users.restore', $user->id) . '" method="POST" class="restore-form">
+    ' . csrf_field() . method_field('PUT') . '
+    <button type="submit" class="btn btn-success btn-sm">
+        <i class="fas fa-undo"></i> Restore
+    </button>
+</form>
+<form action="' . route('users.forceDelete', $user->id) . '" method="POST" class="restore-form">
+    ' . csrf_field() . method_field('DELETE') . '
+    <button type="submit" class="btn btn-success btn-sm">
+        <i class="fas fa-undo"></i> Force Delete
+    </button>
+</form>
+
+</div>
+';
+                })
+                ->rawColumns(['status', 'action'])->make(true);
+        }
+
+        $users = User::onlyTrashed()->paginate(10);
+        $roles = Role::all();
+        $pageTitle = "Trashed Users";
+        return view('users.trashedUsers', compact(['users', 'roles', 'pageTitle']));
+    }
+
+
+
     public function destroy(Store $store)
     {
         //

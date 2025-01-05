@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Http\Controllers\StoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,8 +47,8 @@ Route::group(
         })->name('changeLanguage');
 
         require __DIR__.'/auth.php';
-        require __DIR__.'/users.php';
         require __DIR__.'/stores.php';
+        require __DIR__.'/users.php';
     }
 );
 

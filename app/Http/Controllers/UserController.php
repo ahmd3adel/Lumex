@@ -74,61 +74,6 @@ class UserController extends Controller
         return view('users.index', compact(['users', 'roles' , 'pageTitle']));
     }
 
-
-//    public function trashed(Request $request)
-//    {
-//        if ($request->ajax()) {
-//            $users = User::with('roles')->select(['id', 'name', 'email', 'created_at' , 'phone' , 'username'])->onlyTrashed();
-//            return DataTables::of($users)
-//                ->addColumn('roles', function ($user) {
-//                    return $user->roles->pluck('name')->join(', ');
-//                })->addColumn('status', function ($user) {
-//                    $toggleButton = '<button class="btn btn-sm ' .
-//                        ($user->status === 'active' ? 'btn-success' : 'btn-danger') .
-//                        ' toggle-status" data-id="' . $user->id . '">' .
-//                        ($user->status === 'active' ? 'Active' : 'Inactive') .
-//                        '</button>';
-//                    return $toggleButton;
-//                })->addColumn('action', function ($user) {
-//                    return '
-//    <div class="d-flex flex-nowrap gap-1 justify-content-start">
-//        <button class="btn btn-info btn-sm view-user col-md-3"
-//                data-id="' . $user->id . '"
-//                data-name="' . $user->name . '"
-//                data-username="' . $user->username . '"
-//                data-phone="' . $user->phone . '"
-//                data-role="' . $user->roles->pluck('name')->join(', ') . '"
-//                data-joined="' . $user->created_at . '"
-//                data-email="' . $user->email . '">
-//            <i class="fas fa-eye"></i> View
-//        </button>
-//        <button class="btn btn-warning btn-sm edit-user col-md-3"
-//                data-id="' . $user->id . '"
-//                data-name="' . $user->name . '"
-//                data-email="' . $user->email . '"
-//                data-phone="' . $user->phone . '"
-//                data-username="' . $user->username . '"
-//                data-role="' . optional($user->roles->first())->name . '">
-//            <i class="fas fa-edit"></i> Edit
-//        </button>
-//        <form action="' . route('users.destroy', $user->id) . '" method="POST" style="display:inline-block;" class="delete col-md-3">
-//            ' . csrf_field() . method_field('DELETE') . '
-//            <button type="submit" class="btn btn-danger btn-sm">
-//                <i class="fas fa-trash"></i> Delete
-//            </button>
-//        </form>
-//    </div>
-//    ';
-//                })
-//
-//                ->rawColumns(['status', 'action']) ->make(true);
-//        }
-//        $users = User::paginate(10);
-//        $roles = Role::pluck('name')->toArray();
-//
-//        return view('users/trashedUsers', compact(['users', 'roles']));
-//    }
-
     public function toggleStatus(Request $request)
     {
         $user = User::findOrFail($request->id);
@@ -332,8 +277,8 @@ class UserController extends Controller
 </form>
 <form action="' . route('users.forceDelete', $user->id) . '" method="POST" class="restore-form">
     ' . csrf_field() . method_field('DELETE') . '
-    <button type="submit" class="btn btn-success btn-sm">
-        <i class="fas fa-undo"></i> Force Delete
+    <button type="submit" class="btn btn-danger btn-sm">
+        <i class="fas fa-trash"></i> Force Delete
     </button>
 </form>
 
@@ -343,7 +288,7 @@ class UserController extends Controller
                 ->rawColumns(['status', 'action'])->make(true);
         }
 
-        $users = User::onlyTrashed()->paginate(10); // جلب السجلات المحذوفة فقط مع تقسيم الصفحات
+        $users = User::onlyTrashed()->paginate(10);
         $roles = Role::all();
         $pageTitle = "Trashed Users";
         return view('users.trashedUsers', compact(['users', 'roles', 'pageTitle']));

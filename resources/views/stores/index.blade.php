@@ -1,5 +1,6 @@
 @extends('layouts.index')
-@section('title' , 'Stores PAGE')
+@section('title', $pageTitle . ' PAGE')
+
 @section('breadcramp')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -28,9 +29,6 @@
                     <div class="card-header">
                         <h3 class="card-title">{{__('store table')}}</h3>
                         <div class="card-tools">
-{{--                            <a class="btn btn-secondary btn-sm"  href="{{ route('store.trashed') }}">--}}
-{{--                                <i class="fas fa-trash"></i> @lang('Trashed store')--}}
-{{--                            </a>--}}
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createstoreModal">
                                 <i class="fas fa-store-plus"></i> @lang('add store')
                             </button>
@@ -47,9 +45,9 @@
                             <tr>
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-store"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('created_at') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('created_at') }}</th>
+                                <th><i class="fas fa-store"></i> {{ trans('location') }}</th>
+                                <th><i class="fas fa-store"></i> {{ trans('Created_at') }}</th>
+                                <th><i class="fas fa-store"></i> {{ trans('Updated_at') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
@@ -67,123 +65,7 @@
         @endsection
 
         @push('cssModal')
-
-            <style>
-                .table th {
-                    background-color: #f8f9fa; /* لون خلفية الأعمدة */
-                    font-weight: bold; /* نص عريض */
-                }
-                .table tbody tr:hover {
-                    background-color: #f1f1f1; /* لون خلفية الصف عند التمرير */
-                }
-
-                @media (min-width: 768px) {
-                    .text-md-end {
-                        text-align: right !important;
-                    }
-                }
-
-                .action-buttons {
-                    display: flex;
-                    flex-wrap: nowrap; /* Prevent buttons from wrapping */
-                    gap: 0.5rem; /* Add space between buttons */
-                    justify-content: flex-start;
-                }
-
-                .action-buttons .btn {
-                    white-space: nowrap; /* Prevent text from wrapping */
-                }
-
-                /* For small screens */
-                @media (max-width: 768px) {
-                    .action-buttons .btn {
-                        font-size: 0.8rem; /* Reduce font size */
-                        padding: 0.25rem 0.5rem; /* Adjust padding for buttons */
-                    }
-                    .action-buttons {
-                        gap: 0.25rem; /* Reduce gap on small screens */
-                    }
-                }
-                /* Action Buttons Container */
-                .action-buttons {
-                    display: flex;
-                    flex-wrap: nowrap; /* Prevent wrapping */
-                    gap: 0.5rem; /* Add space between buttons */
-                    align-items: center; /* Align buttons vertically */
-                }
-
-                /* Buttons Styling */
-                .action-buttons .btn {
-                    white-space: nowrap; /* Prevent text from wrapping */
-                }
-
-                /* Adjustments for Small Screens */
-                @media (max-width: 768px) {
-                    .action-buttons .btn {
-                        font-size: 0.75rem; /* Reduce font size for buttons */
-                        padding: 0.25rem 0.5rem; /* Adjust padding for better fit */
-                    }
-                    .action-buttons {
-                        gap: 0.25rem; /* Reduce gap between buttons */
-                    }
-                }
-                /* Ensure the action buttons fit inline */
-                .action-buttons {
-                    display: flex;
-                    flex-wrap: nowrap; /* Prevent wrapping */
-                    gap: 0.5rem; /* Add space between buttons */
-                    justify-content: flex-start;
-                }
-
-                /* Adjust button styling */
-                .action-buttons .btn {
-                    white-space: nowrap; /* Prevent text wrapping inside buttons */
-                }
-
-                /* Adjust column width for table layout */
-                .dataTables_wrapper .dataTables_scrollHeadInner table {
-                    table-layout: auto !important; /* Allow columns to adjust dynamically */
-                }
-
-                /* Responsive adjustments for smaller screens */
-                @media (max-width: 768px) {
-                    .action-buttons .btn {
-                        font-size: 0.8rem; /* Reduce font size */
-                        padding: 0.25rem 0.5rem; /* Adjust padding for buttons */
-                    }
-                    .action-buttons {
-                        gap: 0.25rem; /* Reduce gap on small screens */
-                    }
-                }
-                <style>
-                 .table th {
-                     background-color: #f8f9fa;
-                     font-weight: bold;
-                     text-align: center;
-                 }
-                .table tbody tr:hover {
-                    background-color: #f1f1f1;
-                }
-                .action-buttons {
-                    display: flex;
-                    gap: 0.5rem;
-                    justify-content: center;
-                }
-                .action-buttons .btn {
-                    white-space: nowrap;
-                }
-                @media (max-width: 768px) {
-                    .action-buttons .btn {
-                        font-size: 0.8rem;
-                        padding: 0.25rem 0.5rem;
-                    }
-                    .action-buttons {
-                        gap: 0.25rem;
-                    }
-                }
-            </style>
-            </style>
-
+            <link rel="stylesheet" href="{{asset('dist/css/myCustomTable.css')}}">
         @endpush
 @push('jsModal')
 
@@ -203,8 +85,6 @@
                             { data: 'location', name: 'location' },
                             { data: 'created_at', name: 'created_at' },
                             { data: 'updated_at', name: 'updated_at' },
-
-                            // { data: 'phone', name: 'phone' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
@@ -256,29 +136,26 @@
                 });
 
                     //view-store modal
-                    // document.addEventListener('click', function (e) {
-                    //     if (e.target.closest('.view-store')) {
-                    //         var id = e.target.getAttribute('data-id')
-                    //         var name = e.target.getAttribute('data-name')
-                    //         var storename = e.target.getAttribute('data-storename')
-                    //         var phone = e.target.getAttribute('data-phone')
-                    //         var role = e.target.getAttribute('data-role')
-                    //         var email = e.target.getAttribute('data-email')
-                    //         var  joined= e.target.getAttribute('data-joined')
-                    //
-                    //         document.getElementById('modal-store-name').innerText = name
-                    //         document.getElementById('modal-phone').innerText = phone
-                    //         document.getElementById('modal-store-email').innerText = email
-                    //         document.getElementById('modal-store-role').innerText = role
-                    //         document.getElementById('modal-store-joined').innerText = joined
-                    //         document.getElementById('modal-storename').innerText = storename
-                    //
-                    //         var modal = document.getElementById('storeModal');
-                    //         var bootstrapModal = new bootstrap.Modal(modal);
-                    //
-                    //         bootstrapModal.show();
-                    //     }
-                    // });
+                    document.addEventListener('click', function (e) {
+                        if (e.target.closest('.view-store')) {
+
+                            var id = e.target.getAttribute('data-id')
+                            var name = e.target.getAttribute('data-name')
+                            var location = e.target.getAttribute('data-location')
+                            var created = e.target.getAttribute('data-created')
+                            var updated = e.target.getAttribute('data-updated')
+
+                            document.getElementById('modal-store-name').innerText = name
+                            document.getElementById('modal-store-location').innerText = location
+                            document.getElementById('modal-store-created-at').innerText = created
+                            document.getElementById('modal-store-updated-at').innerText = updated
+
+                            var modal = document.getElementById('storeModal');
+                            var bootstrapModal = new bootstrap.Modal(modal);
+
+                            bootstrapModal.show();
+                        }
+                    });
 
 
                     {{--$(document).on('click', '.toggle-status', function () {--}}

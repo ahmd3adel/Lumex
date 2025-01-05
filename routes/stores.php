@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\StoreController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function () {
-    Route::resource('/stores', \App\Http\Controllers\StoreController::class)->except(['create' , 'show']);
-    Route::get('/stores/trashed' , [\App\Http\Controllers\StoreController::class , 'trashed'])->name('users.trashed');
-    Route::put('/users/restore/{id}' , [\App\Http\Controllers\StoreController::class , 'restore'])->name('users.restore');
-    Route::DELETE('/users/force_delete/{id}' , [\App\Http\Controllers\StoreController::class , 'forceDelete'])->name('users.forceDelete');
-});
+
+    Route::resource('/stores', StoreController::class)->except(['create' , 'show']);
+    Route::get('/stores/trashed' , [StoreController::class , 'trashed'])->name('stores.trashed');
+    Route::put('/stores/restore/{id}' , [StoreController::class , 'restore'])->name('stores.restore');
+    Route::DELETE('/users/force_delete/{id}' , [StoreController::class , 'forceDelete'])->name('stores.forceDelete');
+
 ?>
