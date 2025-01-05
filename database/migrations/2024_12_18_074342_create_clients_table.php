@@ -12,11 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // العمود ID
+            $table->string('company_name'); // اسم الشركة
+            $table->string('name'); // اسم العميل
+            $table->string('website')->nullable(); // الموقع (يمكن أن يكون اختياريًا)
+            $table->string('logo')->nullable(); // الشعار (اختياري)
+            $table->string('phone'); // الهاتف
+            $table->decimal('balance', 15, 2)->default(0.00); // الرصيد مع قيمة افتراضية
+            $table->datetime('last_login')->nullable(); // آخر تسجيل دخول (اختياري)
+            $table->string('address')->nullable(); // العنوان (اختياري)
+            $table->foreignId('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }
 
+// Company name website logo fool balance lost login at this sitting
     /**
      * Reverse the migrations.
      */

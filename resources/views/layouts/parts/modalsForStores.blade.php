@@ -83,29 +83,8 @@
                         </div>
                         <!-- Email Field -->
                         <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">{{trans('Email')}}</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="phone" class="form-label">{{trans('Phone')}}</label>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="storename" class="form-label">{{trans('storename')}}</label>
-                            <input type="text" class="form-control" id="storename" name="storename" placeholder="Enter storename">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <!-- Role Field -->
-                        <div class="col-md-6 mb-3">
-                            <label for="role" class="form-label">{{trans('Role')}}</label>
-                        </div>
-                        <!-- Password Field -->
-                        <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" autocomplete="off" class="form-control" id="password" name="password" placeholder="Enter password">
+                            <label for="Location" class="form-label">{{trans('Location')}}</label>
+                            <input type="text" class="form-control" id="Location" name="location" placeholder="Enter Location">
                         </div>
                     </div>
                 </div>
@@ -130,7 +109,9 @@
         <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header bg-warning text-white">
-                <h5 class="modal-title" id="editstoreModalLabel"><i class="fas fa-edit"></i> Edit store</h5>
+                <h5 class="modal-title" id="editstoreModalLabel">
+                    <i class="fas fa-edit"></i> Edit Store
+                </h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -146,46 +127,27 @@
                     <div class="row">
                         <!-- Name Field -->
                         <div class="col-md-6 mb-3">
-                            <label for="edit-name" class="form-label">{{trans('Name')}}</label>
+                            <label for="edit-name" class="form-label">{{ trans('Name') }}</label>
                             <input type="text" class="form-control" id="edit-name" name="name" placeholder="Enter name" required>
-                            @error('name')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
+                            <div class="invalid-feedback">Please enter a valid name.</div>
                         </div>
-                        <!-- Email Field -->
+                        <!-- Location Field -->
                         <div class="col-md-6 mb-3">
-                            <label for="edit-email" class="form-label">{{trans('Email')}}</label>
-                            <input type="email" class="form-control" id="edit-email" name="email" placeholder="Enter email" required>
-                            <div class="invalid-feedback">Please enter a valid email.</div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="edit-phone" class="form-label">{{trans('Phone')}}</label>
-                            <input type="text" class="form-control" id="edit-phone" name="phone" placeholder="Enter phone number" required>
-                            <div class="invalid-feedback">Please enter a valid phone number.</div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="edit-storename" class="form-label">{{trans('storename')}}</label>
-                            <input type="text" class="form-control" id="edit-storename" name="storename" placeholder="Enter storename" required>
-                            <div class="invalid-feedback">Please enter a valid storename.</div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <!-- Role Field -->
-                        <div class="col-md-6 mb-3">
-                            <label for="edit-role" class="form-label">{{trans('Role')}}</label>
-                            <div class="invalid-feedback">Please select a role.</div>
+                            <label for="edit-location" class="form-label">{{ trans('Location') }}</label>
+                            <input type="text" class="form-control" id="edit-location" name="location" placeholder="Enter location" required>
+                            <div class="invalid-feedback">Please enter a valid location.</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
-                    <button type="submit" class="btn btn-warning submit-editing-form" id="submitEditstoreForm"><i class="fas fa-save"></i> Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                    <button type="submit" class="btn btn-warning submit-editing-form" id="submitEditstoreForm">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
                 </div>
             </form>
         </div>

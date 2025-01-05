@@ -12,4 +12,6 @@ class Store extends Model
         'created_at' => 'datetime',
     ];
 
+    protected $guarded = [];
+
 }

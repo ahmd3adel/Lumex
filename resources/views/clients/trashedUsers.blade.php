@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@section('title' , 'USERS PAGE')
+@section('title' , 'TRASHED PAGE')
 @section('breadcramp')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -19,7 +19,7 @@
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
-@endsection
+        @endsection
 
         @section('content')
             <div class="container-fluid">
@@ -31,9 +31,12 @@
                             <a class="btn btn-secondary btn-sm"  href="{{ route('users.trashed') }}">
                                 <i class="fas fa-trash"></i> @lang('Trashed Users')
                             </a>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createUserModal">
-                                <i class="fas fa-user-plus"></i> @lang('add user')
-                            </button>
+                            <a class="btn btn-primary btn-sm" href="{{route('users.index')}}">
+                                <i class="fas fa-user"></i> @lang('users')
+                            </a>
+
+
+
                         </div>
                     </div>
                     <!-- /.card-header -->
@@ -61,19 +64,18 @@
                 <!-- /.card -->
             </div>
 
-        @include('layouts.parts.modalsForUsers')
+            @include('layouts.parts.modals')
 
         @endsection
 
         @push('cssModal')
             <link rel="stylesheet" href="{{asset('dist/css/myCustomTable.css')}}">
         @endpush
-@push('jsModal')
+        @push('jsModal')
 
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
-
 
 
                 $(document).ready(function () {
@@ -81,7 +83,7 @@
                     let table = $('#user-table').DataTable({
                         processing: true, // Show loading indicator
                         serverSide: true, // Enable server-side processing
-                        ajax: "{{ route('users.index') }}", // Dynamic data route
+                        ajax: "{{ route('users.trashed') }}", // Dynamic data route
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
@@ -345,11 +347,15 @@
                                 }
                             })
                             .catch(error => {
+                                console.error('Error:', error);
                                 Swal.fire('Error', 'An unexpected error occurred.', 'error');
                             })
                             .finally(() => disableButton(submitButton, false));
                     });
                 });
+
+
+
                 // Utility functions
                 function resetForm(form) {
                     form.reset();
@@ -381,10 +387,6 @@
                         button.innerHTML = 'Submit';
                     }
                 }
-
-
-
-
 
             </script>
 

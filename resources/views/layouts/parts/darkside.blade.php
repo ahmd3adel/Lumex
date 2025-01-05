@@ -14,9 +14,9 @@
             </div>
             <div class="info">
                 <a href="/profile" class="d-block text-white font-weight-bold">
-                    {{ \Illuminate\Support\Facades\Auth::user()->username }}
+{{--                    {{ \Illuminate\Support\Facades\Auth::user()->username }}--}}
                 </a>
-                <small class="text-muted">{{ \Illuminate\Support\Facades\Auth::user()->email }}</small>
+{{--                <small class="text-muted">{{ \Illuminate\Support\Facades\Auth::user()->email }}</small>--}}
             </div>
         </div>
 

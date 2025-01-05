@@ -28,14 +28,13 @@
         "next": "التالي",
         "previous": "السابق"
     },
-    "Name": "الاسم",
-    "Email": "البريد الالكتروني",
-    "Phone": "موبايل",
-    "Username": "اسم المستخدم",
-    "Role": "الدور",
-    "Created_at": "تم الانشاء",
-    "Updated_at": "أخر تعديل",
-    "location": "العنوان",
-    "Company": "اسم الشركة"
+
+    "clientname": "اسم العميل",
+    "phone": "رقم الهاتف",
+    "roles": "الأدوار",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "export_to_pdf": "تصدير إلى PDF",
+    "export_to_excel": "تصدير إلى Excel"
 
 }

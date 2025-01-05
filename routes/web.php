@@ -49,6 +49,7 @@ Route::group(
         require __DIR__.'/auth.php';
         require __DIR__.'/stores.php';
         require __DIR__.'/users.php';
+        require __DIR__.'/clients.php';
     }
 );
 
