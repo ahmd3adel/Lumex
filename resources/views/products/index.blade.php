@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@section('title' , 'clientS PAGE')
+@section('title' , $pageTitle)
 @section('breadcramp')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -13,7 +13,7 @@
                         @parent
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">{{trans('Home')}}</a></li>
-                            <li class="breadcrumb-item active "> {{trans('clients table')}} </li>
+                            <li class="breadcrumb-item active "> {{trans('products table')}} </li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -26,13 +26,13 @@
                 <!-- Card for the table -->
                 <div class="card p-4">
                     <div class="card-header">
-                        <h3 class="card-title">{{__('clients table')}}</h3>
+                        <h3 class="card-title">{{__('products table')}}</h3>
                         <div class="card-tools">
-                            <a class="btn btn-secondary btn-sm"  href="{{ route('clients.trashed') }}">
-                                <i class="fas fa-trash"></i> @lang('Trashed clients')
+                            <a class="btn btn-secondary btn-sm"  href="{{ route('products.trashed') }}">
+                                <i class="fas fa-trash"></i> @lang('Trashed products')
                             </a>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createclientModal" aria-controls="createclientModal" title="@lang('Add Client')">
-                                <i class="fas fa-user-plus"></i> @lang('add client')
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createproductModal" aria-controls="createproductModal" title="@lang('Add product')">
+                                <i class="fas fa-user-plus"></i> @lang('add product')
                             </button>
 
                         </div>
@@ -40,16 +40,17 @@
                     <!-- /.card-header -->
 
                     <div class="table-responsive ">
-                        <table id="client-table" class="table table-bordered table-hover w-100">
+                        <table id="product-table" class="table table-bordered table-hover w-100">
                             <thead>
                             <tr>
 
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('company name') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('title') }}</th>
-                                <th><i class="fas fa-money-bill"></i> {{ trans('balance') }}</th>
+                                <th><i class="fas fa-phone"></i> {{ trans('description') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('price') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('quantity') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('Cutter Name') }}</th>
+
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
 
 
@@ -64,7 +65,7 @@
                 <!-- /.card -->
             </div>
 
-            @include('layouts.parts.modalsForclients')
+            @include('layouts.parts.modalsForproducts')
 
         @endsection
 
@@ -81,17 +82,17 @@
 
                 $(document).ready(function () {
                     // إعداد الجدول باستخدام DataTables
-                    let table = $('#client-table').DataTable({
+                    let table = $('#product-table').DataTable({
                         processing: true,
                         serverSide: true,
-                        ajax: "{{ route('clients.index') }}",
+                        ajax: "{{ route('products.index') }}",
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
-                            { data: 'phone', name: 'phone' },
-                            { data: 'company_name', name: 'company name' },
-                            { data: 'address', name: 'title' },
-                            { data: 'balance', name: 'balance' },
+                            { data: 'description', name: 'description' },
+                            { data: 'price', name: 'price' },
+                            { data: 'quantity', name: 'quantity' },
+                            { data: 'cutter_name', name: 'Cutter Name' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
@@ -109,7 +110,7 @@
                                 },
                                 customize: function (doc) {
                                     doc.content.splice(0, 0, {
-                                        text: 'Client Report',
+                                        text: 'product Report',
                                         style: 'header',
                                         alignment: 'center',
                                         fontSize: 18,
@@ -140,36 +141,32 @@
                             }
                         }
                     });
-                    //view-client modal
+                    //view-product modal
                     document.addEventListener('click', function (e) {
-                        if (e.target.closest('.view-client')) {
+                        if (e.target.closest('.view-product')) {
                             var id = e.target.getAttribute('data-id')
                             var name = e.target.getAttribute('data-name')
-                            var company_name = e.target.getAttribute('data-company_name')
-                            var phone = e.target.getAttribute('data-phone')
-                            var address = e.target.getAttribute('data-address')
-                            var website = e.target.getAttribute('data-website')
-                            var balance = e.target.getAttribute('data-balance')
+                            var price = e.target.getAttribute('data-price')
+                            var quantity = e.target.getAttribute('data-quantity')
+                            var cutter_name = e.target.getAttribute('data-cutter_name')
 
-                            document.getElementById('modal-client-name').innerText = name
-                            document.getElementById('modal-client-companyName').innerText = company_name
-                            document.getElementById('modal-phone').innerText = phone
-                            document.getElementById('modal-client-website').innerText = website
-                            document.getElementById('title').innerText = address
-                            document.getElementById('modal-client-balance').innerText = address
-                            document.getElementById('modal-client-balance').innerText = balance
-                            document.getElementById('modal-address').innerText = address
 
-                            var modal = document.getElementById('clientModal');
+                            document.getElementById('modal-product-name').innerText = name
+                            document.getElementById('modal-product-price').innerText = price
+                            document.getElementById('modal-product-quantity').innerText = quantity
+                            document.getElementById('cutter_name').innerText = cutter_name
+
+
+                            var modal = document.getElementById('productModal');
                             var bootstrapModal = new bootstrap.Modal(modal);
 
                             bootstrapModal.show();
                         }
                     });
-                    // Create client Form Submission
-                    const storeclientRoute = "{{ route('clients.store') }}";
+                    // Create product Form Submission
+                    const storeproductRoute = "{{ route('products.store') }}";
 
-                    document.getElementById('createclientForm').addEventListener('submit', function (event) {
+                    document.getElementById('createproductForm').addEventListener('submit', function (event) {
                         event.preventDefault();
                         const form = this;
                         const submitButton = form.querySelector('.submit-creating-form');
@@ -182,7 +179,7 @@
 
                         disableButton(submitButton, true);
 
-                        fetch(storeclientRoute, {
+                        fetch(storeproductRoute, {
                             method: 'POST',
                             body: JSON.stringify(data),
                             headers: {
@@ -201,12 +198,12 @@
                             })
                             .then(data => {
                                 if (data.success) {
-                                    $('#createclientModal').modal('hide').removeClass('show').addClass('fade');
+                                    $('#createproductModal').modal('hide').removeClass('show').addClass('fade');
                                     $('body').removeClass('modal-open');
                                     $('body').css('padding-right', '');
                                     $('.modal-backdrop').remove();
 
-                                    Swal.fire('Success', 'Client created successfully.', 'success');
+                                    Swal.fire('Success', 'product created successfully.', 'success');
                                     form.reset();
                                     table.ajax.reload();
                                 } else {
@@ -225,33 +222,32 @@
 
 
 
-                    //edit-client modal
+                    //edit-product modal
                     document.addEventListener('click' , function (e) {
-                        if(e.target.closest('.edit-client')){
+                        if(e.target.closest('.edit-product')){
+
                             var id = e.target.getAttribute('data-id')
                             var name = e.target.getAttribute('data-name')
-                            var company_name = e.target.getAttribute('data-company_name')
-                            var phone = e.target.getAttribute('data-phone')
-                            var address = e.target.getAttribute('data-address')
-                            var website = e.target.getAttribute('data-website')
+                            var price = e.target.getAttribute('data-price')
+                            var quantity = e.target.getAttribute('data-quantity')
+                            var cutter_name = e.target.getAttribute('data-cutter_name')
+                            var description = e.target.getAttribute('data-description')
 
                             document.getElementById('edit-id').value = id
                             document.getElementById('edit-name').value = name
-                            document.getElementById('edit-address').value = address
-                            document.getElementById('edit-phone').value = phone
-                            document.getElementById('edit-company-name').value = company_name
-                            document.getElementById('edit-website').value = website
-                            // document.getElementById('edit-phone').value = phone
+                            document.getElementById('edit-cutter_name').value = cutter_name
+                            document.getElementById('edit-price').value = price
+                            document.getElementById('edit-quantity').value = quantity
+                            document.getElementById('edit-description').value = description
 
 
-                            // document.getElementById('editclientForm').setAttribute('action' , '/clients/' + clientId )
-                            var modal = document.getElementById('editclientModal');
+                            var modal = document.getElementById('editproductModal');
                             var bootstrapModal = new bootstrap.Modal(modal);
                             bootstrapModal.show();
                         }
                     })
 
-                    document.getElementById('editclientForm').addEventListener('submit', function (e) {
+                    document.getElementById('editproductForm').addEventListener('submit', function (e) {
                         e.preventDefault();
                         var form = this;
                         const formData = new FormData(form);
@@ -263,8 +259,8 @@
                         });
 
                         // استبدال :id في الرابط
-                        const updateUserRoute = "{{ route('clients.update', ':id') }}";
-                        const finalRoute = updateUserRoute.replace(':id', data.id);
+                        const updateProductRoute = "{{ route('products.update', ':id') }}";
+                        const finalRoute = updateProductRoute.replace(':id', data.id);
 
                         fetch(finalRoute, {
                             method: 'PUT',
@@ -287,12 +283,12 @@
                             .then((data) => {
                                 if (data.success) {
                                     // تنفيذ عند النجاح
-                                    $('#editclientModal').modal('hide').removeClass('show').addClass('fade');
+                                    $('#editproductModal').modal('hide').removeClass('show').addClass('fade');
 
                                     $('body').removeClass('modal-open'); // إزالة خاصية منع التمرير
                                     $('body').css('padding-right', ''); // إعادة ضبط الحشو إذا كان مضافًا
                                     $('.modal-backdrop').remove(); // إزالة الخلفية الداكنة
-                                    Swal.fire('Success', 'Client updated successfully.', 'success');
+                                    Swal.fire('Success', 'product updated successfully.', 'success');
                                     table.ajax.reload(); // Reload DataTable
                                 } else {
                                     console.error("Response Errors:", data.errors); // عرض الأخطاء في الكونسول
@@ -323,7 +319,7 @@
                     });
                     @endif
 
-                    // Confirmation before deleting a client
+                    // Confirmation before deleting a product
                     $(document).on('submit', 'form.delete', function (e) {
                         e.preventDefault();
                         let form = this;
@@ -343,7 +339,7 @@
                     });
 
                     // Reset modal forms on close
-                    $('#createclientModal, #editclientModal').on('hidden.bs.modal', function () {
+                    $('#createproductModal, #editproductModal').on('hidden.bs.modal', function () {
                         const form = this.querySelector('form');
                         if (form) resetForm(form);
                     });

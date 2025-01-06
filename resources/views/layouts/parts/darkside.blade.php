@@ -13,10 +13,10 @@
                 <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="/profile" class="d-block text-white font-weight-bold">
-{{--                    {{ \Illuminate\Support\Facades\Auth::user()->username }}--}}
+                <a href="/profile" class="d-block text-white font-weight-bold text-capitalize">
+                    {{ \Illuminate\Support\Facades\Auth::user()->name }}
                 </a>
-{{--                <small class="text-muted">{{ \Illuminate\Support\Facades\Auth::user()->email }}</small>--}}
+                <small class="text-muted">{{ \Illuminate\Support\Facades\Auth::user()->email }}</small>
             </div>
         </div>
 
@@ -60,6 +60,12 @@
                     <a href="/invoices" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                         <p>Invoices</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/invoices" class="nav-link">
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>Payments</p>
                     </a>
                 </li>
                 <li class="nav-item">

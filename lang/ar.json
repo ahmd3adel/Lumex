@@ -29,12 +29,5 @@
         "previous": "السابق"
     },
 
-    "clientname": "اسم العميل",
-    "phone": "رقم الهاتف",
-    "roles": "الأدوار",
-    "status": "الحالة",
-    "actions": "الإجراءات",
-    "export_to_pdf": "تصدير إلى PDF",
-    "export_to_excel": "تصدير إلى Excel"
-
+    "company name": "اسم الشركة",
 }

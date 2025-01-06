@@ -50,6 +50,7 @@ Route::group(
         require __DIR__.'/stores.php';
         require __DIR__.'/users.php';
         require __DIR__.'/clients.php';
+        require __DIR__.'/products.php';
     }
 );
 

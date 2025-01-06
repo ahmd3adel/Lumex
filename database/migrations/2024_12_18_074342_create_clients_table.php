@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('website')->nullable(); // الموقع (يمكن أن يكون اختياريًا)
             $table->string('logo')->nullable(); // الشعار (اختياري)
             $table->string('phone'); // الهاتف
-            $table->decimal('balance', 15, 2)->default(0.00); // الرصيد مع قيمة افتراضية
+            $table->decimal('balance', 15, 2)->default(0);
             $table->datetime('last_login')->nullable(); // آخر تسجيل دخول (اختياري)
             $table->string('address')->nullable(); // العنوان (اختياري)
             $table->foreignId('user_id')->nullable();
