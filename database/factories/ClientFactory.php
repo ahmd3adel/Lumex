@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,7 +27,7 @@ class ClientFactory extends Factory
             'balance' => $this->faker->randomFloat(2, 0, 10000), // قيمة عشوائية بين 0 و 10000
             'last_login' => $this->faker->optional()->dateTimeBetween('-1 years', 'now'),
             'address' => $this->faker->address,
-            'user_id' => User::inRandomOrder()->first()->id,
+            'store_id' => Store::inRandomOrder()->first()->id,
 
         ];
     }

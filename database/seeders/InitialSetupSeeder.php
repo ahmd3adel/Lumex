@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -81,14 +82,10 @@ class InitialSetupSeeder extends Seeder
         ]);
         $user6->assignRole('admin');
 
-        $user7 = User::create([
-            'name' => 'agent3',
-            'email' => 'agent3@gmail.com',
-            'username' => 'agent3',
-            'phone' => '01016070906',
-            'password' => Hash::make('123456789')
+        $user7 = Store::create([
+            'name' => 'Elnour',
+            'location' => 'cairo',
         ]);
-        $user7->assignRole('agent');
 
 
 $user1->syncPermissions(Permission::all());

@@ -21,8 +21,8 @@ return new class extends Migration
             $table->decimal('balance', 15, 2)->default(0);
             $table->datetime('last_login')->nullable(); // آخر تسجيل دخول (اختياري)
             $table->string('address')->nullable(); // العنوان (اختياري)
-            $table->foreignId('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('store_id')->nullable();
+            $table->foreign('store_id')->references('id')->on('stores')->cascadeOnDelete();
             $table->timestamps();
         });
     }

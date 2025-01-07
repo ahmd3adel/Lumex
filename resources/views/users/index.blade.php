@@ -49,6 +49,7 @@
                                 <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
                                 <th><i class="fas fa-user-tag"></i> {{ trans('roles') }}</th>
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>
+                                <th><i class="fas fa-toggle-on"></i> {{ trans('store') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
@@ -90,6 +91,7 @@
                             { data: 'phone', name: 'phone' },
                             { data: 'roles', name: 'roles', orderable: false, searchable: false },
                             { data: 'status', name: 'status' },
+                            { data: 'store', name: 'store' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
@@ -349,6 +351,36 @@
                             })
                             .finally(() => disableButton(submitButton, false));
                     });
+
+                    // store details modal
+                    document.addEventListener('click', function (e) {
+                        if (e.target.classList.contains('open-store-modal')) {
+                            e.preventDefault();
+                            const storeId = e.target.getAttribute('data-id');
+                            fetch(`/users/store/${storeId}`, {
+                                method: 'GET',
+                                headers: {
+                                    'Accept': 'application/json'
+                                },
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        document.getElementById('modal-store-name').innerText = data.data.name;
+                                        document.getElementById('modal-store-location').innerText = data.data.location;
+                                        // Show the modal
+                                        const modal = new bootstrap.Modal(document.getElementById('storeModal'));
+                                        modal.show();
+                                    } else {
+                                        alert('faild')
+                                    }
+                                })
+                                .catch(error => console.error('Error:', error));
+                        }
+                    });
+
+
+
                 });
                 // Utility functions
                 function resetForm(form) {

@@ -20,12 +20,15 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $products = Product::select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name'])->get();
+            $products = Product::select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name' , 'store_id'])->orderBy('created_at' , 'desc')->get();
 
             return DataTables::of($products)
                 ->addColumn('name', function ($product) {
                     return $product->name;
+                }) ->addColumn('store', function ($product) {
+                    return $product->store ? $product->store->name : 'No Store Assigned';
                 })
+
                 ->addColumn('description', function ($product) {
                     return $product->description;
                 })
@@ -86,6 +89,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
 {
+    $creator = Auth::user();
     $request->validate([
         'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name',
         'description' => 'required|min:3',
@@ -94,13 +98,14 @@ class ProductController extends Controller
         'cutter_name' => 'required|string|min:3',
     ]);
     try {
-        $creator = Auth::user()->name;
+
         $product = Product::create([
             'name' => $request->name,
             'description' => $request->description,
             'price' => $request->price,
             'quantity' => $request->quantity,
             'cutter_name' => $request->cutter_name,
+            'store_id' => $creator->store_id,
         ]);
         return response()->json([
             'success' => true,

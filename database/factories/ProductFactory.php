@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Store;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -18,10 +20,12 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word(), // Random product name
-            'description' => $this->faker->sentence(), // Random description
-            'price' => $this->faker->randomFloat(2, 1, 1000), // Random price between 1 and 1000
-            'quantity' => $this->faker->numberBetween(1, 100), // Random quantity between 1 and 100
+            'name' => $this->faker->word(),
+            'description' => $this->faker->sentence(),
+            'cutter_name' => $this->faker->name('male'),
+            'price' => $this->faker->randomFloat(2, 1, 1000),
+            'quantity' => $this->faker->numberBetween(1, 100),
+            'store_id' => Store::inRandomOrder()->first()->id
         ];
     }
 }

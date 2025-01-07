@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
 
-    Route::resource('/products', ProductController::class)->except(['create' , 'show']);
+    Route::resource('/products', ProductController::class);
     Route::get('/products/trashed' , [ProductController::class , 'trashed'])->name('products.trashed');
     Route::put('/products/restore/{id}' , [ProductController::class , 'restore'])->name('products.restore');
     Route::DELETE('/products/force_delete/{id}' , [ProductController::class , 'forceDelete'])->name('products.forceDelete');

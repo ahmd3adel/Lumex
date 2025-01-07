@@ -22,7 +22,7 @@ class StoreController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $stores = Store::select(['id', 'name', 'location', 'created_at', 'updated_at'])->get();
+            $stores = Store::select(['id', 'name', 'location', 'created_at', 'updated_at'])->orderBy('created_at', 'desc');
 
             return DataTables::of($stores)
                 ->addColumn('name', function ($store) {

@@ -23,7 +23,7 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $clients = Client::select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'user_id'])->get();
+            $clients = Client::select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'store_id'])->get();
 
             return DataTables::of($clients)
                 ->addColumn('name', function ($client) {
@@ -47,8 +47,8 @@ class ClientController extends Controller
                 ->addColumn('address', function ($client) {
                     return $client->address ?? 'N/A';
                 })
-                ->addColumn('user_id', function ($client) {
-                    return $client->user ? $client->user->name : 'Unassigned';
+                ->addColumn('store', function ($client) {
+                    return $client->store ? $client->store->name : 'Unassigned';
                 })
                 ->addColumn('action', function ($client) {
                     return '

@@ -82,6 +82,15 @@
                             <label for="email" class="form-label">{{trans('Email')}}</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">{{trans('Store')}}</label>
+                            <select class="form-label" name="store">
+                                <option>select store</option>
+                                @foreach($stores as $store)
+                                    <option value="{{$store->id}}">{{$store->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">{{trans('Phone')}}</label>
@@ -203,3 +212,32 @@
 </div>
 
 <!-- end edit user Modal -->
+
+
+
+<div class="modal fade" id="storeModal" tabindex="-1" role="dialog" aria-labelledby="storeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title" id="storeModalLabel">Store Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <p><strong>Name:</strong> <span id="modal-store-name"></span></p>
+                <p><strong>Address:</strong> <span id="modal-store-location"></span></p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -16,7 +16,13 @@
                 <a href="/profile" class="d-block text-white font-weight-bold text-capitalize">
                     {{ \Illuminate\Support\Facades\Auth::user()->name }}
                 </a>
-                <small class="text-muted">{{ \Illuminate\Support\Facades\Auth::user()->email }}</small>
+                <small class="text-muted">
+                    @if (Auth::user()->store && Auth::user()->store->name)
+                        {{ Auth::user()->store->name }}
+                    @else
+                        {{ Auth::user()->email }}
+                    @endif
+                </small>
             </div>
         </div>
 

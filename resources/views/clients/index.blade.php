@@ -50,6 +50,7 @@
                                 <th><i class="fas fa-user"></i> {{ trans('company name') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('title') }}</th>
                                 <th><i class="fas fa-money-bill"></i> {{ trans('balance') }}</th>
+                                <th><i class="fas fa-money-bill"></i> {{ trans('Store') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
 
 
@@ -92,6 +93,7 @@
                             { data: 'company_name', name: 'company name' },
                             { data: 'address', name: 'title' },
                             { data: 'balance', name: 'balance' },
+                            { data: 'store', name: 'store' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,10 +24,15 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $users = User::with('roles:name')->select(['id', 'name', 'email', 'created_at', 'status' , 'phone' , 'username']);
+            $users = User::with(['roles:name', 'store'])->select(['id', 'name', 'email', 'created_at', 'status' , 'phone' , 'username' , 'store_id'])->orderBy('created_at', 'desc');
             return DataTables::of($users)
                 ->addColumn('roles', function ($user) {
                     return $user->roles->pluck('name')->join(', ');
+                }) ->addColumn('store', function ($user) {
+//                    return $user->store ? $user->store->name : 'N/A';
+                    return $user->store
+                        ? '<a href="#" class="open-store-modal" data-id="' . $user->store->id . '" data-location = "' . $user->store->location . '">' . $user->store->name . '</a>'
+                        : '';
                 })->addColumn('status', function ($user) {
                     $toggleButton = '<button class="btn btn-sm ' .
                         ($user->status === 'active' ? 'btn-success' : 'btn-light') .
@@ -65,13 +71,13 @@ class UserController extends Controller
     </div>
     ';
                 })
-
-                ->rawColumns(['status', 'action']) ->make(true);
+                ->rawColumns(['status', 'action' , 'store']) ->make(true);
         }
         $users = User::paginate(10);
         $roles = Role::all();
         $pageTitle = "users";
-        return view('users.index', compact(['users', 'roles' , 'pageTitle']));
+        $stores = Store::all();
+        return view('users.index', compact(['users', 'roles' , 'pageTitle' , 'stores']));
     }
 
     public function toggleStatus(Request $request)
@@ -88,9 +94,6 @@ class UserController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -99,6 +102,7 @@ class UserController extends Controller
             'phone' => 'required|min:3|max:255',
             'username' => 'required|string|min:3|max:255|unique:users,username',
             'password' => 'required|min:8',
+            'store' => 'required',
             'status' => 'in:active,inactive'
         ]);
 
@@ -109,15 +113,16 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'username' => $request->username,
+                'store_id' => $request->store,
                 'password' => Hash::make($request->password),
             ]);
 
             $user->assignRole($request->role);
-            \Log::info('User created successfully', [
-                'creator_name' => Auth::name,
-                'creator_id' => Auth::id(),
-                'user_id' => $user->id,
-            ]);
+//            \Log::info('User created successfully', [
+//                'creator_name' => Auth::name,
+//                'creator_id' => Auth::id(),
+//                'user_id' => $user->id,
+//            ]);
             return response()->json([
                 'success' => true,
                 'message' => 'User created successfully.',
@@ -135,10 +140,6 @@ class UserController extends Controller
             ], 500);
         }
     }
-
-
-
-
 
 
     public function update(Request $request, string $id)
@@ -227,14 +228,6 @@ class UserController extends Controller
         }
     }
 
-
-
-
-
-
-
-
-
     /**
      * Remove the specified resource from storage.
      */
@@ -245,8 +238,6 @@ class UserController extends Controller
         return redirect()->back()->with('success', 'User deleted successfully.');
 
     }
-
-
     public function trashed(Request $request)
     {
         if ($request->ajax()) {
@@ -319,5 +310,23 @@ class UserController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to delete the user permanently.']);
         }
     }
+
+    public function getStore($id)
+    {
+        $store = Store::find($id);
+
+        if ($store) {
+            return response()->json([
+                'success' => true,
+                'data' => $store,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Store not found',
+        ], 404);
+    }
+
 
 }
