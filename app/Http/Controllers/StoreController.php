@@ -22,15 +22,24 @@ class StoreController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $stores = Store::select(['id', 'name', 'location', 'created_at', 'updated_at'])->orderBy('created_at', 'desc');
+            $stores = Store::with('users')->select(['id', 'name', 'location', 'created_at', 'updated_at'])->withCount([
+                'users' => function ($query) {
+                    $query->where('status' , '=' , 'active');
+                }
+            ])->orderBy('created_at', 'desc');
 
             return DataTables::of($stores)
                 ->addColumn('name', function ($store) {
                     return $store->name;
                 })
-                ->addColumn('location', function ($store) {
+                ->addColumn('users', function ($store) {
                     return $store->location;
-                })->addColumn('created_at', function ($store) {
+                })
+                ->addColumn('users', function ($store) {
+                    return '<a href="' . route("stores.users", ['id' => $store->id]) . '">' . $store->users_count . '</a>';
+                })
+
+                ->addColumn('created_at', function ($store) {
                     return $store->created_at->format('Y-m-d');
                 })->addColumn('updated_at', function ($store) {
                     return $store->updated_at->format('Y-m-d');
@@ -57,7 +66,7 @@ class StoreController extends Controller
     </div>
     ';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action' , 'users'])
                 ->make(true);
         }
 
@@ -70,52 +79,13 @@ class StoreController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
      */
 
 
-//    public function store(StoreStoreRequest $request)
-//    {
-//        $request->validate([
-//            'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:stores,name',
-//            'location' => 'required|min:3|max:255',
-//
-//        ]);
-//
-//        try {
-//            $creator = Auth::user()->name;
-//            $store = store::create([
-//                'name' => $request->name,
-//                'location' => $request->email,
-//            ]);
-//
-////            \Log::info('Store created successfully', [
-////                'store_name' => Auth::name,
-////                'store_id' => Auth::id(),
-////            ]);
-//            return response()->json([
-//                'success' => true,
-//                'message' => 'store created successfully.',
-//                'data' => $store,
-//            ]);
-//        } catch (\Exception $e) {
-//
-//
-//
-//
-//            return response()->json([
-//                'success' => false,
-//                'message' => 'Something went wrong.',
-//                'error' => $e->getMessage(),
-//            ], 500);
-//        }
-//    }
 
     public function store(Request $request)
     {
@@ -151,15 +121,99 @@ class StoreController extends Controller
     /**
      * Display the specified resource.
      */
-
+//public function users($id)
+//{
+//    $store = Store::findOrFail($id); // التحقق من وجود المتجر
+//      $users = $store->users;
+//    return DataTables::of($users)
+//        ->addColumn('name', function ($user) {
+//            return $user->name; // اسم المستخدم
+//        })
+//        ->addColumn('email', function ($user) {
+//            return $user->email; // بريد المستخدم
+//        })
+//        ->addColumn('username', function ($user) {
+//            return $user->username; // اسم المستخدم
+//        })
+//        ->addColumn('phone', function ($user) {
+//            return $user->phone; // هاتف المستخدم
+//        })
+//        ->addColumn('roles', function ($user) {
+//            return $user->roles->pluck('name')->join(', '); // الأدوار المرتبطة بالمستخدم
+//        })
+//        ->addColumn('status', function ($user) {
+//            $statusClass = $user->status === 'active' ? 'btn-success' : 'btn-light';
+//            $statusText = $user->status === 'active' ? 'Active' : 'Inactive';
+//            return '<button class="btn btn-sm ' . $statusClass . ' toggle-status" data-id="' . $user->id . '">' . $statusText . '</button>';
+//        })
+//        ->addColumn('action', function ($user) {
+//            return '
+//                    <a href="' . route('users.edit', $user->id) . '" class="btn btn-sm btn-warning">Edit</a>
+//                    <form action="' . route('users.destroy', $user->id) . '" method="POST" style="display:inline-block;">
+//                        ' . csrf_field() . method_field('DELETE') . '
+//                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+//                    </form>
+//                ';
+//        })
+//        ->rawColumns(['status', 'action']) // السماح بعرض HTML في الأعمدة
+//        ->make(true);
+//}
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Store $store)
+    public function users($id)
     {
-        //
+        $store = Store::findOrFail($id);
+
+        // جلب المستخدمين المرتبطين بالمتجر مع الأدوار
+        $users = $store->users()->with('roles')->get();
+
+        if (request()->ajax()) {
+            return DataTables::of($users)
+                ->addColumn('name', function ($user) {
+                    return $user->name;
+                })
+                ->addColumn('email', function ($user) {
+                    return $user->email ?? 'N/A';
+                })
+                ->addColumn('username', function ($user) {
+                    return $user->username;
+                })
+                ->addColumn('phone', function ($user) {
+                    return $user->phone;
+                })
+                ->addColumn('roles', function ($user) {
+                    return $user->roles->pluck('name')->join(', '); // جلب أسماء الأدوار
+                })
+                ->addColumn('status', function ($user) {
+                    $statusClass = $user->status === 'active' ? 'btn-success' : 'btn-light';
+                    return '<button class="btn btn-sm ' . $statusClass . '">' . $user->status . '</button>';
+                })
+                ->addColumn('action', function ($user) {
+                    return '
+                    <a href="' . route('users.edit', $user->id) . '" class="btn btn-sm btn-warning">Edit</a>
+                    <form action="' . route('users.destroy', $user->id) . '" method="POST" style="display:inline-block;">
+                        ' . csrf_field() . method_field('DELETE') . '
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>';
+                })
+                ->rawColumns(['status', 'action'])
+                ->make(true);
+        }
+
+        $pageTitle = 'Users for Store: ' . $store->name;
+        return view('stores.relatedUsers', compact('store', 'pageTitle', 'id'));
     }
+
+
+
+
+
+
+
+
+
 
     /**
      * Update the specified resource in storage.

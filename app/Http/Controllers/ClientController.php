@@ -23,7 +23,7 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $clients = Client::select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'store_id'])->get();
+            $clients = Client::with(['store'])->select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'store_id'])->get();
 
             return DataTables::of($clients)
                 ->addColumn('name', function ($client) {
@@ -84,10 +84,10 @@ class ClientController extends Controller
                 ->rawColumns(['website', 'logo', 'action'])
                 ->make(true);
         }
-
+        $userRole = Auth::user()->roles->pluck('name');
         $clients = Client::paginate(10);
         $pageTitle = "Clients";
-        return view('clients.index', compact('clients', 'pageTitle'));
+        return view('clients.index', compact('clients', 'pageTitle' , 'userRole'));
     }
 
 

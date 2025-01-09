@@ -81,6 +81,7 @@
 
 
                 $(document).ready(function () {
+                    var userRole = "{{$userRole}}"
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#product-table').DataTable({
                         processing: true,
@@ -93,7 +94,7 @@
                             { data: 'price', name: 'price' },
                             { data: 'quantity', name: 'quantity' },
                             { data: 'cutter_name', name: 'Cutter' },
-                            { data: 'store', name: 'store' },
+                            { data: 'store', name: 'store' , visible: userRole != 'agent'},
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +

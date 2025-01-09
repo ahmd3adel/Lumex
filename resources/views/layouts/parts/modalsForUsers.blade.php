@@ -67,42 +67,24 @@
                 @csrf
                 <div class="modal-body">
                     <div class="row">
-                        <!-- Name Field -->
-                        <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">{{trans('Name')}}</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
-                            @error('name')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
                         <!-- Email Field -->
                         <div class="col-md-6 mb-3">
                             <label for="email" class="form-label">{{trans('Email')}}</label>
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">{{trans('Store')}}</label>
-                            <select class="form-label" name="store">
-                                <option>select store</option>
-                                @foreach($stores as $store)
-                                    <option value="{{$store->id}}">{{$store->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
 
+                        <!-- Phone Field -->
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">{{trans('Phone')}}</label>
                             <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter phone number">
                         </div>
 
+                        <!-- Username Field -->
                         <div class="col-md-6 mb-3">
                             <label for="Username" class="form-label">{{trans('Username')}}</label>
                             <input type="text" class="form-control" id="Username" name="username" placeholder="Enter username">
                         </div>
-                    </div>
-                    <div class="row">
+
                         <!-- Role Field -->
                         <div class="col-md-6 mb-3">
                             <label for="role" class="form-label">{{trans('Role')}}</label>
@@ -110,23 +92,32 @@
                                 <option value="">Select role</option>
                                 @foreach($roles as $role)
                                     <option value="{{$role->name}}">{{ucfirst($role->name)}}</option>
-
                                 @endforeach
-
                             </select>
                         </div>
+
                         <!-- Password Field -->
                         <div class="col-md-6 mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="password" autocomplete="off" class="form-control" id="password" name="password" placeholder="Enter password">
+                        </div>
+
+                        <!-- Store Field -->
+                        <div id="storeFieldWrapper" class="col-md-6 mb-3">
+                            <label for="store" class="form-label">{{ trans('Store') }}</label>
+                            <select class="form-control" name="store">
+                                <option>Select store</option>
+                                @foreach($stores as $store)
+                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
 
                 <!-- Modal Footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary"  data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
-
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fas fa-times"></i> Close</button>
                     <button type="submit" class="btn btn-primary submit-creating-form" onclick="disableButton(this)">
                         <i class="fas fa-save"></i> Create
                     </button>
@@ -137,7 +128,6 @@
 </div>
 <!-- end create user Modal -->
 <!-- start edit user Modal -->
-
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -212,8 +202,6 @@
 </div>
 
 <!-- end edit user Modal -->
-
-
 
 <div class="modal fade" id="storeModal" tabindex="-1" role="dialog" aria-labelledby="storeModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">

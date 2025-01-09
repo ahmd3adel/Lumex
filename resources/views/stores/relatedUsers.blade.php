@@ -14,7 +14,7 @@
                         @parent
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">{{trans('Home')}}</a></li>
-                            <li class="breadcrumb-item active "> {{trans('store table')}} </li>
+                            <li class="breadcrumb-item active "> {{trans('store table')}}  </li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -27,7 +27,7 @@
                 <!-- Card for the table -->
                 <div class="card p-4">
                     <div class="card-header">
-                        <h3 class="card-title">{{__('store table')}}</h3>
+                        <h3 class="card-title">{{__('store table')}} for {{$store->name}}</h3>
                         <div class="card-tools">
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createstoreModal">
                                 <i class="fas fa-store-plus"></i> @lang('add store')
@@ -44,11 +44,12 @@
                             <thead>
                             <tr>
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('location') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('Users') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('Created_at') }}</th>
-                                <th><i class="fas fa-store"></i> {{ trans('Updated_at') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
+                                <th><i class="fas fa-envelope"></i> {{ trans('email') }}</th>
+                                <th><i class="fas fa-at"></i> {{ trans('username') }}</th>
+                                <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
+                                <th><i class="fas fa-user-tag"></i> {{ trans('roles') }}</th>
+                                <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
@@ -74,6 +75,9 @@
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
+            var storeId = "{{$id}}";
+            var ajaxUrl = "{{ route('stores.users', ':id') }}";
+            var ajax1 = ajaxUrl.replace(':id' , storeId)
             $('#createstoreModal, #editstoreModal').on('hidden.bs.modal', function () {
                 const form = this.querySelector('form');
                 if (form) resetForm(form);
@@ -83,14 +87,15 @@
             let table = $('#store-table').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ route('stores.index') }}",
+                ajax: ajax1,
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name' },
-                    { data: 'location', name: 'location' },
-                    { data: 'users', name: 'users' },
-                    { data: 'created_at', name: 'created_at' },
-                    { data: 'updated_at', name: 'updated_at' },
+                    { data: 'email', name: 'email' },
+                    { data: 'username', name: 'username' },
+                    { data: 'phone', name: 'phone' },
+                    { data: 'roles', name: 'roles' },
+                    { data: 'status', name: 'status' },
                     { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
                 dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +

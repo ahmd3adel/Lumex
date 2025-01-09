@@ -20,7 +20,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $products = Product::select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name' , 'store_id'])->orderBy('created_at' , 'desc')->get();
+            $products = Product::with('store')->select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name' , 'store_id'])->orderBy('created_at' , 'desc')->get();
 
             return DataTables::of($products)
                 ->addColumn('name', function ($product) {
@@ -75,7 +75,8 @@ class ProductController extends Controller
 
         $products = Product::paginate(10);
         $pageTitle = "Products";
-        return view('products.index', compact('products', 'pageTitle'));
+        $userRole = Auth::user()->roles->first()->name;
+        return view('products.index', compact('products', 'pageTitle' , 'userRole'));
     }
 
 

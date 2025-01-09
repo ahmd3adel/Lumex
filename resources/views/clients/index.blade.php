@@ -43,7 +43,7 @@
                         <table id="client-table" class="table table-bordered table-hover w-100">
                             <thead>
                             <tr>
-
+{{--@dd($userRole);--}}
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
                                 <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
@@ -81,6 +81,7 @@
 
 
                 $(document).ready(function () {
+                    const userRole = "{{ $userRole }}";
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#client-table').DataTable({
                         processing: true,
@@ -93,7 +94,7 @@
                             { data: 'company_name', name: 'company name' },
                             { data: 'address', name: 'title' },
                             { data: 'balance', name: 'balance' },
-                            { data: 'store', name: 'store' },
+                            { data: 'store', name: 'store' , visible: userRole != 'agent'},
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
