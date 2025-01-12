@@ -2,59 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use App\Models\Profile;
+use App\Http\Requests\StoreProfileRequest;
+use App\Http\Requests\UpdateProfileRequest;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * Display a listing of the resource.
      */
-    public function edit(Request $request): View
+    public function index()
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $pageTitle = "Profile";
+        return view('profiles.profile' , compact('pageTitle'));
     }
 
     /**
-     * Update the user's profile information.
+     * Show the form for creating a new resource.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function create()
     {
-        $request->user()->fill($request->validated());
-
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
-
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        //
     }
 
     /**
-     * Delete the user's account.
+     * Store a newly created resource in storage.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function store(StoreProfileRequest $request)
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
+        //
+    }
 
-        $user = $request->user();
+    /**
+     * Display the specified resource.
+     */
+    public function show(Profile $profile)
+    {
+        //
+    }
 
-        Auth::logout();
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Profile $profile)
+    {
+        return view('profiles.profile');
+    }
 
-        $user->delete();
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateProfileRequest $request, Profile $profile)
+    {
+        //
+    }
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Profile $profile)
+    {
+        //
     }
 }

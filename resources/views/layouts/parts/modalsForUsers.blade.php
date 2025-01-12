@@ -73,6 +73,11 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter email">
                         </div>
 
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">{{trans('Name')}}</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter email">
+                        </div>
+
                         <!-- Phone Field -->
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">{{trans('Phone')}}</label>
@@ -188,6 +193,23 @@
                             </select>
                             <div class="invalid-feedback">Please select a role.</div>
                         </div>
+
+
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" autocomplete="off" class="form-control" id="password" name="password" placeholder="Enter password">
+                        </div>
+
+                        <div id="storeFieldWrapper" class="col-md-6 mb-3">
+                            <label for="store" class="form-label">{{ trans('Store') }}</label>
+                            <select class="form-control" name="store">
+                                <option>Select store</option>
+                                @foreach($stores as $store)
+                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                     </div>
                 </div>
 

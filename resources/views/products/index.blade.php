@@ -7,7 +7,7 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1 class="">{{trans('clients')}}</h1>
+                        <h1 class="">{{trans('Products')}}</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         @parent
@@ -50,6 +50,7 @@
                                 <th><i class="fas fa-user"></i> {{ trans('price') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('quantity') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('Cutter') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('Status') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('Store') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
 
@@ -94,6 +95,7 @@
                             { data: 'price', name: 'price' },
                             { data: 'quantity', name: 'quantity' },
                             { data: 'cutter_name', name: 'Cutter' },
+                            { data: 'status', name: 'status' },
                             { data: 'store', name: 'store' , visible: userRole != 'agent'},
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
@@ -165,6 +167,26 @@
                             bootstrapModal.show();
                         }
                     });
+
+                    $(document).on('click', '.toggle-status', function () {
+                        let userId = $(this).data('id');
+                        $.ajax({
+                            url: "{{ route('products.toggleStatus') }}",
+                            type: 'POST',
+                            data: {
+                                _token: '{{ csrf_token() }}',
+                                id: userId
+                            },
+                            success: function (response) {
+                                Swal.fire('{{ trans('Success') }}', '{{ trans('User status updated successfully.') }}', 'success');
+                                table.ajax.reload();
+                            },
+                            error: function () {
+                                Swal.fire('خطأ', 'حدث خطأ أثناء تحديث الحالة', 'error');
+                            }
+                        });
+                    });
+
                     // Create product Form Submission
                     const storeproductRoute = "{{ route('products.store') }}";
 
@@ -345,7 +367,6 @@
                         const form = this.querySelector('form');
                         if (form) resetForm(form);
                     });
-
                 });
                 // Utility functions
                 function resetForm(form) {
@@ -377,12 +398,5 @@
                         button.innerHTML = 'Submit';
                     }
                 }
-
-
-
-
-
             </script>
-
-
     @endpush

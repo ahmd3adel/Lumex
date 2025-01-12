@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use PHPUnit\Exception;
@@ -50,6 +51,7 @@ class UserController extends Controller
                 data-phone="' . $user->phone . '"
                 data-role="' . $user->roles->pluck('name')->join(', ') . '"
                 data-joined="' . $user->created_at . '"
+                data-store_id="' . $user->store_id . '"
                 data-email="' . $user->email . '">
             <i class="fas fa-eye"></i> View
         </button>
@@ -102,12 +104,12 @@ class UserController extends Controller
             'phone' => 'required|min:3|max:255',
             'username' => 'required|string|min:3|max:255|unique:users,username',
             'password' => 'required|min:8',
-            'store' => 'required',
+            'store' => 'required|exists:stores,id',
+            'role' => 'required|exists:roles,name',
             'status' => 'in:active,inactive'
         ]);
 
         try {
-            $creator = Auth::user()->name;
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -117,22 +119,22 @@ class UserController extends Controller
                 'password' => Hash::make($request->password),
             ]);
 
-            $user->assignRole($request->role);
-//            \Log::info('User created successfully', [
-//                'creator_name' => Auth::name,
-//                'creator_id' => Auth::id(),
-//                'user_id' => $user->id,
-//            ]);
+            if (Role::where('name', $request->role)->exists()) {
+                $user->assignRole($request->role);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid role provided.',
+                ], 400);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'User created successfully.',
                 'data' => $user,
             ]);
         } catch (\Exception $e) {
-
-
-
-
+            \Log::error('Error in user creation: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Something went wrong.',
@@ -140,6 +142,8 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+
 
 
     public function update(Request $request, string $id)

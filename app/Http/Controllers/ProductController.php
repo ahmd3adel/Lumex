@@ -20,19 +20,23 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $products = Product::with('store')->select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name' , 'store_id'])->orderBy('created_at' , 'desc')->get();
+            $products = Product::with('store')->select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name' , 'store_id' , 'status'])->orderBy('created_at' , 'desc')->get();
 
             return DataTables::of($products)
                 ->addColumn('name', function ($product) {
                     return $product->name;
                 }) ->addColumn('store', function ($product) {
                     return $product->store ? $product->store->name : 'No Store Assigned';
-                })
-
-                ->addColumn('description', function ($product) {
+                })->addColumn('description', function ($product) {
                     return $product->description;
-                })
-                ->addColumn('price', function ($product) {
+                })->addColumn('status', function ($product) {
+                    $toggleButton = '<button class="btn btn-sm ' .
+                        ($product->status === 'active' ? 'btn-success' : 'btn-light') .
+                        ' toggle-status" data-id="' . $product->id . '">' .
+                        ($product->status === 'active' ? 'Active' : 'Inactive') .
+                        '</button>';
+                    return $toggleButton;
+                })->addColumn('price', function ($product) {
                     return $product->price;
                 })->addColumn('quantity', function ($product) {
                     return $product->quantity;
@@ -69,7 +73,7 @@ class ProductController extends Controller
                     </form>
                 </div>';
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action' , 'status'])
                 ->make(true);
         }
 
@@ -78,12 +82,18 @@ class ProductController extends Controller
         $userRole = Auth::user()->roles->first()->name;
         return view('products.index', compact('products', 'pageTitle' , 'userRole'));
     }
+    public function toggleStatus(Request $request)
+    {
+        $product = Product::findOrFail($request->id);
+        $product->status = $product->status === 'active' ? 'inactive' : 'active';
+        $product->save();
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-
+        return response()->json([
+            'success' => true,
+            'message' => 'Status updated successfully!',
+            'new_status' => $product->status
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.

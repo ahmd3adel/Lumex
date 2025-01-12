@@ -18,6 +18,8 @@ return new class extends Migration
             $table->text('description')->nullable(); // Product description
             $table->decimal('price', 10, 0); // Product price
             $table->integer('quantity')->default(0); // Quantity in stock
+            $table->string('image')->nullable(); // image
+            $table->enum('status' , ['active' , 'inactive'])->default('active');
             $table->foreignId('store_id'); // Quantity in stock
             $table->foreign('store_id')->references('id')->on('stores')->cascadeOnDelete();
             $table->timestamps(); // Created at and Updated at timestamps

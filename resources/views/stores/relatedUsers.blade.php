@@ -164,6 +164,33 @@
                 }
             });
 
+            $(document).on('click', '.toggle-status', function () {
+                let userId = $(this).data('id');
+                $.ajax({
+                    url: "{{ route('users.toggleStatus') }}",
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: userId
+                    },
+                    success: function (response) {
+                        Swal.fire('{{ trans('Success') }}', '{{ trans('User status updated successfully.') }}', 'success');
+                        table.ajax.reload();
+                    },
+                    error: function () {
+                        Swal.fire('خطأ', 'حدث خطأ أثناء تحديث الحالة', 'error');
+                    }
+                });
+            });
+            @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                timer: 3000,
+                showConfirmButton: false
+            });
+            @endif
             // Edit Store Modal
             document.addEventListener('click', function (e) {
                 if (e.target.closest('.edit-store')) {

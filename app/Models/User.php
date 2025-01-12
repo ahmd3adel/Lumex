@@ -36,7 +36,10 @@ class User extends Authenticatable
     }
 
 
-
+    public function profile()
+    {
+        return $this->belongsTo(Profile::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -56,34 +59,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-
-    protected static function booted()
-    {
-
-
-
-//             static::addGlobalScope('storeUsers', function (Builder $builder) {
-//                $user = Auth::user();
-//                $builder->where('id' , "=" , $user->store_id);
-//            });
-
-
-//        try {
-//            static::addGlobalScope('storeUsers', function (Builder $builder) {
-//                if (Auth::check() && !is_null(Auth::user()->store_id)) {
-//                    $builder->where('store_id', Auth::user()->store_id);
-//                }
-//            });
-//        }
-//        catch (\Exception $e) {
-//            \Log::error('Error in User Global Scope: ' . $e->getMessage(), [
-//                'trace' => $e->getTraceAsString(),
-//            ]);
-//        }
-    }
-
-
 
 
 

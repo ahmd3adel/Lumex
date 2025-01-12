@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/dashboard" class="brand-link">
+    <a href="/accounts/" class="brand-link">
         <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Admin Dashboard</span>
     </a>
@@ -13,7 +13,7 @@
                 <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="/profile" class="d-block text-white font-weight-bold text-capitalize">
+                <a href="/accounts/"  class="d-block text-white font-weight-bold text-capitalize">
                     {{ \Illuminate\Support\Facades\Auth::user()->name }}
                 </a>
                 <small class="text-muted">
@@ -31,32 +31,32 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
 
                 <li class="nav-item">
-                    <a href="/dashboard" class="nav-link">
+                    <a href="/accounts/" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-header">MANAGEMENT</li>
                 <li class="nav-item">
-                    <a href="/users" class="nav-link">
+                    <a href="{{route('users.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>Users</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/clients" class="nav-link">
+                    <a href="{{route('clients.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-user-friends"></i>
                         <p>Clients</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/stores" class="nav-link">
+                    <a href="{{route('stores.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-store"></i>
                         <p>Stores</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/products" class="nav-link">
+                    <a href="{{route('products.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
                         <p>Products</p>
                     </a>

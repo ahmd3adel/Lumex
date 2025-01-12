@@ -1,13 +1,10 @@
 <?php
 
-use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth' , 'checkStatus'])->group(function () {
-    Route::get('admin/dashboard' , function (){
-        return view('admins.dashboard');
-    });
+Route::middleware(['checkStatus'])->group(function () {
     Route::get('/' , function (){
         return view('admins.dashboard');
     });
@@ -17,6 +14,6 @@ Route::middleware(['auth' , 'checkStatus'])->group(function () {
     Route::resource('/users', UserController::class);
     Route::post('/users/toggle-status', [UserController::class, 'toggleStatus'])->name('users.toggleStatus');
     Route::get('users/store/{id}', [UserController::class, 'getStore'])->name('store.get');
-
+    Route::resource('/profiles', ProfileController::class);
 });
 ?>

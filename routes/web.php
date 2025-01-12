@@ -1,11 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\App;
+use App\Http\Controllers\front\HomeController;
+use App\Http\Controllers\front\ProductController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use App\Http\Controllers\StoreController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +29,6 @@ Route::group(
 
     ],
     function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->middleware(['auth', 'verified'])->name('dashboard');
 
         Route::get('/change-language', function (Illuminate\Http\Request $request) {
             $locale = $request->get('locale', 'en'); // تحديد اللغة الافتراضية
@@ -46,11 +41,20 @@ Route::group(
             return redirect()->to(LaravelLocalization::getLocalizedURL($locale));
         })->name('changeLanguage');
 
+        Route::get('/' , [HomeController::class , 'index']);
+        Route::get('products' , [ProductController::class , 'index'])->name('front.products.index');
+        Route::get('products/{product:name}' , [ProductController::class , 'show'])->name('front.products.show');
         require __DIR__.'/auth.php';
-        require __DIR__.'/stores.php';
-        require __DIR__.'/users.php';
-        require __DIR__.'/clients.php';
-        require __DIR__.'/products.php';
+        Route::middleware('auth')->group(function (){
+        Route::group(['prefix' => 'accounts'] , function (){
+            require __DIR__.'/stores.php';
+            require __DIR__.'/users.php';
+            require __DIR__.'/clients.php';
+            require __DIR__.'/products.php';
+        });
+
+        });
+
     }
 );
 

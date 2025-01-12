@@ -184,11 +184,15 @@ class StoreController extends Controller
                     return $user->phone;
                 })
                 ->addColumn('roles', function ($user) {
-                    return $user->roles->pluck('name')->join(', '); // جلب أسماء الأدوار
+                    return $user->roles->pluck('name')->join(', ');
                 })
                 ->addColumn('status', function ($user) {
-                    $statusClass = $user->status === 'active' ? 'btn-success' : 'btn-light';
-                    return '<button class="btn btn-sm ' . $statusClass . '">' . $user->status . '</button>';
+                    $toggleButton = '<button class="btn btn-sm ' .
+                        ($user->status === 'active' ? 'btn-success' : 'btn-light') .
+                        ' toggle-status" data-id="' . $user->id . '">' .
+                        ($user->status === 'active' ? 'Active' : 'Inactive') .
+                        '</button>';
+                    return $toggleButton;
                 })
                 ->addColumn('action', function ($user) {
                     return '
@@ -295,53 +299,6 @@ class StoreController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-
-//    public function trashed(Request $request)
-//    {
-//        if ($request->ajax()) {
-//            $users = User::onlyTrashed()->get(); // جلب المستخدمين المحذوفين فقط
-//
-//            return DataTables::of($users)
-//                ->addColumn('roles', function ($user) {
-//                    return $user->roles->pluck('name')->join(', ');
-//                })
-//                ->addColumn('action', function ($user) {
-//                    return '
-//<div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
-//    <button class="btn btn-info btn-sm view-user"
-//            data-id="' . $user->id . '"
-//            data-name="' . $user->name . '"
-//            data-username="' . $user->username . '"
-//            data-phone="' . $user->phone . '"
-//            data-role="' . $user->roles->pluck('name')->join(', ') . '"
-//            data-joined="' . $user->created_at . '"
-//            data-email="' . $user->email . '">
-//        <i class="fas fa-eye"></i> View
-//    </button>
-//<form action="' . route('users.restore', $user->id) . '" method="POST" class="restore-form">
-//    ' . csrf_field() . method_field('PUT') . '
-//    <button type="submit" class="btn btn-success btn-sm">
-//        <i class="fas fa-undo"></i> Restore
-//    </button>
-//</form>
-//<form action="' . route('users.forceDelete', $user->id) . '" method="POST" class="restore-form">
-//    ' . csrf_field() . method_field('DELETE') . '
-//    <button type="submit" class="btn btn-success btn-sm">
-//        <i class="fas fa-undo"></i> Force Delete
-//    </button>
-//</form>
-//
-//</div>
-//';
-//                })
-//                ->rawColumns(['status', 'action'])->make(true);
-//        }
-//
-//        $users = User::onlyTrashed()->paginate(10);
-//        $roles = Role::all();
-//        $pageTitle = "Trashed Users";
-//        return view('users.trashedUsers', compact(['users', 'roles', 'pageTitle']));
-//    }
 
 
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -20,6 +21,9 @@ class Product extends Model
     }
 
 
+
+
+
     protected static function booted()
     {
         static::addGlobalScope('store', function (Builder $builder) {
@@ -30,5 +34,22 @@ class Product extends Model
         });
     }
 
+    public function scopeActive(Builder $builder)
+    {
+        $builder->where('status' , 'active');
+    }
+
+
+    public function getFakeUrlAttribute()
+    {
+        if (!$this->image){
+            return "https://dummyimage.com/640x480/00ff77/ffffff.png&text=Placeholder";
+        }
+        if (str::startsWith($this->image , ['http://' , 'https://'])){
+            return "default.webp";
+        }
+        return asset($this->image);
+
+    }
 
 }
