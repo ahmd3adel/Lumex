@@ -22,8 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-//        App::setLocale('ar');
-        Paginator::useBootstrap(); // استخدم Bootstrap فقط
+        Paginator::useBootstrap();
     }
 
 

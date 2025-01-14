@@ -49,7 +49,6 @@ class Product extends Model
             return "default.webp";
         }
         return asset($this->image);
-
     }
 
 }

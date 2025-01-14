@@ -44,6 +44,7 @@ Route::group(
         Route::get('/' , [HomeController::class , 'index']);
         Route::get('products' , [ProductController::class , 'index'])->name('front.products.index');
         Route::get('products/{product:name}' , [ProductController::class , 'show'])->name('front.products.show');
+        Route::resource('cart' , \App\Http\Controllers\front\CartController::class);
         require __DIR__.'/auth.php';
         Route::middleware('auth')->group(function (){
         Route::group(['prefix' => 'accounts'] , function (){

@@ -27,7 +27,8 @@ class User extends Authenticatable
         'password',
         'phone',
         'username',
-        'store_id'
+        'store_id',
+        'last_login'
     ];
 
     public function store()

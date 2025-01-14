@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['checkStatus'])->group(function () {
+Route::middleware(['checkStatus' , 'last_login'])->group(function () {
     Route::get('/' , function (){
         return view('admins.dashboard');
     });
