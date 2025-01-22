@@ -30,4 +30,11 @@
     },
 
     "company name": "اسم الشركة",
+    "discount": "خصم" ,
+    "net_total": "المبلغ قبل الخصم" ,
+    "total": "المبلغ" ,
+    "invoice_date": "التاريخ",
+    "invoice_no" : "رقم الفاتورة",
+    "store": "الشركة",
+    "client": "العميل"
 }

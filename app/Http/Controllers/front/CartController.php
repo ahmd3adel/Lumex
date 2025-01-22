@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\Product;
 use App\Repository\Cart\CartModelRepository;
 use Illuminate\Http\Request;
@@ -31,12 +32,25 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'product_id' => 'required|int|exists:products,id',
-            'quantity' => 'nullable|min:1|int'
-        ]);
-        $product = Product::findOrFail($request->product_id);
-        $this->repository->add($product , $request->quantity);
+
+        $cartItem = Cart::where('product_id', $request->product_id)
+            ->where('user_id', Auth::id())
+            ->first();
+        if ($cartItem)
+        {
+            $cartItem->update([
+                'quantity' => $cartItem->quantity + $request->quantity
+            ]);
+        }
+        else{
+            $request->validate([
+                'product_id' => 'required|int|exists:products,id',
+                'quantity' => 'nullable|min:1|int'
+            ]);
+            $product = Product::findOrFail($request->product_id);
+            $this->repository->add($product , $request->quantity);
+        }
+
         return redirect()->route('cart.index');
     }
 
@@ -59,9 +73,11 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        $product = Product::findOrFail($id);
-        $this->repository->add($product , $product->quantity ?? 1);
+        $productId = Product::findOrFail($id);
+//        $this->repository->add($product , $product->quantity ?? 1);
+        $productId->delete();
+        return redirect()->back();
     }
 }

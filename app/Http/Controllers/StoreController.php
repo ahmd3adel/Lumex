@@ -22,16 +22,13 @@ class StoreController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $stores = Store::with('users')->select(['id', 'name', 'location', 'created_at', 'updated_at'])->withCount([
+            $stores = Store::with('users:id,name')->select(['id', 'name', 'location', 'created_at', 'updated_at'])->withCount([
                 'users' => function ($query) {
                     $query->where('status' , '=' , 'active');
                 }
             ])->orderBy('created_at', 'desc');
 
             return DataTables::of($stores)
-                ->addColumn('name', function ($store) {
-                    return $store->name;
-                })
                 ->addColumn('users', function ($store) {
                     return $store->location;
                 })

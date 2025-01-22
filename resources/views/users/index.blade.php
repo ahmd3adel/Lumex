@@ -50,6 +50,8 @@
                                 <th><i class="fas fa-user-tag"></i> {{ trans('roles') }}</th>
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('store') }}</th>
+                                <th><i class="fas fa-toggle-on"></i> {{ trans('created by') }}</th>
+                                <th><i class="fas fa-toggle-on"></i> {{ trans('updated by') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
@@ -91,7 +93,9 @@
                             { data: 'phone', name: 'phone' },
                             { data: 'roles', name: 'roles', orderable: false, searchable: false },
                             { data: 'status', name: 'status' },
-                            { data: 'store', name: 'store' },
+                            { data: 'store', name: 'store.name' , searchable: true },
+                            { data: 'created by', name: 'created by' },
+                            { data: 'updated by', name: 'updated by' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +

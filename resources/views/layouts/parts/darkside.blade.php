@@ -13,12 +13,13 @@
                 <img src="{{ asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
             </div>
             <div class="info">
-                <a href="/accounts/"  class="d-block text-white font-weight-bold text-capitalize">
+                <a href="/accounts/" class="d-block text-white font-weight-bold text-capitalize">
                     {{ \Illuminate\Support\Facades\Auth::user()->name }}
                 </a>
                 <small class="text-muted">
                     @if (Auth::user()->store && Auth::user()->store->name)
-                        {{ Auth::user()->store->name }}
+                        {{ Auth::user()->store->name }}  <br>
+                        {{ Auth::user()->roles['0']->name }}
                     @else
                         {{ Auth::user()->email }}
                     @endif
@@ -29,7 +30,6 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
                 <li class="nav-item">
                     <a href="/accounts/" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -63,14 +63,20 @@
                 </li>
                 <li class="nav-header">FINANCIAL</li>
                 <li class="nav-item">
-                    <a href="/invoices" class="nav-link">
+                    <a href="{{route('invoices.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                         <p>Invoices</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/invoices" class="nav-link">
-                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                <li class="nav-item ml-3">
+                    <a href="/invoices/returns" class="nav-link">
+                        <i class="nav-icon fas fa-undo"></i>
+                        <p>Returns</p>
+                    </a>
+                </li>
+                <li class="nav-item ml-3">
+                    <a href="/invoices/payments" class="nav-link">
+                        <i class="nav-icon fas fa-credit-card"></i>
                         <p>Payments</p>
                     </a>
                 </li>
@@ -99,7 +105,6 @@
                         <p>Settings</p>
                     </a>
                 </li>
-
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

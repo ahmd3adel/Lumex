@@ -114,7 +114,17 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
+@if(!Auth::user()->hasRole('agent'))
+                        <div id="storeFieldWrapper" class="col-md-6 mb-3">
+                            <label for="store" class="form-label">{{ trans('Store') }}</label>
+                            <select class="form-control" name="store_id">
+                                <option>Select store</option>
+                                @foreach($stores as $store)
+                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @endif
                         <!-- Section 2: Contact Details -->
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">{{ trans('Phone') }}</label>
@@ -133,7 +143,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="title" class="form-label">{{ trans('Title') }}</label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="{{ trans('Enter title') }}" required>
+                            <input type="text" class="form-control" id="title" name="address" placeholder="{{ trans('Enter title') }}" required>
                             @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

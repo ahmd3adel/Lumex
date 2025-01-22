@@ -24,9 +24,22 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $users = User::with(['roles:name', 'store'])->select(['id', 'name', 'email', 'created_at', 'status' , 'phone' , 'username' , 'store_id'])->orderBy('created_at', 'desc');
-            return DataTables::of($users)
+if ($request->ajax()) {
+    $users = User::with([
+        'roles:name', // Load only the name field of roles
+        'store:id,name' // Load only the id and name fields of store
+    ])
+        ->select([
+            'id', 'name', 'email', 'created_at', 'status', 'phone', 'username', 'store_id', 'created_by', 'updated_by'
+        ])
+        ->where('id' , '!=' , Auth::id())
+        ->whereHas('roles', function ($query) {
+            $query->where('name', '!=', 'super admin');
+        })
+        ->orderBy('created_at', 'desc');
+
+
+    return DataTables::of($users)
                 ->addColumn('roles', function ($user) {
                     return $user->roles->pluck('name')->join(', ');
                 }) ->addColumn('store', function ($user) {
@@ -41,7 +54,13 @@ class UserController extends Controller
                         ($user->status === 'active' ? 'Active' : 'Inactive') .
                         '</button>';
                     return $toggleButton;
-                })->addColumn('action', function ($user) {
+                })->addColumn('created by',function ($user){
+                    return $user->createdBy->name ?? "";
+                })->addColumn('updated by',function ($user){
+                    return $user->updatedBy->name ?? "";
+                })
+
+                ->addColumn('action', function ($user) {
                     return '
     <div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
         <button class="btn btn-info btn-sm view-user"
@@ -95,18 +114,29 @@ class UserController extends Controller
         ]);
     }
 
-
     public function store(Request $request)
     {
+        Log::info('Request in middleware before merge: ', $request->all());
+
+        if (Auth::user()->hasRole('agent'))
+        {
+            $storeId = Auth::user()->store_id;
+        }
+        else
+        {
+            $storeId = $request->store_id;
+        }
+
         $request->validate([
             'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name',
             'email' => 'required|email|min:3|max:255|unique:users,email',
             'phone' => 'required|min:3|max:255',
             'username' => 'required|string|min:3|max:255|unique:users,username',
             'password' => 'required|min:8',
-            'store' => 'required|exists:stores,id',
+            'store_id' => 'required|exists:stores,id',
             'role' => 'required|exists:roles,name',
-            'status' => 'in:active,inactive'
+            'status' => 'in:active,inactive',
+            'user_id' => 'exists:users,id'
         ]);
 
         try {
@@ -117,6 +147,7 @@ class UserController extends Controller
                 'username' => $request->username,
                 'store_id' => $request->store,
                 'password' => Hash::make($request->password),
+
             ]);
 
             if (Role::where('name', $request->role)->exists()) {
@@ -143,12 +174,8 @@ class UserController extends Controller
         }
     }
 
-
-
-
     public function update(Request $request, string $id)
     {
-        // Define validation rules
         $rules = [
             'name' => [
                 'required',
@@ -176,6 +203,7 @@ class UserController extends Controller
             'password' => 'nullable|string|min:8',
             'role' => 'nullable|string|exists:roles,name',
             'status' => 'in:active,inactive',
+            'user_id' => 'exists:users,id',
         ];
 
         // Validate request manually
@@ -207,6 +235,7 @@ class UserController extends Controller
                 'username' => $request->input('username'),
             ]);
 
+//            $user->update($request->all());
             // Update password if provided
             if ($request->filled('password')) {
                 $user->update(['password' => Hash::make($request->input('password'))]);

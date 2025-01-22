@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('created_by')->nullable();
+
+            $table->unsignedBigInteger('updated_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
+
+            $table->foreign('updated_by')->references('id')->on('users')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }

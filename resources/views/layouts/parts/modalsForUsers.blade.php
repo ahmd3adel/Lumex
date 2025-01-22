@@ -110,7 +110,7 @@
                         <!-- Store Field -->
                         <div id="storeFieldWrapper" class="col-md-6 mb-3">
                             <label for="store" class="form-label">{{ trans('Store') }}</label>
-                            <select class="form-control" name="store">
+                            <select class="form-control" name="store_id">
                                 <option>Select store</option>
                                 @foreach($stores as $store)
                                     <option value="{{ $store->id }}">{{ $store->name }}</option>
@@ -202,7 +202,7 @@
 
                         <div id="storeFieldWrapper" class="col-md-6 mb-3">
                             <label for="store" class="form-label">{{ trans('Store') }}</label>
-                            <select class="form-control" name="store">
+                            <select class="form-control" name="store_id">
                                 <option>Select store</option>
                                 @foreach($stores as $store)
                                     <option value="{{ $store->id }}">{{ $store->name }}</option>

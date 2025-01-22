@@ -79,7 +79,7 @@ class ProductController extends Controller
 
         $products = Product::paginate(10);
         $pageTitle = "Products";
-        $userRole = Auth::user()->roles->first()->name;
+        $userRole = Auth::user()->roles->first()->name ?? "";
         return view('products.index', compact('products', 'pageTitle' , 'userRole'));
     }
     public function toggleStatus(Request $request)

@@ -12,43 +12,44 @@ use Illuminate\Support\Str;
 
 class CartModelRepository implements CartRepository
 {
+    public $items;
+    public function __construct()
+    {
+        $this->items = collect([]);
+    }
     public function get() :Collection{
-       return Cart::with('product')->where('cookie_id' , $this->getCookie())->get();
+        if (!$this->items->count())
+        {
+             $this->items = Cart::with('product')->get();
+        }
+       return $this->items;
     }
     public function add(Product $product , $quantity = 1){
-        Cart::create([
-            'cookie_id' => $this->getCookie(),
+        $item= Cart::create([
             'user_id' => Auth::id(),
             'product_id' => $product->id,
             'quantity' => $quantity,
         ]);
+        $this->get()->push($item);
     }
     public function delete($id){
-        Cart::where('id' , $id)->where('cart_id' , $this->getCookie())->delete();
+        Cart::where('id' , $id)->delete();
     }
     public function update(Product $product , $quantity){
-        Cart::where('product_id' , $product->id)->where('cart_id' , $this->getCookie())->update([
+        Cart::where('product_id' , $product->id)->update([
             'quantity' => $quantity
         ]);
     }
     public function total()
     {
-        return Cart::where('cart_id' , $this->getCookie())->join('products', 'products.id', '=', 'cart.product_id')
-            ->selectRaw('SUM(products.price * cart.quantity) as total_price')
-            ->value('total_price') ?? 0;
+         return $this->get()->sum(function ($item){
+            return $item->quantity * $item->price;
+        });
     }
     public function empty()
     {
         Cart::where('user_id', Auth::id())->delete();
     }
-    protected function getCookie()
-    {
-        $cookie_id = Cookie::get('cart_id');
-        if(!$cookie_id)
-        {
-            Cookie::queue('cart_id' , $cookie_id , 30 * 24 * 60);
-        }
-        return $cookie_id;
-    }
+
 }
 ?>

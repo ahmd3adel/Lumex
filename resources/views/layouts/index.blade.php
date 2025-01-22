@@ -11,6 +11,7 @@
     <!-- /.content-header -->
 @yield('content')
     @stack('jsModal')
+    @stack('style')
     @stack('cssModal')
 {{--    @include('layouts.parts.transferswidgs')--}}
     @yield('transferswidgs')
@@ -36,5 +37,6 @@
 
 <script src="plugins/jquery/jquery.min.js"></script>
 @include('layouts.parts.scripts')
+@stack('scripts')
 </body>
 </html>

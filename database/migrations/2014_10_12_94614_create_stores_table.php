@@ -15,9 +15,20 @@ return new class extends Migration
             $table->id();
             $table->string('name'); // اسم المتجر
             $table->string('location')->nullable(); // موقع المتجر
+            $table->string('phone')->nullable(); // موقع المتجر
+
+            // Explicitly define unsignedBigInteger for foreign keys
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+
+            // Define foreign key constraints
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('updated_by')->references('id')->on('users')->cascadeOnDelete();
+
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

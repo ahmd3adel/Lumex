@@ -22,7 +22,11 @@ return new class extends Migration
             $table->datetime('last_login')->nullable(); // آخر تسجيل دخول (اختياري)
             $table->string('address')->nullable(); // العنوان (اختياري)
             $table->foreignId('store_id')->nullable();
+            $table->foreignId('created_by')->nullable();
+            $table->foreignId('updated_by')->nullable();
             $table->foreign('store_id')->references('id')->on('stores')->cascadeOnDelete();
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('updated_by')->references('id')->on('users')->cascadeOnDelete();
             $table->timestamps();
         });
     }

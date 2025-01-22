@@ -54,7 +54,12 @@
                                 <p>$29.00</p>
                             </div>
                             <div class="col-lg-1 col-md-2 col-12">
-                                <a class="remove-item" href="javascript:void(0)"><i class="lni lni-close"></i></a>
+                                <form method="post" action="{{route('cart.destroy' , $singleCart->product_id)}}">
+                                    @csrf
+                                    @method('Delete')
+                                    <button class="remove-item" type="submit"><i class="lni lni-close"></i></button>
+
+                                </form>
                             </div>
                         </div>
                     </div>

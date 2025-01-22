@@ -29,10 +29,20 @@ class Product extends Model
         static::addGlobalScope('store', function (Builder $builder) {
             if (Auth::check() && Auth::user()->hasRole('agent')) {
                 $storeId = Auth::user()->store_id;
+                \Log::info('Store Scope Applied: Store ID = ' . $storeId);
+                $builder->where('store_id', $storeId);
+            }
+        });
+
+        static::addGlobalScope('product', function (Builder $builder) {
+            if (Auth::check() && Auth::user()->hasRole('agent')) {
+                $storeId = Auth::user()->store_id;
+                \Log::info('Product Scope Applied: Store ID = ' . $storeId);
                 $builder->where('store_id', $storeId);
             }
         });
     }
+
 
     public function scopeActive(Builder $builder)
     {

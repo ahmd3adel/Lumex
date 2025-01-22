@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\front\HomeController;
 use App\Http\Controllers\front\ProductController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -41,6 +42,7 @@ Route::group(
             return redirect()->to(LaravelLocalization::getLocalizedURL($locale));
         })->name('changeLanguage');
 
+//        Route::resource('/invoices', InvoiceController::class);
         Route::get('/' , [HomeController::class , 'index']);
         Route::get('products' , [ProductController::class , 'index'])->name('front.products.index');
         Route::get('products/{product:name}' , [ProductController::class , 'show'])->name('front.products.show');
@@ -52,8 +54,8 @@ Route::group(
             require __DIR__.'/users.php';
             require __DIR__.'/clients.php';
             require __DIR__.'/products.php';
+            require __DIR__.'/invoices.php';
         });
-
         });
 
     }

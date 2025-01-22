@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,23 +24,16 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $clients = Client::with(['store'])->select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'store_id'])->get();
+            $clients = Client::with(['store:id,name'])
+                ->select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'store_id'])
+                ->orderBy('id' , 'DESC');
 
             return DataTables::of($clients)
-                ->addColumn('name', function ($client) {
-                    return $client->name;
-                })
-                ->addColumn('company_name', function ($client) {
-                    return $client->company_name;
-                })
                 ->addColumn('website', function ($client) {
                     return $client->website ? '<a href="' . $client->website . '" target="_blank">' . $client->website . '</a>' : 'N/A';
                 })
                 ->addColumn('logo', function ($client) {
                     return $client->logo ? '<img src="' . asset($client->logo) . '" alt="Logo" style="width:50px; height:50px; border-radius:50%;">' : 'No Logo';
-                })
-                ->addColumn('phone', function ($client) {
-                    return $client->phone;
                 })
                 ->addColumn('balance', function ($client) {
                     return number_format($client->balance, 2);
@@ -87,17 +81,13 @@ class ClientController extends Controller
         $userRole = Auth::user()->roles->pluck('name');
         $clients = Client::paginate(10);
         $pageTitle = "Clients";
-        return view('clients.index', compact('clients', 'pageTitle' , 'userRole'));
+        $stores = Store::all();
+        return view('clients.index', compact('clients', 'pageTitle' , 'userRole' , 'stores'));
     }
 
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -106,15 +96,18 @@ class ClientController extends Controller
 
     public function store(Request $request)
     {
-//        return response($request);
         $validated = $request->validate([
-            'name' => 'required|string|min:3|max:255',
+            'name' => 'unique:clients|required|string|min:3|max:255',
             'company_name' => 'required|string|max:255',
             'website' => 'string|max:255',
             'logo' => 'string|max:255',
             'address' => 'string|max:255',
             'phone' => 'required|string',
+            'created_by' => 'string',
+            'updated_by' => 'string',
+            'store_id' => 'string',
         ]);
+//        dd($validated);
         try {
             // Create the client
             $client = Client::create($validated);
@@ -175,7 +168,6 @@ class ClientController extends Controller
                 'address' => 'nullable|string|max:255',
                 'phone' => [
                     'required',
-                    'regex:/^[0-9\-\(\)\s]+$/', // Allow numbers, spaces, dashes, and parentheses
                     'min:10', // Minimum length for phone numbers
                 ],
                 'website' => 'nullable|url|max:255',
@@ -183,17 +175,22 @@ class ClientController extends Controller
 
             // Find the client by ID
             $client = Client::findOrFail($id);
+//$client->fill([
+//    'store_id' => 'ahmed'
+//]);
+//dd($request->all());
+            $client->update($request->all());
 
             // Update client details
-            $client->fill([
-                'name' => $validatedData['name'],
-                'address' => $validatedData['address'] ?? $client->address,
-                'phone' => $validatedData['phone'],
-                'website' => $validatedData['website'] ?? $client->website,
-            ]);
-
-            // Save updated client
-            $client->save();
+//            $client->fill([
+//                'name' => $validatedData['name'],
+//                'address' => $validatedData['address'] ?? $client->address,
+//                'phone' => $validatedData['phone'],
+//                'website' => $validatedData['website'] ?? $client->website,
+//            ]);
+//
+//            // Save updated client
+//            $client->save();
 
             // Return success response
             return response()->json([

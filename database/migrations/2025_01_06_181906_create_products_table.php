@@ -20,6 +20,14 @@ return new class extends Migration
             $table->integer('quantity')->default(0); // Quantity in stock
             $table->string('image')->nullable(); // image
             $table->enum('status' , ['active' , 'inactive'])->default('active');
+            $table->unsignedBigInteger('created_by')->nullable();
+
+            $table->unsignedBigInteger('updated_by')->nullable();
+
+            $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
+
+            $table->foreign('updated_by')->references('id')->on('users')->cascadeOnDelete();
+
             $table->foreignId('store_id'); // Quantity in stock
             $table->foreign('store_id')->references('id')->on('stores')->cascadeOnDelete();
             $table->timestamps(); // Created at and Updated at timestamps

@@ -47,20 +47,14 @@
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
                                 <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('company name') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('title') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('address') }}</th>
                                 <th><i class="fas fa-money-bill"></i> {{ trans('balance') }}</th>
                                 <th><i class="fas fa-money-bill"></i> {{ trans('Store') }}</th>
                                 <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
-
-
                             </tr>
                             </thead>
                         </table>
                     </div>
-
-
-
                 </div>
                 <!-- /.card -->
             </div>
@@ -86,13 +80,13 @@
                     let table = $('#client-table').DataTable({
                         processing: true,
                         serverSide: true,
+                        searching:true,
                         ajax: "{{ route('clients.index') }}",
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
                             { data: 'phone', name: 'phone' },
-                            { data: 'company_name', name: 'company name' },
-                            { data: 'address', name: 'title' },
+                            { data: 'address', name: 'address', searchable: true },
                             { data: 'balance', name: 'balance' },
                             { data: 'store', name: 'store' , visible: userRole != 'agent'},
                             { data: 'action', name: 'action', orderable: false, searchable: false }
