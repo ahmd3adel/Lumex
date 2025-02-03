@@ -29,6 +29,11 @@ class StoreController extends Controller
             ])->orderBy('created_at', 'desc');
 
             return DataTables::of($stores)
+                ->addColumn('name', function ($store) {
+                    return '<a href="'.route('stores.show', $store->id).'" class="text-primary">
+                           ' . e($store->name) . '
+                        </a>';
+                })
                 ->addColumn('users', function ($store) {
                     return $store->location;
                 })
@@ -50,7 +55,7 @@ class StoreController extends Controller
                 data-location="' . $store->location . '"
                 data-created="' . $store->created_at->format('Y-m-d') . '"
                 data-updated="' . $store->updated_at . '">
-            <i class="fas fa-eye"></i> View
+            <i class="fas fa-eye"></i> ' . trans('View') . '
         </button>
         <button class="btn btn-warning btn-sm edit-store"
                 data-id="' . $store->id . '"
@@ -58,12 +63,12 @@ class StoreController extends Controller
                 data-location="' . $store->location . '"
                 data-created="' . $store->created . '"
                 data-updated="' . $store->updated_at . '">
-            <i class="fas fa-edit"></i> Edit
+            <i class="fas fa-edit"></i> ' . trans('Edit') . '
         </button>
     </div>
     ';
                 })
-                ->rawColumns(['action' , 'users'])
+                ->rawColumns(['action' , 'users' , 'name'])
                 ->make(true);
         }
 
@@ -72,6 +77,11 @@ class StoreController extends Controller
         return view('stores.index', compact(['stores', 'pageTitle']));
     }
 
+    public function show($id)
+    {
+        $store = Store::find($id);
+        return view('stores.show' , compact('store'));
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -55,6 +55,8 @@ Route::group(
             require __DIR__.'/clients.php';
             require __DIR__.'/products.php';
             require __DIR__.'/invoices.php';
+            require __DIR__.'/returns.php';
+            require __DIR__.'/receipts.php';
         });
         });
 

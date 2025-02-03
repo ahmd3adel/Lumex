@@ -101,7 +101,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">{{ trans('Name') }}</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="{{ trans('Enter name') }}" required>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="{{ trans('Enter name') }}">
                             @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -128,18 +128,18 @@
                         <!-- Section 2: Contact Details -->
                         <div class="col-md-6 mb-3">
                             <label for="phone" class="form-label">{{ trans('Phone') }}</label>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ trans('Enter phone number') }}" required>
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ trans('Enter phone number') }}">
                             @error('phone')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="clientwebsite" class="form-label">{{ trans('Website') }}</label>
-                            <input type="text" class="form-control" id="client_website" name="website" placeholder="{{ trans('Enter website link') }}" required>
-                            @error('website')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+{{--                        <div class="col-md-6 mb-3">--}}
+{{--                            <label for="clientwebsite" class="form-label">{{ trans('Website') }}</label>--}}
+{{--                            <input type="text" class="form-control" id="client_website" name="website" placeholder="{{ trans('Enter website link') }}" required>--}}
+{{--                            @error('website')--}}
+{{--                            <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                            @enderror--}}
+{{--                        </div>--}}
 
                         <div class="col-md-6 mb-3">
                             <label for="title" class="form-label">{{ trans('Title') }}</label>

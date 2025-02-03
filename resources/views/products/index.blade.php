@@ -45,14 +45,13 @@
                             <tr>
 
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('Store') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-phone"></i> {{ trans('description') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('price') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('quantity') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('Cutter') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('Status') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('Store') }}</th>
-                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
+                                <th><i class="fas fa-phone"></i> {{ trans('description') }}</th>
+                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>
 
 
                             </tr>
@@ -73,14 +72,10 @@
         @push('cssModal')
             <link rel="stylesheet" href="{{asset('dist/css/myCustomTable.css')}}">
         @endpush
-@push('jsModal')
-
+    @push('jsModal')
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
-
-
-
                 $(document).ready(function () {
                     var userRole = "{{$userRole}}"
                     // إعداد الجدول باستخدام DataTables
@@ -90,13 +85,12 @@
                         ajax: "{{ route('products.index') }}",
                         columns: [
                             { data: 'id', name: 'id' },
+                            { data: 'store', name: 'store' , visible: userRole != 'agent'},
                             { data: 'name', name: 'name' },
-                            { data: 'description', name: 'description' },
                             { data: 'price', name: 'price' },
                             { data: 'quantity', name: 'quantity' },
-                            { data: 'cutter_name', name: 'Cutter' },
                             { data: 'status', name: 'status' },
-                            { data: 'store', name: 'store' , visible: userRole != 'agent'},
+                            { data: 'description', name: 'description' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +

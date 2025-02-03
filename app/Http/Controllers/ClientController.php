@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Invoice;
+use App\Models\ReceiptVoucher;
+use App\Models\ReturnGoods;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -18,72 +22,152 @@ use Yajra\DataTables\Facades\DataTables;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $clients = Client::with(['store:id,name'])
-                ->select(['id', 'name', 'company_name', 'website', 'logo', 'phone', 'balance', 'last_login', 'address', 'store_id'])
-                ->orderBy('id' , 'DESC');
+            $clients = Client::select(['id', 'name', 'company_name', 'website', 'phone', 'balance', 'last_login', 'address', 'store_id'])
+                ->with(['store:id,name']) // Load store relationship
+                ->withCount([
+                    'invoices as total_invoices' => function ($query) {
+                        $query->select(DB::raw("COALESCE(SUM(net_total), 0)"));
+                    },
+                    'returns as total_returns' => function ($query) {
+                        $query->select(DB::raw("COALESCE(SUM(net_total), 0)"));
+                    },
+                    'payments as total_payments' => function ($query) {
+                        $query->select(DB::raw("COALESCE(SUM(amount), 0)"));
+                    }
+                ])
+                ->get();
 
             return DataTables::of($clients)
-                ->addColumn('website', function ($client) {
-                    return $client->website ? '<a href="' . $client->website . '" target="_blank">' . $client->website . '</a>' : 'N/A';
-                })
-                ->addColumn('logo', function ($client) {
-                    return $client->logo ? '<img src="' . asset($client->logo) . '" alt="Logo" style="width:50px; height:50px; border-radius:50%;">' : 'No Logo';
-                })
                 ->addColumn('balance', function ($client) {
-                    return number_format($client->balance, 2);
-                })
-                ->addColumn('address', function ($client) {
-                    return $client->address ?? 'N/A';
+                    // حساب الرصيد = الفواتير - المرتجعات - الدفعات
+                    $balance = $client->total_invoices - $client->total_returns - $client->total_payments;
+                    return '<span class="badge bg-' . ($balance >= 0 ? 'success' : 'danger') . '">
+                            $' . number_format($balance, 2) . '
+                        </span>';
                 })
                 ->addColumn('store', function ($client) {
-                    return $client->store ? $client->store->name : 'Unassigned';
+                    return $client->store ? e($client->store->name) : 'N/A';
                 })
-                ->addColumn('action', function ($client) {
+                ->addColumn('name', function ($client) {
+                    return '<a href="' . route('clients.show', $client->id) . '" class="text-primary">
+                           ' . e($client->name) . '
+                        </a>';
+                })
+                ->addColumn('actions', function ($client) {
                     return '
                 <div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
                     <button class="btn btn-info btn-sm view-client"
-                            data-id="' . $client->id . '"
-                            data-name="' . $client->name . '"
-                            data-company_name="' . $client->company_name . '"
-                            data-phone="' . $client->phone . '"
-                            data-balance="' . $client->balance . '"
-                            data-website="' . $client->website . '"
-                            data-address="' . $client->address . '">
-                        <i class="fas fa-eye"></i> View
+                            data-id="' . e($client->id) . '"
+                            data-name="' . e($client->name) . '"
+                            data-company_name="' . e($client->company_name) . '"
+                            data-phone="' . e($client->phone) . '"
+                            data-balance="' . e($client->balance) . '"
+                            data-website="' . e($client->website) . '"
+                            data-address="' . e($client->address) . '">
+                        <i class="fas fa-eye"></i> ' . trans('view') . '
                     </button>
                     <button class="btn btn-warning btn-sm edit-client"
-                            data-id="' . $client->id . '"
-                            data-name="' . $client->name . '"
-                            data-company_name="' . $client->company_name . '"
-                            data-phone="' . $client->phone . '"
-                            data-balance="' . $client->balance . '"
-                            data-website="' . $client->website . '"
-                            data-address="' . $client->address . '">
-                        <i class="fas fa-edit"></i> Edit
+                            data-id="' . e($client->id) . '"
+                            data-name="' . e($client->name) . '"
+                            data-company_name="' . e($client->company_name) . '"
+                            data-phone="' . e($client->phone) . '"
+                            data-balance="' . e($client->balance) . '"
+                            data-website="' . e($client->website) . '"
+                            data-address="' . e($client->address) . '">
+                        <i class="fas fa-edit"></i>  ' . trans('Edit') . '
                     </button>
                     <form action="' . route('clients.destroy', $client->id) . '" method="POST" class="delete">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i> Delete
+                            <i class="fas fa-trash"></i>  ' . trans('Delete') . '
                         </button>
                     </form>
                 </div>';
                 })
-                ->rawColumns(['website', 'logo', 'action'])
+                ->rawColumns(['balance', 'actions', 'name', 'store'])
                 ->make(true);
         }
+
         $userRole = Auth::user()->roles->pluck('name');
         $clients = Client::paginate(10);
         $pageTitle = "Clients";
         $stores = Store::all();
-        return view('clients.index', compact('clients', 'pageTitle' , 'userRole' , 'stores'));
+        return view('clients.index', compact('clients', 'pageTitle', 'userRole', 'stores'));
     }
+
+
+    /**
+     * Display a listing of the resource.
+     */
+//    public function index(Request $request)
+//    {
+//        if ($request->ajax()) {
+//            $clients = Client::with(['store:id,name'])
+//                ->select(['id', 'name', 'company_name', 'website', 'phone', 'balance', 'last_login', 'address', 'store_id'])
+//                ->orderBy('id' , 'DESC');
+//
+//            return DataTables::of($clients)
+//                ->addColumn('website', function ($client) {
+//                    return $client->website ? '<a href="' . $client->website . '" target="_blank">' . $client->website . '</a>' : 'N/A';
+//                })
+//                ->addColumn('balance', function ($client) {
+//                    return number_format($client->balance, 2);
+//                })
+//                ->addColumn('name', function ($store) {
+//                    return '<a href="'.route('clients.show', $store->id).'" class="text-primary">
+//                           ' . e($store->name) . '
+//                        </a>';
+//                })
+//                ->addColumn('address', function ($client) {
+//                    return $client->address ?? 'N/A';
+//                })
+//                ->addColumn('store', function ($client) {
+//                    return $client->store ? $client->store->name : 'Unassigned';
+//                })
+//                ->addColumn('action', function ($client) {
+//                    return '
+//                <div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
+//                    <button class="btn btn-info btn-sm view-client"
+//                            data-id="' . $client->id . '"
+//                            data-name="' . $client->name . '"
+//                            data-company_name="' . $client->company_name . '"
+//                            data-phone="' . $client->phone . '"
+//                            data-balance="' . $client->balance . '"
+//                            data-website="' . $client->website . '"
+//                            data-address="' . $client->address . '">
+//                        <i class="fas fa-eye"></i> ' . trans('view') . '
+//                    </button>
+//                    <button class="btn btn-warning btn-sm edit-client"
+//                            data-id="' . $client->id . '"
+//                            data-name="' . $client->name . '"
+//                            data-company_name="' . $client->company_name . '"
+//                            data-phone="' . $client->phone . '"
+//                            data-balance="' . $client->balance . '"
+//                            data-website="' . $client->website . '"
+//                            data-address="' . $client->address . '">
+//                        <i class="fas fa-edit"></i>  ' . trans('Edit') . '
+//                    </button>
+//                    <form action="' . route('clients.destroy', $client->id) . '" method="POST" class="delete">
+//                        ' . csrf_field() . method_field('DELETE') . '
+//                        <button type="submit" class="btn btn-danger btn-sm">
+//                            <i class="fas fa-trash"></i>  ' . trans('Delete') . '
+//                        </button>
+//                    </form>
+//                </div>';
+//                })
+//                ->rawColumns(['website', 'logo', 'action' , 'name'])
+//                ->make(true);
+//        }
+//        $userRole = Auth::user()->roles->pluck('name');
+//        $clients = Client::paginate(10);
+//        $pageTitle = "Clients";
+//        $stores = Store::all();
+//        return view('clients.index', compact('clients', 'pageTitle' , 'userRole' , 'stores'));
+//    }
 
 
     /**
@@ -97,12 +181,12 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'unique:clients|required|string|min:3|max:255',
+            'name' => 'max:255',
             'company_name' => 'required|string|max:255',
             'website' => 'string|max:255',
             'logo' => 'string|max:255',
             'address' => 'string|max:255',
-            'phone' => 'required|string',
+            'phone' => '',
             'created_by' => 'string',
             'updated_by' => 'string',
             'store_id' => 'string',
@@ -143,10 +227,65 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Client $client)
+    public function show($clientId)
     {
-        //
+        $client = Client::findOrFail($clientId);
+
+        // جلب جميع المعاملات الخاصة بالعميل (فواتير، مرتجعات، دفعات) بترتيب زمني
+        $transactions = collect([]);
+
+        // جلب الفواتير (تزيد الرصيد)
+        $invoices = Invoice::where('client_id', $clientId)
+            ->select('id', 'invoice_no as reference_no', 'total as amount', 'invoice_date as date')
+            ->get()
+            ->map(function ($invoice) {
+                return [
+                    'type' => 'invoice',
+                    'id' => $invoice->id,
+                    'reference_no' => $invoice->reference_no,
+                    'amount' => $invoice->amount,
+                    'date' => $invoice->date,
+                ];
+            });
+
+        // جلب المرتجعات (تخصم من الرصيد)
+        $returns = ReturnGoods::where('client_id', $clientId)
+            ->select('id', 'return_no as reference_no', 'net_total as amount', 'return_date as date')
+            ->get()
+            ->map(function ($return) {
+                return [
+                    'type' => 'return',
+                    'id' => $return->id,
+                    'reference_no' => $return->reference_no,
+                    'amount' => -$return->amount, // بالسالب لأنه يُخصم من الرصيد
+                    'date' => $return->date,
+                ];
+            });
+
+        // جلب الدفعات (تخصم من الرصيد)
+        $payments = ReceiptVoucher::where('client_id', $clientId)
+            ->select('id', 'voucher_no as reference_no', 'amount', 'receipt_date as date')
+            ->get()
+            ->map(function ($payment) {
+                return [
+                    'type' => 'payment',
+                    'id' => $payment->id,
+                    'reference_no' => $payment->reference_no,
+                    'amount' => -$payment->amount, // بالسالب لأنه يُخصم من الرصيد
+                    'date' => $payment->date,
+                ];
+            });
+
+        // دمج كل العمليات وترتيبها حسب التاريخ
+        $transactions = $transactions->merge($invoices)
+            ->merge($returns)
+            ->merge($payments)
+            ->sortBy('date')
+            ->values();
+
+        return view('clients.show', compact('client', 'transactions'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -262,4 +401,17 @@ class ClientController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to delete the user permanently.']);
         }
     }
+    public function getMyClients($store)
+    {
+        $clients = Client::select('id , name')->where('store_id' , $store)->get();
+        $options = [];
+        foreach ($clients as $client)
+    {
+        $options[] = $client->name;
+    }
+
+        return response()->json($options);
+    }
+
+
 }

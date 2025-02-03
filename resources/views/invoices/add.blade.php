@@ -255,6 +255,25 @@
 
             // Update totals when discount changes
             discountInput.addEventListener('input', updateInvoiceTotals);
+
+            var myStore = document.getElementById('store_id');
+            myStore.addEventListener('change' , function (){
+                console.log(this.value)
+                $.ajax({
+                    {{--url: "{{ route('clients.getMyClients') }}/" + this.value,--}}
+                    url:"{{url('accounts/clients/getMyClients')}}/" + this.value,
+                    type: 'GET',
+                    data: {
+                    },
+                    success: function (response) {
+                        console.log(response.data)
+                    },
+                    error: function () {
+                        alert('faild')
+                    }
+                });
+            });
+
         });
 
     </script>

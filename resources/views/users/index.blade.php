@@ -38,9 +38,10 @@
                     </div>
                     <!-- /.card-header -->
 
-                    <div class="table-responsive ">
+                    <div class="table-responsive">
                         <table id="user-table" class="table table-bordered table-hover w-100">
                             <thead>
+
                             <tr>
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
@@ -52,9 +53,11 @@
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('store') }}</th>
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('created by') }}</th>
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('updated by') }}</th>
-                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
+                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"></i>{{ trans('actions') }}             </pre></th>
                             </tr>
                             </thead>
+                            <tbody>
+                            </tbody>
                         </table>
                     </div>
 
@@ -97,6 +100,7 @@
                             { data: 'created by', name: 'created by' },
                             { data: 'updated by', name: 'updated by' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
+
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
                             '<"row"<"col-md-12"t>>' + // Table

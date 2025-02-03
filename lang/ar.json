@@ -36,5 +36,14 @@
     "invoice_date": "التاريخ",
     "invoice_no" : "رقم الفاتورة",
     "store": "الشركة",
-    "client": "العميل"
+    "client": "العميل",
+    "Clients": "العملاء",
+    "add invoice" : "اضافة فاتورة",
+    "add client" : "اضافة عميل",
+    "address": " العنوان",
+    "balance": "الرصيد",
+    "clients table": "جدول العملاء",
+    "view": "عرض",
+    "Edit": "تعديل",
+    "Delete": "حذف"
 }

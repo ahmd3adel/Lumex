@@ -23,6 +23,15 @@ class Client extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function returns()
+    {
+        return $this->hasMany(ReturnGoods::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(ReceiptVoucher::class);
+    }
     protected static function booted()
     {
         static::addGlobalScope('client', function (Builder $builder) {

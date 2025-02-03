@@ -22,7 +22,6 @@ class ClientFactory extends Factory
             'company_name' => $this->faker->company,
             'name' => $this->faker->name,
             'website' => $this->faker->optional()->url,
-            'logo' => $this->faker->optional()->imageUrl(200, 200, 'business', true, 'Faker', true),
             'phone' => $this->faker->phoneNumber,
             'balance' => $this->faker->randomFloat(2, 0, 10000), // قيمة عشوائية بين 0 و 10000
             'last_login' => $this->faker->optional()->dateTimeBetween('-1 years', 'now'),

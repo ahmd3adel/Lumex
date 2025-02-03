@@ -28,9 +28,15 @@
                     <div class="card-header">
                         <h3 class="card-title">{{__('clients table')}}</h3>
                         <div class="card-tools">
-                            <a class="btn btn-secondary btn-sm"  href="{{ route('clients.trashed') }}">
-                                <i class="fas fa-trash"></i> @lang('Trashed clients')
-                            </a>
+
+                            @if(!Auth::user()->hasRole('agent'))
+
+                                <a class="btn btn-secondary btn-sm"  href="{{ route('clients.trashed') }}">
+                                    <i class="fas fa-trash"></i> @lang('Trashed clients')
+                                </a>
+
+                            @endif
+
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createclientModal" aria-controls="createclientModal" title="@lang('Add Client')">
                                 <i class="fas fa-user-plus"></i> @lang('add client')
                             </button>
@@ -39,22 +45,27 @@
                     </div>
                     <!-- /.card-header -->
 
-                    <div class="table-responsive ">
+                    <div class="table-responsive">
                         <table id="client-table" class="table table-bordered table-hover w-100">
                             <thead>
                             <tr>
-{{--@dd($userRole);--}}
-                                <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('address') }}</th>
-                                <th><i class="fas fa-money-bill"></i> {{ trans('balance') }}</th>
-                                <th><i class="fas fa-money-bill"></i> {{ trans('Store') }}</th>
-                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
+                                <th class="text-center"> {{ trans('id') }}</th>
+                                <th class="text-center"><i class="fas fa-user"></i> {{ trans('name') }}</th>
+                                <th class="text-center"><i class="fas fa-store"></i> {{ trans('store') }}</th>
+                                <th class="text-center"><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
+                                <th class="text-center"><i class="fas fa-map-marker-alt"></i> {{ trans('address') }}</th>
+                                <th class="text-center">
+                                {{--                                    <i class="fas fa-money-bill-wave"></i> --}}
+                                {{ trans('balance') }}</th>
+                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>
                             </tr>
                             </thead>
+                            <tbody>
+                            <!-- سيتم تحميل البيانات ديناميكيًا هنا -->
+                            </tbody>
                         </table>
                     </div>
+
                 </div>
                 <!-- /.card -->
             </div>
@@ -75,6 +86,7 @@
 
 
                 $(document).ready(function () {
+                    const userIsNotAgent = {{ Auth::user()->hasRole('agent') ? 'false' : 'true' }};
                     const userRole = "{{ $userRole }}";
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#client-table').DataTable({
@@ -85,11 +97,18 @@
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
+                            { data: 'store', name: 'store'},
                             { data: 'phone', name: 'phone' },
                             { data: 'address', name: 'address', searchable: true },
                             { data: 'balance', name: 'balance' },
-                            { data: 'store', name: 'store' , visible: userRole != 'agent'},
-                            { data: 'action', name: 'action', orderable: false, searchable: false }
+                            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+                        ],
+                        columnDefs: [
+                            {
+                                // Target the 'store' column index (2 in this case)
+                                targets: [5],
+                                visible: userIsNotAgent, // Show or hide based on role
+                            }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
                             '<"row"<"col-md-12"t>>' +

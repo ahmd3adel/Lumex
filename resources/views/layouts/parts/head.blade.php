@@ -18,13 +18,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="{{asset('plugins/fontawesome-free/css/all.min.css')}}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{asset('dist/css/adminlte.min.css')}}">
-    <link
-        rel="stylesheet"
-        href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css"
-        integrity="sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe"
-        crossorigin="anonymous" />
+{{--    <link--}}
+{{--        rel="stylesheet"--}}
+{{--        href="https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css"--}}
+{{--        integrity="sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe"--}}
+{{--        crossorigin="anonymous" />--}}
     <!-- Load Bootstrap RTL theme from RawGit -->
-    <link rel="stylesheet" href="{{asset('dist/css/custom.css')}}">
+{{--    <link rel="stylesheet" href="{{asset('dist/css/custom.css')}}">--}}
 
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
 @stack('style')

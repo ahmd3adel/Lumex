@@ -70,9 +70,14 @@
                             <label for="quantity" class="form-label">Quantity</label>
                             <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Enter product quantity" required>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="quantity" class="form-label">Cutter Name</label>
-                            <input type="text" class="form-control" id="cutter_name" name="cutter_name" placeholder="Enter Cutter Name" required>
+                        <div id="storeFieldWrapper" class="col-md-6 mb-3">
+                            <label for="store" class="form-label">{{ trans('Store') }}</label>
+                            <select class="form-control" name="store_id">
+                                <option>Select store</option>
+                                @foreach($stores as $store)
+                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row">
@@ -120,10 +125,10 @@
                             <input type="text" class="form-control" id="edit-name" name="name" placeholder="Enter product name" required>
                         </div>
                         <!-- SKU Field -->
-                        <div class="col-md-6 mb-3">
-                            <label for="edit-sku" class="form-label">Cutter Name</label>
-                            <input type="text" class="form-control" id="edit-cutter_name" name="cutter_name" placeholder="Enter cutter name" required>
-                        </div>
+{{--                        <div class="col-md-6 mb-3">--}}
+{{--                            <label for="edit-sku" class="form-label">Cutter Name</label>--}}
+{{--                            <input type="text" class="form-control" id="edit-cutter_name" name="cutter_name" placeholder="Enter cutter name" required>--}}
+{{--                        </div>--}}
                     </div>
                     <div class="row">
                         <!-- Price Field -->

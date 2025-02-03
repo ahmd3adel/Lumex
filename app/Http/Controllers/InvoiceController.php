@@ -31,7 +31,17 @@ class InvoiceController extends Controller
 
             return DataTables::of($invoices)
                 ->addColumn('client', function ($invoice) {
-                    return $invoice->client ? $invoice->client->name : 'N/A';
+                    return '<a href="'.route('stores.show', $invoice->id).'" class="text-primary">
+                           ' . e($invoice->name) . '
+                        </a>';
+                })
+                ->addColumn('client', function ($invoice) {
+//                    return $invoice->client ? $invoice->client->name : 'N/A';
+
+                    return '<a href="'.route('clients.show', $invoice->client->id).'" class="text-primary">
+                           ' . e($invoice->client->name) . '
+                        </a>';
+
                 })
 
 
@@ -45,23 +55,23 @@ class InvoiceController extends Controller
                     href="'.route('invoices.show' , $invoice->id).'"
                             data-id="' . e($invoice->id) . '"
                             data-name="' . e($invoice->invoice_no) . '">
-                        <i class="fas fa-eye"></i> View
+                        <i class="fas fa-eye"></i>  ' . trans('view') . '
                     </a>
                     <button class="btn btn-warning btn-sm edit-invoice"
                             data-id="' . e($invoice->id) . '"
                             data-name="' . e($invoice->invoice_no) . '">
-                        <i class="fas fa-edit"></i> Edit
+                        <i class="fas fa-edit"></i>  ' . trans('Edit') . '
                     </button>
                     <form action="' . route('invoices.destroy', $invoice->id) . '" method="POST" class="delete">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i> Delete
+                            <i class="fas fa-trash"></i> ' . trans('Delete') . '
                         </button>
                     </form>
                 </div>
             ';
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['actions' , 'client'])
                 ->make(true);
         }
 

@@ -109,3 +109,26 @@
         gap: 0.25rem;
     }
 }
+
+/* حاوية التمرير */
+.table-responsive {
+    max-height: 600px; /* تحديد ارتفاع الجدول */
+    overflow-y: auto; /* التمرير العمودي */
+    overflow-x: auto; /* التمرير الأفقي */
+}
+
+/* تثبيت الرأس */
+#user-table thead th , #invoice-table thead th , #store-table thead th , #client-table thead th {
+    position: sticky; /* تثبيت الرأس */
+    top: 0; /* مكان التثبيت في الأعلى */
+    background-color: #f8f9fa; /* لون خلفية الرأس */
+    z-index: 10; /* الأولوية للرأس */
+}
+
+/* النص داخل الأعمدة */
+#user-table th, #user-table td , #invoice-table th, #invoice-table td , #store-table td , #client-table td{
+    white-space: nowrap; /* منع كسر النص */
+    text-align: center;
+}
+
+

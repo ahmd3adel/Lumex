@@ -83,4 +83,6 @@ width: calc(100% - 250);
 
 body {
     font-family: 'Cairo', sans-serif !important;
+    overflow-x: hidden;
+    width: calc(100% - 250px);
 }

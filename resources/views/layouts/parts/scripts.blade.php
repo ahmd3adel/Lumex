@@ -11,11 +11,11 @@
 
 <!-- Bootstrap -->
 <script src="{{asset('plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-
 <!-- AdminLTE -->
 <script src="{{asset('dist/js/adminlte.min.js')}}"></script>
 
 <script src="{{asset('plugins/chart.js/Chart.min.js')}}"></script>
+<script src="{{asset('dist\js\myCustomArabic.js')}}"></script>
 
 
 {{--<script--}}

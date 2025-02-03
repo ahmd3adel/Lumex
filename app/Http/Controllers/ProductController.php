@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Client;
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Models\User;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Yajra\DataTables\Facades\DataTables;
 
 class ProductController extends Controller
@@ -20,7 +16,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $products = Product::with('store')->select(['id', 'name', 'description', 'price', 'quantity' , 'cutter_name' , 'store_id' , 'status'])->orderBy('created_at' , 'desc')->get();
+            $products = Product::with('store')->select(['id', 'name', 'description', 'price', 'quantity' , 'store_id' , 'status'])->orderBy('created_at' , 'desc')->get();
 
             return DataTables::of($products)
                 ->addColumn('name', function ($product) {
@@ -54,7 +50,7 @@ class ProductController extends Controller
                             data-price="' . $product->price . '"
                             data-cutter_name="' . $product->cutter_name . '"
                             data-quantity="' . $product->quantity . '">
-                        <i class="fas fa-eye"></i> View
+                        <i class="fas fa-eye"></i> ' . trans('View') . '
                     </button>
                     <button class="btn btn-warning btn-sm edit-product"
                             data-id="' . $product->id . '"
@@ -63,12 +59,12 @@ class ProductController extends Controller
                             data-price="' . $product->price . '"
                             data-cutter_name="' . $product->cutter_name . '"
                             data-quantity="' . $product->quantity . '">
-                        <i class="fas fa-edit"></i> Edit
+                        <i class="fas fa-edit"></i> ' . trans('Edit') . '
                     </button>
                     <form action="' . route('products.destroy', $product->id) . '" method="POST" class="delete">
                         ' . csrf_field() . method_field('DELETE') . '
                         <button type="submit" class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i> Delete
+                            <i class="fas fa-trash"></i> ' . trans('Delete') . '
                         </button>
                     </form>
                 </div>';
@@ -80,7 +76,8 @@ class ProductController extends Controller
         $products = Product::paginate(10);
         $pageTitle = "Products";
         $userRole = Auth::user()->roles->first()->name ?? "";
-        return view('products.index', compact('products', 'pageTitle' , 'userRole'));
+        $stores = Store::all();
+        return view('products.index', compact('products', 'pageTitle' , 'userRole' , 'stores'));
     }
     public function toggleStatus(Request $request)
     {
@@ -94,7 +91,6 @@ class ProductController extends Controller
             'new_status' => $product->status
         ]);
     }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -103,10 +99,8 @@ class ProductController extends Controller
     $creator = Auth::user();
     $request->validate([
         'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name',
-        'description' => 'required|min:3',
         'price' => 'required',
         'quantity' => 'required',
-        'cutter_name' => 'required|string|min:3',
     ]);
     try {
 
@@ -115,8 +109,6 @@ class ProductController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'cutter_name' => $request->cutter_name,
-            'store_id' => $creator->store_id,
         ]);
         return response()->json([
             'success' => true,
@@ -131,7 +123,6 @@ class ProductController extends Controller
         ], 500);
     }
 }
-
     /**
      * Display the specified resource.
      */

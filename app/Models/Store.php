@@ -36,4 +36,9 @@ class Store extends Model
         return $this->hasMany(Invoice::class);
     }
 
+    public function receipts()
+    {
+        return $this->hasMany(ReceiptVoucher::class, 'store_id');
+    }
+
 }

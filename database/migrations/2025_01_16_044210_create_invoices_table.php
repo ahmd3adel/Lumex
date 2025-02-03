@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id(); // Primary key
-            $table->string('invoice_no')->unique(); // Unique invoice number
+            $table->string('invoice_no'); // Unique invoice number
             $table->foreignId('client_id'); // Reference to the client
             $table->foreignId('store_id')->nullable(); // Reference to the store
             $table->decimal('total', 15, 2); // Total amount before discount
@@ -26,6 +26,7 @@ return new class extends Migration
             $table->timestamps(); // Created and updated timestamps
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();
+            $table->unique(['invoice_no' , 'store_id']);
             $table->foreign('created_by')->references('id')->on('users')->cascadeOnDelete();
             $table->foreign('updated_by')->references('id')->on('users')->cascadeOnDelete();
             // Foreign key constraints

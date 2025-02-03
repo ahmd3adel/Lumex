@@ -51,17 +51,39 @@
                         <table id="invoice-table" class="table table-bordered table-hover w-100">
                             <thead>
                             <tr>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('invoice_no') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('store') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('client') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('discount') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('net_total') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('total') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('invoice_date') }}</th>
-                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
+                                <th class="text-center">
+                                    <i class="fas fa-hashtag"></i> {{ trans('id') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-file-invoice"></i> {{ trans('invoice_no') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-store"></i> {{ trans('store') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-user"></i> {{ trans('client') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-percent"></i> {{ trans('discount') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-money-bill-wave"></i> {{ trans('net_total') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-wallet"></i> {{ trans('total') }}
+                                </th>
+                                <th class="text-center">
+                                    <i class="fas fa-calendar-alt"></i> {{ trans('invoice_date') }}
+                                </th>
+                                <th class="text-center ">
+                                    <pre class="p-0 m-0">         <i class="fas fa-cogs"></i>{{ trans('actions') }}         </pre>
+
+                                </th>
                             </tr>
                             </thead>
+                            <tbody>
+                            <!-- البيانات سيتم تحميلها ديناميكيًا -->
+                            </tbody>
                         </table>
                     </div>
 
@@ -107,7 +129,7 @@
                     { data: 'net_total', name: 'net_total' },
                     { data: 'total', name: 'total' },
                     { data: 'invoice_date', name: 'invoice_date' },
-                    { data: 'actions', name: 'actions', orderable: false, searchable: false },
+                    { data: 'actions', name: 'action', orderable: false, searchable: false },
                 ],
                 columnDefs: [
                     {

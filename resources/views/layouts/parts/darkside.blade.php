@@ -1,4 +1,4 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4" id="mainSlider">
     <!-- Brand Logo -->
     <a href="/accounts/" class="brand-link">
         <img src="{{ asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -37,24 +37,31 @@
                     </a>
                 </li>
                 <li class="nav-header">MANAGEMENT</li>
-                <li class="nav-item">
-                    <a href="{{route('users.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Users</p>
-                    </a>
-                </li>
+                @if (!Auth::user()->hasRole('agent'))
+                    <li class="nav-item">
+                        <a href="{{route('users.index')}}" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>Users</p>
+                        </a>
+                    </li>
+                @endif
+
+
                 <li class="nav-item">
                     <a href="{{route('clients.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-user-friends"></i>
-                        <p>Clients</p>
+                        <p>{{trans('Clients')}}</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{route('stores.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-store"></i>
-                        <p>Stores</p>
-                    </a>
-                </li>
+                @if(!Auth::user()->hasRole('agent'))
+                    <li class="nav-item">
+                        <a href="{{route('stores.index')}}" class="nav-link">
+                            <i class="nav-icon fas fa-store"></i>
+                            <p>Stores</p>
+                        </a>
+                    </li>
+                @endif
+
                 <li class="nav-item">
                     <a href="{{route('products.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
@@ -69,7 +76,13 @@
                     </a>
                 </li>
                 <li class="nav-item ml-3">
-                    <a href="/invoices/returns" class="nav-link">
+                    <a href="{{route('returns.index')}}" class="nav-link">
+                        <i class="nav-icon fas fa-undo"></i>
+                        <p>Returns</p>
+                    </a>
+                </li>
+                <li class="nav-item ml-3">
+                    <a href="{{route('receipts.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-undo"></i>
                         <p>Returns</p>
                     </a>
@@ -93,7 +106,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/transactions" class="nav-link">
+                    <a href="/returns" class="nav-link">
                         <i class="nav-icon fas fa-money-check"></i>
                         <p>Transactions</p>
                     </a>

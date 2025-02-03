@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Observers\GlobalModelObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,21 +27,22 @@ class Product extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope('store', function (Builder $builder) {
-            if (Auth::check() && Auth::user()->hasRole('agent')) {
-                $storeId = Auth::user()->store_id;
-                \Log::info('Store Scope Applied: Store ID = ' . $storeId);
-                $builder->where('store_id', $storeId);
-            }
-        });
+//        static::addGlobalScope('store', function (Builder $builder) {
+//            if (Auth::check() && Auth::user()->hasRole('agent')) {
+//                $storeId = Auth::user()->store_id;
+//                $builder->where('store_id', $storeId);
+//            }
+//        });
 
         static::addGlobalScope('product', function (Builder $builder) {
             if (Auth::check() && Auth::user()->hasRole('agent')) {
                 $storeId = Auth::user()->store_id;
-                \Log::info('Product Scope Applied: Store ID = ' . $storeId);
                 $builder->where('store_id', $storeId);
             }
         });
+
+        parent::boot();
+        static::observe(GlobalModelObserver::class);
     }
 
 

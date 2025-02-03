@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->id(); // العمود ID
             $table->string('company_name'); // اسم الشركة
-            $table->string('name'); // اسم العميل
+            $table->string('name')->nullable(); // اسم العميل
             $table->string('website')->nullable(); // الموقع (يمكن أن يكون اختياريًا)
-            $table->string('logo')->nullable(); // الشعار (اختياري)
-            $table->string('phone'); // الهاتف
+            $table->string('phone')->nullable(); // الهاتف
             $table->decimal('balance', 15, 2)->default(0);
             $table->datetime('last_login')->nullable(); // آخر تسجيل دخول (اختياري)
             $table->string('address')->nullable(); // العنوان (اختياري)

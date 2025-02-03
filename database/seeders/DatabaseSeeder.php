@@ -8,6 +8,8 @@ use App\Models\Invoice;
 use App\Models\InvoiceDetails;
 use App\Models\Product;
 use App\Models\Profile;
+use App\Models\ReceiptVoucher;
+use App\Models\ReturnGoods;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -19,9 +21,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-                    Store::factory(10)->create();
-                    User::factory(50)->create();
-        Store::factory(10)->create();
+//                    Store::factory(10)->create();
+//                    User::factory(50)->create();
+//        Store::factory(10)->create();
+//        ReturnGoods::factory(10)->create();
+//        ReceiptVoucher::factory(10)->create();
 
 //                    Client::factory(100)->create();
 //                    Product::factory(100)->create();
