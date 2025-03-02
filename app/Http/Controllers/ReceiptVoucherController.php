@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use App\Models\ReceiptVoucher;
 use App\Http\Requests\StoreReceiptVoucherRequest;
 use App\Http\Requests\UpdateReceiptVoucherRequest;
@@ -16,11 +17,6 @@ class ReceiptVoucherController extends Controller
      */
     public function index(\Illuminate\Http\Request $request)
     {
-//        $vouchers = ReceiptVoucher::with(['client:id,name'])
-//            ->select('id', 'voucher_no', 'client_id', 'amount', 'payment_method', 'receipt_date', 'created_by')
-//            ->orderBy('created_at', 'DESC')
-//            ->get(); // ✅ Fix: Execute query
-//        dd($vouchers);
         if ($request->ajax()) {
             // Fetch receipts with relationships
             $vouchers = ReceiptVoucher::with(['client:id,name'])
@@ -57,19 +53,13 @@ class ReceiptVoucherController extends Controller
 
         // Fetch data for normal page load
         $vouchers = ReceiptVoucher::paginate(10);
-
-        // Debugging: Check if database is empty
-        if ($vouchers->isEmpty()) {
-            return view('receipts.index', compact('pageTitle'))->with('message', 'No receipts found.');
-        }
-
+        $clients= Client::all();
         $pageTitle = "Receipt Vouchers";
-        return view('receipts.index', compact('pageTitle', 'vouchers'));
+        if ($vouchers->isEmpty()) {
+            return view('receipts.index', compact('pageTitle' , 'clients'))->with('message', 'No receipts found.');
+        }
+        return view('receipts.index', compact(['pageTitle' , 'clients', 'vouchers']));
     }
-
-
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -84,8 +74,38 @@ class ReceiptVoucherController extends Controller
      */
     public function store(StoreReceiptVoucherRequest $request)
     {
-        //
+        // التحقق من البيانات المدخلة
+        $request->validate([
+            'voucher_no' => 'nullable|string|max:255|unique:receipt_vouchers,voucher_no,NULL,id,store_id,' . $request->store_id,
+            'client_id' => 'required|exists:clients,id',
+//            'store_id' => 'required|exists:stores,id',
+            'amount' => 'required|numeric|min:0',
+            'payment_method' => 'nullable|string|in:cash,bank,credit_card',
+            'receipt_date' => 'required|date',
+            'notes' => 'nullable|string',
+        ]);
+
+        // إنشاء إيصال جديد
+        $receipt = $receiptVoucher = ReceiptVoucher::create([
+            'voucher_no' => $request->voucher_no,
+            'client_id' => $request->client_id,
+            'store_id' => Auth::user()->store_id,
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method ?? 'cash',
+            'receipt_date' => $request->receipt_date,
+            'notes' => $request->notes,
+            'created_by' => auth()->id(),
+        ]);
+
+
+        return response()->json([
+            'success' => true,
+            'message' => __('Receipt voucher created successfully!'),
+            'data' => $receiptVoucher,
+        ], 201);
     }
+
+
 
     /**
      * Display the specified resource.

@@ -84,7 +84,7 @@
                 <li class="nav-item ml-3">
                     <a href="{{route('receipts.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-undo"></i>
-                        <p>Returns</p>
+                        <p>Receipts</p>
                     </a>
                 </li>
                 <li class="nav-item ml-3">

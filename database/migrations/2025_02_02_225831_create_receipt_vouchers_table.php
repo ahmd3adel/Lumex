@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('payment_method')->default('cash')->nullable(); // Payment Type (Cash, Bank, etc.)
             $table->text('notes')->nullable(); // Additional Notes
             $table->date('receipt_date')->nullable(); // Date of Receipt
+            $table->unique(['voucher_no' , 'store_id']);
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->timestamps(); // Created and Updated timestamps

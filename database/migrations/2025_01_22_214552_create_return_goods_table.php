@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('notes')->nullable(); // Total after discount
             $table->date('return_date'); // Date of the invoice
             $table->unsignedInteger('pieces_no')->default(0); // Date of the invoice
+            $table->unique(['return_no' , 'store_id']);
             $table->timestamps(); // Created and updated timestamps
             $table->foreignId('created_by')->nullable();
             $table->foreignId('updated_by')->nullable();

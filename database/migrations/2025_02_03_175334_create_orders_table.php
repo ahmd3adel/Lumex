@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique(); // Unique identifier for external use
-            $table->foreignId('store_id')->nullable()->constrained('stores')->nullOnDelete()->index();
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->index();
+            $table->foreignId('store_id')->nullable()->constrained('stores')->nullOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('number')->unique();
+            $table->string('payment_method');
             $table->enum('status', ['pending', 'processing', 'completed', 'canceled', 'delivering'])
                 ->default('pending');
             $table->enum('payment_status', ['pending', 'paid', 'failed'])

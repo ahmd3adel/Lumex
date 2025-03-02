@@ -50,11 +50,6 @@
                                 <th><i class="fas fa-phone"></i> {{ trans('payment_method') }}</th>
                                 <th><i class="fas fa-phone"></i> {{ trans('receipt_date') }}</th>
                                 <th><i class="fas fa-phone"></i> {{ trans('created_by') }}</th>
-{{--                                <th><i class="fas fa-receipt-tag"></i> {{ trans('roles') }}</th>--}}
-{{--                                <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>--}}
-{{--                                <th><i class="fas fa-toggle-on"></i> {{ trans('store') }}</th>--}}
-{{--                                <th><i class="fas fa-toggle-on"></i> {{ trans('created by') }}</th>--}}
-{{--                                <th><i class="fas fa-toggle-on"></i> {{ trans('updated by') }}</th>--}}
                                 <th><pre class="p-0 m-0">        <i class="fas fa-cogs"></i>{{ trans('actions') }}             </pre></th>
                             </tr>
                             </thead>
@@ -69,7 +64,7 @@
                 <!-- /.card -->
             </div>
 
-{{--        @include('layouts.parts.modalsForreceipts')--}}
+        @include('layouts.parts.modalsForreceipts')
 
         @endsection
 
@@ -98,11 +93,6 @@
                             { data: 'payment_method', name: 'payment_method' },
                             { data: 'receipt_date', name: 'receipt_date' },
                             { data: 'created_by', name: 'created_by' },
-                            // { data: 'roles', name: 'roles', orderable: false, searchable: false },
-                            // { data: 'status', name: 'status' },
-                            // { data: 'store', name: 'store.name' , searchable: true },
-                            // { data: 'created by', name: 'created by' },
-                            // { data: 'updated by', name: 'updated by' },
                             { data: 'actions', name: 'actions', orderable: false, searchable: false }
 
                         ],

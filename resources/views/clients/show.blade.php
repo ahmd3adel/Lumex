@@ -26,21 +26,23 @@
         @section('content')
             <div class="container">
                 <div class="card p-4">
-                    <div class="card-header bg-primary text-white">
-                        <h3 class="card-title">
-                            <i class="fas fa-user"></i> Client Transactions - {{ $client->name }}
+                    <div class="card-header bg-primary text-white text-right">
+                        <h3 class="card-title" style="float: right">
+                            <i class="fas fa-user"></i> {{ $client->name }}
                         </h3>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th>Type</th>
-                                <th>Reference No</th>
-                                <th>Amount</th>
-                                <th>Balance</th>
-                                <th>Date</th>
-                                <th>Action</th>
+                                <th>{{trans('Type')}}</th>
+                                <th>{{trans('Reference No')}}</th>
+                                <th>{{trans('Amount')}}</th>
+                                <th>{{trans('Balance')}}</th>
+                                <th>{{trans('Date')}}</th>
+                                <th>{{trans('Action')}}</th>
+
+
                             </tr>
                             </thead>
                             <tbody>
@@ -54,11 +56,11 @@
                                 <tr>
                                     <td>
                                         @if($transaction['type'] == 'invoice')
-                                            <span class="badge bg-success">Invoice</span>
+                                            <span class="badge bg-success">{{trans('Invoice')}}</span>
                                         @elseif($transaction['type'] == 'return')
-                                            <span class="badge bg-warning">Return</span>
+                                            <span class="badge bg-warning">{{trans('Return')}}</span>
                                         @elseif($transaction['type'] == 'payment')
-                                            <span class="badge bg-danger">Payment</span>
+                                            <span class="badge bg-danger">{{trans('Payment')}}</span>
                                         @endif
                                     </td>
                                     <td>{{ $transaction['reference_no'] }}</td>

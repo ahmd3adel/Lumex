@@ -45,5 +45,14 @@
     "clients table": "جدول العملاء",
     "view": "عرض",
     "Edit": "تعديل",
+    "Type": "نوع البيان",
+    "Amount": "المبلغ",
+    "Balance": "الرصيد",
+    "Date": "التاريخ",
+    "Action": "العمليات",
+    "Invoice": "فاتورة",
+    "Return": "مرتجع",
+    "Payment": "دفعة",
+    "Reference No": "رقم البيان",
     "Delete": "حذف"
 }

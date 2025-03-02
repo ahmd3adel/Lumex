@@ -217,15 +217,6 @@ class StoreController extends Controller
         return view('stores.relatedUsers', compact('store', 'pageTitle', 'id'));
     }
 
-
-
-
-
-
-
-
-
-
     /**
      * Update the specified resource in storage.
      */
