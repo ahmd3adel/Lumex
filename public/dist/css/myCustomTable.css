@@ -130,5 +130,7 @@
     white-space: nowrap; /* منع كسر النص */
     text-align: center;
 }
-
+.badge.bg-danger{
+    font-size: 16px;
+}
 

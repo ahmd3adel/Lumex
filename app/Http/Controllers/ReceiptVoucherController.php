@@ -97,12 +97,13 @@ class ReceiptVoucherController extends Controller
             'created_by' => auth()->id(),
         ]);
 
+        return redirect()->back();
 
-        return response()->json([
-            'success' => true,
-            'message' => __('Receipt voucher created successfully!'),
-            'data' => $receiptVoucher,
-        ], 201);
+//        return response()->json([
+//            'success' => true,
+//            'message' => __('Receipt voucher created successfully!'),
+//            'data' => $receiptVoucher,
+//        ], 201);
     }
 
 

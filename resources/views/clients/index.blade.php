@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@section('title' , 'clientS PAGE')
+@section('title', trans('Clients Page'))
 @section('breadcramp')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -7,7 +7,7 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1 class="">{{trans('clients')}}</h1>
+                        <h4 class="">{{trans('clients')}}</h4>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         @parent
@@ -51,7 +51,8 @@
                             <tr>
                                 <th class="text-center"> {{ trans('id') }}</th>
                                 <th class="text-center"><i class="fas fa-user"></i> {{ trans('name') }}</th>
-                                <th class="text-center"><i class="fas fa-store"></i> {{ trans('store') }}</th>
+{{--                                <th class="text-center"><i class="fas fa-store"></i> {{ trans('store') }}</th>--}}
+                                <th class="text-center"><i class="fas fa-store"></i> {{ trans('balance') }}</th>
                                 <th class="text-center"><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
                                 <th class="text-center"><i class="fas fa-map-marker-alt"></i> {{ trans('address') }}</th>
                                 <th class="text-center">
@@ -87,7 +88,7 @@
 
                 $(document).ready(function () {
                     const userIsNotAgent = {{ Auth::user()->hasRole('agent') ? 'false' : 'true' }};
-                    const userRole = "{{ $userRole }}";
+                    {{--const userRole = "{{ $userRole }}";--}}
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#client-table').DataTable({
                         processing: true,
@@ -96,11 +97,11 @@
                         ajax: "{{ route('clients.index') }}",
                         columns: [
                             { data: 'id', name: 'id' },
-                            { data: 'name', name: 'name' },
-                            { data: 'store', name: 'store'},
-                            { data: 'phone', name: 'phone' },
-                            { data: 'address', name: 'address', searchable: true },
+                            { data: 'name', name: 'name' , searchable: true},
                             { data: 'balance', name: 'balance' },
+                            { data: 'store', name: 'store' , visible:userIsNotAgent},
+                            { data: 'phone', name: 'phone' , visible:userIsNotAgent },
+                            { data: 'address', name: 'address', searchable: true , visible:userIsNotAgent},
                             { data: 'actions', name: 'actions', orderable: false, searchable: false }
                         ],
                         columnDefs: [
@@ -114,31 +115,31 @@
                             '<"row"<"col-md-12"t>>' +
                             '<"row"<"col-md-6"i><"col-md-6"p>>',
                         buttons: [
-                            {
-                                extend: 'pdfHtml5',
-                                text: '{{ trans("export_to_pdf") }}',
-                                className: 'btn btn-danger btn-sm',
-                                orientation: 'portrait',
-                                pageSize: 'A4',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5]
-                                },
-                                customize: function (doc) {
-                                    doc.content.splice(0, 0, {
-                                        text: 'Client Report',
-                                        style: 'header',
-                                        alignment: 'center',
-                                        fontSize: 18,
-                                        margin: [0, 0, 0, 20]
-                                    });
-                                }
-                            },
+                            {{--{--}}
+                            {{--    extend: 'pdfHtml5',--}}
+                            {{--    text: '{{ trans("export_to_pdf") }}',--}}
+                            {{--    className: 'btn btn-danger btn-sm',--}}
+                            {{--    orientation: 'portrait',--}}
+                            {{--    pageSize: 'A4',--}}
+                            {{--    exportOptions: {--}}
+                            {{--        columns: [0, 1, 2, 3, 4, 5]--}}
+                            {{--    },--}}
+                            {{--    customize: function (doc) {--}}
+                            {{--        doc.content.splice(0, 0, {--}}
+                            {{--            text: 'Client Report',--}}
+                            {{--            style: 'header',--}}
+                            {{--            alignment: 'center',--}}
+                            {{--            fontSize: 18,--}}
+                            {{--            margin: [0, 0, 0, 20]--}}
+                            {{--        });--}}
+                            {{--    }--}}
+                            {{--},--}}
                             {
                                 extend: 'excelHtml5',
                                 text: '{{ trans("export_to_excel") }}',
                                 className: 'btn btn-success btn-sm',
                                 exportOptions: {
-                                    columns: [0, 1, 2, 3]
+                                    columns: [1, 2]
                                 }
                             }
                         ],
@@ -164,13 +165,13 @@
                             var company_name = e.target.getAttribute('data-company_name')
                             var phone = e.target.getAttribute('data-phone')
                             var address = e.target.getAttribute('data-address')
-                            var website = e.target.getAttribute('data-website')
+                            // var website = e.target.getAttribute('data-website')
                             var balance = e.target.getAttribute('data-balance')
 
                             document.getElementById('modal-client-name').innerText = name
                             document.getElementById('modal-client-companyName').innerText = company_name
                             document.getElementById('modal-phone').innerText = phone
-                            document.getElementById('modal-client-website').innerText = website
+                            // document.getElementById('modal-client-website').innerText = website
                             document.getElementById('title').innerText = address
                             document.getElementById('modal-client-balance').innerText = address
                             document.getElementById('modal-client-balance').innerText = balance

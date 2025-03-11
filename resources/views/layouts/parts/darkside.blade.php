@@ -30,13 +30,12 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">
-                    <a href="/accounts/" class="nav-link">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-header">MANAGEMENT</li>
+{{--                <li class="nav-item">--}}
+{{--                    <a href="/accounts/" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-tachometer-alt"></i>--}}
+{{--                        <p>{{trans('Dashboard')}}</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
                 @if (!Auth::user()->hasRole('agent'))
                     <li class="nav-item">
                         <a href="{{route('users.index')}}" class="nav-link">
@@ -45,6 +44,15 @@
                         </a>
                     </li>
                 @endif
+{{--                <li class="nav-header">{{trans('MANAGEMENT')}}</li>--}}
+{{--                @if (!Auth::user()->hasRole('agent'))--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route('users.index')}}" class="nav-link">--}}
+{{--                            <i class="nav-icon fas fa-users"></i>--}}
+{{--                            <p>Users</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                @endif--}}
 
 
                 <li class="nav-item">
@@ -65,59 +73,71 @@
                 <li class="nav-item">
                     <a href="{{route('products.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-box"></i>
-                        <p>Products</p>
+                        <p>{{trans('Products')}}</p>
                     </a>
                 </li>
-                <li class="nav-header">FINANCIAL</li>
                 <li class="nav-item">
                     <a href="{{route('invoices.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
-                        <p>Invoices</p>
+                        <p>{{trans('Invoices')}}</p>
                     </a>
                 </li>
-                <li class="nav-item ml-3">
+                <li class="nav-item">
                     <a href="{{route('returns.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-undo"></i>
-                        <p>Returns</p>
+                        <p>{{trans('Returns')}}</p>
                     </a>
                 </li>
-                <li class="nav-item ml-3">
+{{--                <li class="nav-header">FINANCIAL</li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{route('invoices.index')}}" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-file-invoice-dollar"></i>--}}
+{{--                        <p>Invoices</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item ml-3">--}}
+{{--                    <a href="{{route('returns.index')}}" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-undo"></i>--}}
+{{--                        <p>Returns</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+                <li class="nav-item">
                     <a href="{{route('receipts.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-undo"></i>
-                        <p>Receipts</p>
+                        <p>{{trans('Receipts')}}</p>
                     </a>
                 </li>
-                <li class="nav-item ml-3">
-                    <a href="/invoices/payments" class="nav-link">
-                        <i class="nav-icon fas fa-credit-card"></i>
-                        <p>Payments</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/expenses" class="nav-link">
-                        <i class="nav-icon fas fa-wallet"></i>
-                        <p>Expenses</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/suppliers" class="nav-link">
-                        <i class="nav-icon fas fa-truck"></i>
-                        <p>Suppliers</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/returns" class="nav-link">
-                        <i class="nav-icon fas fa-money-check"></i>
-                        <p>Transactions</p>
-                    </a>
-                </li>
-                <li class="nav-header">SETTINGS</li>
-                <li class="nav-item">
-                    <a href="/settings" class="nav-link">
-                        <i class="nav-icon fas fa-cogs"></i>
-                        <p>Settings</p>
-                    </a>
-                </li>
+{{--                <li class="nav-item ml-3">--}}
+{{--                    <a href="/invoices/payments" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-credit-card"></i>--}}
+{{--                        <p>Payments</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="/expenses" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-wallet"></i>--}}
+{{--                        <p>Expenses</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="/suppliers" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-truck"></i>--}}
+{{--                        <p>Suppliers</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="/returns" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-money-check"></i>--}}
+{{--                        <p>Transactions</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--                <li class="nav-header">SETTINGS</li>--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="/settings" class="nav-link">--}}
+{{--                        <i class="nav-icon fas fa-cogs"></i>--}}
+{{--                        <p>Settings</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

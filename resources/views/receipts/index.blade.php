@@ -28,9 +28,12 @@
                     <div class="card-header">
                         <h3 class="card-title">{{__('receipts table')}}</h3>
                         <div class="card-tools">
-                            <a class="btn btn-secondary btn-sm"  href="{{ route('receipts.trashed') }}">
-                                <i class="fas fa-trash"></i> @lang('Trashed receipts')
-                            </a>
+                            @if(!Auth::user()->hasRole('agent'))
+                                <a class="btn btn-secondary btn-sm"  href="{{ route('receipts.trashed') }}">
+                                    <i class="fas fa-trash"></i> @lang('Trashed receipts')
+                                </a>
+                            @endif
+
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createreceiptModal">
                                 <i class="fas fa-receipt-plus"></i> @lang('add receipt')
                             </button>

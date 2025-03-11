@@ -54,6 +54,7 @@
                             </div>
 
                             <!-- Store -->
+                            @if(!Auth::user()->hasRole('agent'))
                             <div class="col-lg-6 mb-3">
                                 <label for="store_id" class="form-label">Store</label>
                                 <select id="store_id" name="store_id" class="form-control" required>
@@ -63,11 +64,11 @@
                                     @endforeach
                                 </select>
                             </div>
-
+                            @endif
                             <!-- Discount -->
                             <div class="col-lg-6 mb-3">
                                 <label for="discount" class="form-label">Discount</label>
-                                <input type="number" step="0.01" id="discount" name="discount" class="form-control" placeholder="Enter discount">
+                                <input type="text" step="0.01" id="discount" name="discount" class="form-control" placeholder="Enter discount">
                             </div>
                         </div>
                         <hr>
@@ -165,8 +166,6 @@
                 </div>
             </div>
 @endsection
-
-
 
 @push('scripts')
     <script>
@@ -269,7 +268,7 @@
                         console.log(response.data)
                     },
                     error: function () {
-                        alert('faild')
+                        // alert('faild')
                     }
                 });
             });

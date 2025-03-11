@@ -27,7 +27,7 @@ class StoreInvoiceRequest extends FormRequest
             'invoice_no' => 'required|string|max:50|unique:invoices,invoice_no',
             'invoice_date' => 'required|date',
             'client_id' => 'required|exists:clients,id',
-            'store_id' => 'required|exists:stores,id',
+//            'store_id' => 'required|exists:stores,id',
             'discount' => 'nullable|numeric|min:0',
             'total' => 'numeric',
             'product_id' => 'required|array',

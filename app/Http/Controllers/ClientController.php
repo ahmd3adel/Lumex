@@ -42,11 +42,12 @@ class ClientController extends Controller
                 ->get();
 
             return DataTables::of($clients)
+
                 ->addColumn('balance', function ($client) {
                     // حساب الرصيد = الفواتير - المرتجعات - الدفعات
                     $balance = $client->total_invoices - $client->total_returns - $client->total_payments;
                     return '<span class="badge bg-' . ($balance >= 0 ? 'success' : 'danger') . '">
-                            $' . number_format($balance, 2) . '
+                            ' . number_format($balance, 0) . '
                         </span>';
                 })
                 ->addColumn('store', function ($client) {
@@ -182,7 +183,7 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'name' => 'max:255',
-            'company_name' => 'required|string|max:255',
+//            'company_name' => 'required|string|max:255',
             'website' => 'string|max:255',
             'logo' => 'string|max:255',
             'address' => 'string|max:255',
@@ -192,6 +193,7 @@ class ClientController extends Controller
             'store_id' => 'string',
         ]);
 //        dd($validated);
+        $validated['company_name'] = Auth::user()->store_id;
         try {
             // Create the client
             $client = Client::create($validated);

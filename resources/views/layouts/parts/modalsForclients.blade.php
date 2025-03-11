@@ -5,7 +5,7 @@
             <!-- Modal Header -->
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="clientModalLabel">
-                    <i class="fas fa-user-circle"></i> Client Details
+                    <i class="fas fa-user-circle"></i> {{trans('Client Details')}}
                 </h5>
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
@@ -18,28 +18,28 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <p><strong><i class="fas fa-user"></i> {{trans('Name')}}:</strong>
+                                <p><strong><i class="fas fa-user"></i> {{trans('name')}}:</strong>
                                     <span id="modal-client-name" class="text-primary"></span>
                                 </p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong><i class="fas fa-envelope"></i> {{trans('Company Name')}}:</strong>
+                                <p><strong><i class="fas fa-envelope"></i> {{trans('company name')}}:</strong>
                                     <span id="modal-client-companyName" class="text-primary"></span>
                                 </p>
                             </div>
                         </div>
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-briefcase"></i> {{trans('Website')}}:</strong>
-                                    <span id="modal-client-website" class="text-primary"></span>
-                                </p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-calendar-alt"></i> {{trans('Last Login')}}:</strong>
-                                    <span id="modal-last_login" class="text-primary"></span>
-                                </p>
-                            </div>
-                        </div>
+{{--                        <div class="row mb-3">--}}
+{{--                            <div class="col-md-6">--}}
+{{--                                <p><strong><i class="fas fa-briefcase"></i> {{trans('Website')}}:</strong>--}}
+{{--                                    <span id="modal-client-website" class="text-primary"></span>--}}
+{{--                                </p>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
+{{--                                <p><strong><i class="fas fa-calendar-alt"></i> {{trans('Last Login')}}:</strong>--}}
+{{--                                    <span id="modal-last_login" class="text-primary"></span>--}}
+{{--                                </p>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <p><strong><i class="fas fa-money-bill"></i> {{trans('Balance')}}:</strong>
@@ -47,22 +47,22 @@
                                 </p>
                             </div>
                             <div class="col-md-6">
-                                <p><strong><i class="fas fa-phone"></i> {{trans('Phone')}}:</strong>
+                                <p><strong><i class="fas fa-phone"></i> {{trans('phone')}}:</strong>
                                     <span id="modal-phone" class="text-primary"></span>
                                 </p>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-                                <p><strong><i class="fas fa-map-marker-alt"></i> {{trans('Address')}}:</strong>
+                                <p><strong><i class="fas fa-map-marker-alt"></i> {{trans('address')}}:</strong>
                                     <span id="modal-address" class="text-primary"></span>
                                 </p>
                             </div>
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-id-badge"></i> User ID:</strong>
-                                    <span id="modal-user" class="text-primary"></span>
-                                </p>
-                            </div>
+{{--                            <div class="col-md-6">--}}
+{{--                                <p><strong><i class="fas fa-id-badge"></i> User ID:</strong>--}}
+{{--                                    <span id="modal-user" class="text-primary"></span>--}}
+{{--                                </p>--}}
+{{--                            </div>--}}
                         </div>
                     </div>
                 </div>
@@ -100,23 +100,23 @@
                         <!-- Section 1: Identity Details -->
 
                         <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">{{ trans('Name') }}</label>
+                            <label for="name" class="form-label">{{ trans('name') }}</label>
                             <input type="text" class="form-control" id="name" name="name" placeholder="{{ trans('Enter name') }}">
                             @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-
+                        @if(!Auth::user()->hasRole('agent'))
                         <div class="col-md-6 mb-3">
-                            <label for="company_name" class="form-label">{{ trans('Company Name') }}</label>
+                            <label for="company_name" class="form-label">{{ trans('company name') }}</label>
                             <input type="text" class="form-control" id="company_name" name="company_name" placeholder="{{ trans('Company name') }}" required>
                             @error('clientname')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-@if(!Auth::user()->hasRole('agent'))
+
                         <div id="storeFieldWrapper" class="col-md-6 mb-3">
-                            <label for="store" class="form-label">{{ trans('Store') }}</label>
+                            <label for="store" class="form-label">{{ trans('store') }}</label>
                             <select class="form-control" name="store_id">
                                 <option>Select store</option>
                                 @foreach($stores as $store)
@@ -127,7 +127,7 @@
                         @endif
                         <!-- Section 2: Contact Details -->
                         <div class="col-md-6 mb-3">
-                            <label for="phone" class="form-label">{{ trans('Phone') }}</label>
+                            <label for="phone" class="form-label">{{ trans('phone') }}</label>
                             <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ trans('Enter phone number') }}">
                             @error('phone')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -142,7 +142,7 @@
 {{--                        </div>--}}
 
                         <div class="col-md-6 mb-3">
-                            <label for="title" class="form-label">{{ trans('Title') }}</label>
+                            <label for="title" class="form-label">{{ trans('title') }}</label>
                             <input type="text" class="form-control" id="title" name="address" placeholder="{{ trans('Enter title') }}" required>
                             @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -191,15 +191,15 @@
                         <input type="hidden" class="form-control" id="edit-id" name="id">
 
                         <!-- Title Field -->
-                        <div class="col-md-6 mb-3">
-                            <label for="edit-title" class="form-label">{{ trans('Company name') }}</label>
-                            <input type="text" class="form-control" id="edit-company-name" name="Company_name" placeholder="Enter Company name">
-                            @error('Company_name')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
+{{--                        <div class="col-md-6 mb-3">--}}
+{{--                            <label for="edit-title" class="form-label">{{ trans('Company name') }}</label>--}}
+{{--                            <input type="text" class="form-control" id="edit-company-name" name="Company_name" placeholder="Enter Company name">--}}
+{{--                            @error('Company_name')--}}
+{{--                            <div class="invalid-feedback">--}}
+{{--                                {{ $message }}--}}
+{{--                            </div>--}}
+{{--                            @enderror--}}
+{{--                        </div>--}}
                     </div>
 
                     <div class="row">
