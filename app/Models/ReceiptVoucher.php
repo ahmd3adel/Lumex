@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Observers\GlobalModelObserver;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class ReceiptVoucher extends Model
 {
@@ -25,4 +28,19 @@ class ReceiptVoucher extends Model
     {
         return $this->hasMany(InvoiceDetails::class, 'invoice_id');
     }
+
+    protected static function booted()
+    {
+
+        static::addGlobalScope('receipt', function (Builder $builder) {
+            if (Auth::check() && Auth::user()->hasRole('agent')) {
+                $storeId = Auth::user()->store_id;
+                $builder->where('store_id', $storeId);
+            }
+        });
+
+        parent::boot();
+        static::observe(GlobalModelObserver::class);
+    }
+
 }

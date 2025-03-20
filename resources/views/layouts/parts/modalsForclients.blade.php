@@ -126,13 +126,13 @@
                         </div>
                         @endif
                         <!-- Section 2: Contact Details -->
-                        <div class="col-md-6 mb-3">
-                            <label for="phone" class="form-label">{{ trans('phone') }}</label>
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ trans('Enter phone number') }}">
-                            @error('phone')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+{{--                        <div class="col-md-6 mb-3">--}}
+{{--                            <label for="phone" class="form-label">{{ trans('phone') }}</label>--}}
+{{--                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{{ trans('Enter phone number') }}">--}}
+{{--                            @error('phone')--}}
+{{--                            <div class="invalid-feedback">{{ $message }}</div>--}}
+{{--                            @enderror--}}
+{{--                        </div>--}}
 {{--                        <div class="col-md-6 mb-3">--}}
 {{--                            <label for="clientwebsite" class="form-label">{{ trans('Website') }}</label>--}}
 {{--                            <input type="text" class="form-control" id="client_website" name="website" placeholder="{{ trans('Enter website link') }}" required>--}}
@@ -143,7 +143,7 @@
 
                         <div class="col-md-6 mb-3">
                             <label for="title" class="form-label">{{ trans('title') }}</label>
-                            <input type="text" class="form-control" id="title" name="address" placeholder="{{ trans('Enter title') }}" required>
+                            <input type="text" class="form-control" id="title" name="address" placeholder="{{ trans('Enter title') }}">
                             @error('title')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

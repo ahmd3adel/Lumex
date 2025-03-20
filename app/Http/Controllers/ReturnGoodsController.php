@@ -95,20 +95,6 @@ class ReturnGoodsController extends Controller
 
      $validated = $request->validated();
 
-//     dd($request->all());
-//     $request->validate([
-//         'return_no'   => 'required|unique:return_goods,return_no|max:50',
-//         'client_id'   => 'required|exists:clients,id',
-//         'store_id'    => 'nullable|exists:stores,id',
-//         'return_date' => 'required|date',
-//         'total'       => 'required|numeric|min:0',
-//         'discount'    => 'nullable|numeric|min:0',
-////         'pieces_no'   => 'required|integer|min:1',
-//         'product_id.*' => 'required|exists:products,id',
-//         'quantity.*'  => 'required|integer|min:1',
-//         'price.*'     => 'required|numeric|min:0',
-//     ]);
-
      $return = ReturnGoods::create([
          'return_no'   => 'RET-'.$validated['return_no'],
          'client_id'   =>  $validated['client_id'],
@@ -118,9 +104,42 @@ class ReturnGoodsController extends Controller
          'net_total'   =>  $validated['total'] - ($request->discount ?? 0),
 //         'notes'       =>  $validated['notes'],
          'return_date' =>  $validated['return_date'],
-//         'pieces_no'   =>  $validated['pieces_no'],
          'created_by'  => Auth::id(),
      ]);
+
+
+
+     if (
+
+         count($validated['product_id']) !== count($validated['quantity']) ||
+         count($validated['product_id']) !== count($validated['price'])
+     ) {
+         throw new \Exception('The product data arrays are mismatched.');
+     }
+
+     $total_pices = 0;
+     // إضافة المنتجات المرتبطة بالفاتورة
+     foreach ($validated['product_id'] as $key => $productID) {
+         $quantity = $validated['quantity'][$key];
+         $price = $validated['price'][$key];
+         $subtotal = $quantity * $price;
+
+         $return->products()->create([
+             'invoice_id' => $return->id,
+             'quantity' => $quantity,
+             'product_id' => $productID,
+             'unit_price' => $price,
+             'subtotal' => $subtotal,
+         ]);
+         $total_pices += $quantity;
+     }
+
+
+     // تحديث الإجمالي النهائي للفاتورة
+     $return->fill([
+         'net_total' => $validated['total'],
+         'pieces_no' => $total_pices
+     ])->save();
 
      return redirect()->route('returns.index')->with('success', 'Return added successfully.');
  }

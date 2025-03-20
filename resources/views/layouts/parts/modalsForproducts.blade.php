@@ -70,15 +70,15 @@
                             <label for="quantity" class="form-label">Quantity</label>
                             <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Enter product quantity" required>
                         </div>
-                        <div id="storeFieldWrapper" class="col-md-6 mb-3">
-                            <label for="store" class="form-label">{{ trans('Store') }}</label>
-                            <select class="form-control" name="store_id">
-                                <option>Select store</option>
-                                @foreach($stores as $store)
-                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+{{--                        <div id="storeFieldWrapper" class="col-md-6 mb-3">--}}
+{{--                            <label for="store" class="form-label">{{ trans('Store') }}</label>--}}
+{{--                            <select class="form-control" name="store_id">--}}
+{{--                                <option>Select store</option>--}}
+{{--                                @foreach($stores as $store)--}}
+{{--                                    <option value="{{ $store->id }}">{{ $store->name }}</option>--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
+{{--                        </div>--}}
                     </div>
                     <div class="row">
                         <!-- Description Field -->

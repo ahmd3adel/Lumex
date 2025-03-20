@@ -24,27 +24,20 @@ class InvoiceController extends Controller
             $storeId = Auth::user()->store_id;
 
             $invoices = Invoice::with(['client:id,name', 'store:id,name'])
-                ->select('id', 'invoice_no', 'client_id', 'store_id', 'total', 'discount', 'net_total', 'invoice_date')
+                ->select('id', 'invoice_no', 'client_id', 'store_id', 'total', 'pieces_no', 'net_total', 'invoice_date', 'created_at')
+                ->where('store_id', $storeId)
+                ->orderBy('invoice_no' , 'asc')
                 ->get();
 
 
 
+
             return DataTables::of($invoices)
+                ->addIndexColumn()
                 ->addColumn('client', function ($invoice) {
-                    return '<a href="'.route('stores.show', $invoice->id).'" class="text-primary">
-                           ' . e($invoice->name) . '
-                        </a>';
+                    return $invoice->client ? '<a href="'.route('clients.show', $invoice->client->id).'" class="text-primary">'
+                        . e($invoice->client->name) . '</a>' : 'N/A';
                 })
-                ->addColumn('client', function ($invoice) {
-//                    return $invoice->client ? $invoice->client->name : 'N/A';
-
-                    return '<a href="'.route('clients.show', $invoice->client->id).'" class="text-primary">
-                           ' . e($invoice->client->name) . '
-                        </a>';
-
-                })
-
-
                 ->addColumn('store', function ($invoice) {
                     return $invoice->store ? e($invoice->store->name) : 'N/A';
                 })
@@ -52,15 +45,15 @@ class InvoiceController extends Controller
                     return '
                 <div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
                     <a class="btn btn-info btn-sm"
-                    href="'.route('invoices.show' , $invoice->id).'"
+                    href="'.route('invoices.show', $invoice->id).'"
                             data-id="' . e($invoice->id) . '"
                             data-name="' . e($invoice->invoice_no) . '">
-                        <i class="fas fa-eye"></i>  ' . trans('view') . '
+                        <i class="fas fa-eye"></i> ' . trans('view') . '
                     </a>
                     <button class="btn btn-warning btn-sm edit-invoice"
                             data-id="' . e($invoice->id) . '"
                             data-name="' . e($invoice->invoice_no) . '">
-                        <i class="fas fa-edit"></i>  ' . trans('Edit') . '
+                        <i class="fas fa-edit"></i> ' . trans('Edit') . '
                     </button>
                     <form action="' . route('invoices.destroy', $invoice->id) . '" method="POST" class="delete">
                         ' . csrf_field() . method_field('DELETE') . '
@@ -71,13 +64,14 @@ class InvoiceController extends Controller
                 </div>
             ';
                 })
-                ->rawColumns(['actions' , 'client'])
+                ->rawColumns(['actions', 'client'])
                 ->make(true);
         }
 
         $pageTitle = "Invoices";
         return view('invoices.index', compact('pageTitle'));
     }
+
 
 
 

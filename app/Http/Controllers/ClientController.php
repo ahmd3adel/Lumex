@@ -42,7 +42,7 @@ class ClientController extends Controller
                 ->get();
 
             return DataTables::of($clients)
-
+                ->addIndexColumn()
                 ->addColumn('balance', function ($client) {
                     // حساب الرصيد = الفواتير - المرتجعات - الدفعات
                     $balance = $client->total_invoices - $client->total_returns - $client->total_payments;
@@ -104,73 +104,6 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-//    public function index(Request $request)
-//    {
-//        if ($request->ajax()) {
-//            $clients = Client::with(['store:id,name'])
-//                ->select(['id', 'name', 'company_name', 'website', 'phone', 'balance', 'last_login', 'address', 'store_id'])
-//                ->orderBy('id' , 'DESC');
-//
-//            return DataTables::of($clients)
-//                ->addColumn('website', function ($client) {
-//                    return $client->website ? '<a href="' . $client->website . '" target="_blank">' . $client->website . '</a>' : 'N/A';
-//                })
-//                ->addColumn('balance', function ($client) {
-//                    return number_format($client->balance, 2);
-//                })
-//                ->addColumn('name', function ($store) {
-//                    return '<a href="'.route('clients.show', $store->id).'" class="text-primary">
-//                           ' . e($store->name) . '
-//                        </a>';
-//                })
-//                ->addColumn('address', function ($client) {
-//                    return $client->address ?? 'N/A';
-//                })
-//                ->addColumn('store', function ($client) {
-//                    return $client->store ? $client->store->name : 'Unassigned';
-//                })
-//                ->addColumn('action', function ($client) {
-//                    return '
-//                <div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
-//                    <button class="btn btn-info btn-sm view-client"
-//                            data-id="' . $client->id . '"
-//                            data-name="' . $client->name . '"
-//                            data-company_name="' . $client->company_name . '"
-//                            data-phone="' . $client->phone . '"
-//                            data-balance="' . $client->balance . '"
-//                            data-website="' . $client->website . '"
-//                            data-address="' . $client->address . '">
-//                        <i class="fas fa-eye"></i> ' . trans('view') . '
-//                    </button>
-//                    <button class="btn btn-warning btn-sm edit-client"
-//                            data-id="' . $client->id . '"
-//                            data-name="' . $client->name . '"
-//                            data-company_name="' . $client->company_name . '"
-//                            data-phone="' . $client->phone . '"
-//                            data-balance="' . $client->balance . '"
-//                            data-website="' . $client->website . '"
-//                            data-address="' . $client->address . '">
-//                        <i class="fas fa-edit"></i>  ' . trans('Edit') . '
-//                    </button>
-//                    <form action="' . route('clients.destroy', $client->id) . '" method="POST" class="delete">
-//                        ' . csrf_field() . method_field('DELETE') . '
-//                        <button type="submit" class="btn btn-danger btn-sm">
-//                            <i class="fas fa-trash"></i>  ' . trans('Delete') . '
-//                        </button>
-//                    </form>
-//                </div>';
-//                })
-//                ->rawColumns(['website', 'logo', 'action' , 'name'])
-//                ->make(true);
-//        }
-//        $userRole = Auth::user()->roles->pluck('name');
-//        $clients = Client::paginate(10);
-//        $pageTitle = "Clients";
-//        $stores = Store::all();
-//        return view('clients.index', compact('clients', 'pageTitle' , 'userRole' , 'stores'));
-//    }
-
-
     /**
 
 
@@ -178,15 +111,14 @@ class ClientController extends Controller
      * Store a newly created resource in storage.
      */
 
-
-    public function store(Request $request)
+    public function store(StoreClientRequest $request)
     {
         $validated = $request->validate([
-            'name' => 'max:255',
+            'name' => 'required|max:255',
 //            'company_name' => 'required|string|max:255',
             'website' => 'string|max:255',
             'logo' => 'string|max:255',
-            'address' => 'string|max:255',
+            'address' => '',
             'phone' => '',
             'created_by' => 'string',
             'updated_by' => 'string',
@@ -223,9 +155,6 @@ class ClientController extends Controller
         }
     }
 
-
-
-
     /**
      * Display the specified resource.
      */
@@ -238,7 +167,7 @@ class ClientController extends Controller
 
         // جلب الفواتير (تزيد الرصيد)
         $invoices = Invoice::where('client_id', $clientId)
-            ->select('id', 'invoice_no as reference_no', 'total as amount', 'invoice_date as date')
+            ->select('id', 'pieces_no' , 'invoice_no as reference_no', 'total as amount', 'invoice_date as date')
             ->get()
             ->map(function ($invoice) {
                 return [
@@ -246,13 +175,13 @@ class ClientController extends Controller
                     'id' => $invoice->id,
                     'reference_no' => $invoice->reference_no,
                     'amount' => $invoice->amount,
+                    'pieces_no' => $invoice->pieces_no,
                     'date' => $invoice->date,
                 ];
             });
-
         // جلب المرتجعات (تخصم من الرصيد)
         $returns = ReturnGoods::where('client_id', $clientId)
-            ->select('id', 'return_no as reference_no', 'net_total as amount', 'return_date as date')
+            ->select('id','pieces_no' , 'return_no as reference_no', 'net_total as amount', 'return_date as date')
             ->get()
             ->map(function ($return) {
                 return [
@@ -261,6 +190,7 @@ class ClientController extends Controller
                     'reference_no' => $return->reference_no,
                     'amount' => -$return->amount, // بالسالب لأنه يُخصم من الرصيد
                     'date' => $return->date,
+                    'pieces_no' => $return->pieces_no,
                 ];
             });
 

@@ -112,7 +112,6 @@
 
 /* حاوية التمرير */
 .table-responsive {
-    max-height: 600px; /* تحديد ارتفاع الجدول */
     overflow-y: auto; /* التمرير العمودي */
     overflow-x: auto; /* التمرير الأفقي */
 }

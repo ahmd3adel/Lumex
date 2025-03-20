@@ -25,4 +25,11 @@ class StoreClientRequest extends FormRequest
             //
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name' => 'الاسم مطلوب'
+        ];
+    }
 }

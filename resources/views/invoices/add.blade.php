@@ -68,7 +68,7 @@
                             <!-- Discount -->
                             <div class="col-lg-6 mb-3">
                                 <label for="discount" class="form-label">Discount</label>
-                                <input type="text" step="0.01" id="discount" name="discount" class="form-control" placeholder="Enter discount">
+                                <input type="text" id="discount" name="discount" class="form-control" placeholder="Enter discount">
                             </div>
                         </div>
                         <hr>

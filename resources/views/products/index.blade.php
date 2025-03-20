@@ -28,9 +28,11 @@
                     <div class="card-header">
                         <h3 class="card-title">{{__('products table')}}</h3>
                         <div class="card-tools">
+                            @if(!Auth::user()->hasRole('agent'))
                             <a class="btn btn-secondary btn-sm"  href="{{ route('products.trashed') }}">
                                 <i class="fas fa-trash"></i> @lang('Trashed products')
                             </a>
+                            @endif
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createproductModal" aria-controls="createproductModal" title="@lang('Add product')">
                                 <i class="fas fa-user-plus"></i> @lang('add product')
                             </button>
@@ -81,10 +83,11 @@
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#product-table').DataTable({
                         processing: true,
+                        pageLength: 100,
                         serverSide: true,
                         ajax: "{{ route('products.index') }}",
                         columns: [
-                            { data: 'id', name: 'id' },
+                            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                             { data: 'store', name: 'store' , visible: userRole != 'agent'},
                             { data: 'name', name: 'name' },
                             { data: 'price', name: 'price' },
@@ -97,25 +100,25 @@
                             '<"row"<"col-md-12"t>>' +
                             '<"row"<"col-md-6"i><"col-md-6"p>>',
                         buttons: [
-                            {
-                                extend: 'pdfHtml5',
-                                text: '{{ trans("export_to_pdf") }}',
-                                className: 'btn btn-danger btn-sm',
-                                orientation: 'portrait',
-                                pageSize: 'A4',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3, 4, 5]
-                                },
-                                customize: function (doc) {
-                                    doc.content.splice(0, 0, {
-                                        text: 'product Report',
-                                        style: 'header',
-                                        alignment: 'center',
-                                        fontSize: 18,
-                                        margin: [0, 0, 0, 20]
-                                    });
-                                }
-                            },
+                            {{--{--}}
+                            {{--    extend: 'pdfHtml5',--}}
+                            {{--    text: '{{ trans("export_to_pdf") }}',--}}
+                            {{--    className: 'btn btn-danger btn-sm',--}}
+                            {{--    orientation: 'portrait',--}}
+                            {{--    pageSize: 'A4',--}}
+                            {{--    exportOptions: {--}}
+                            {{--        columns: [0, 1, 2, 3, 4, 5]--}}
+                            {{--    },--}}
+                            {{--    customize: function (doc) {--}}
+                            {{--        doc.content.splice(0, 0, {--}}
+                            {{--            text: 'product Report',--}}
+                            {{--            style: 'header',--}}
+                            {{--            alignment: 'center',--}}
+                            {{--            fontSize: 18,--}}
+                            {{--            margin: [0, 0, 0, 20]--}}
+                            {{--        });--}}
+                            {{--    }--}}
+                            {{--},--}}
                             {
                                 extend: 'excelHtml5',
                                 text: '{{ trans("export_to_excel") }}',

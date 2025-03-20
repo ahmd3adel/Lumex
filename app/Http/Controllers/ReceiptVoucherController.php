@@ -8,6 +8,7 @@ use App\Http\Requests\StoreReceiptVoucherRequest;
 use App\Http\Requests\UpdateReceiptVoucherRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
 
 class ReceiptVoucherController extends Controller
@@ -76,14 +77,20 @@ class ReceiptVoucherController extends Controller
     {
         // التحقق من البيانات المدخلة
         $request->validate([
-            'voucher_no' => 'nullable|string|max:255|unique:receipt_vouchers,voucher_no,NULL,id,store_id,' . $request->store_id,
+            'voucher_no' => [
+                'nullable',
+                'string',
+                Rule::unique('receipt_vouchers')->where(function ($query) use ($request) {
+                    return $query->where('store_id', $request->store_id);
+                }),
+            ],
             'client_id' => 'required|exists:clients,id',
-//            'store_id' => 'required|exists:stores,id',
             'amount' => 'required|numeric|min:0',
             'payment_method' => 'nullable|string|in:cash,bank,credit_card',
             'receipt_date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
+
 
         // إنشاء إيصال جديد
         $receipt = $receiptVoucher = ReceiptVoucher::create([

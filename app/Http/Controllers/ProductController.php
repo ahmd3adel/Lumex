@@ -19,6 +19,7 @@ class ProductController extends Controller
             $products = Product::with('store')->select(['id', 'name', 'description', 'price', 'quantity' , 'store_id' , 'status'])->orderBy('created_at' , 'desc')->get();
 
             return DataTables::of($products)
+                ->addIndexColumn()
                 ->addColumn('name', function ($product) {
                     return $product->name;
                 }) ->addColumn('store', function ($product) {
@@ -99,8 +100,8 @@ class ProductController extends Controller
     $creator = Auth::user();
     $request->validate([
         'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name',
-        'price' => 'required',
-        'quantity' => 'required',
+//        'price' => 'required',
+//        'quantity' => 'required',
     ]);
     try {
 

@@ -61,6 +61,9 @@
                         <p>{{trans('Clients')}}</p>
                     </a>
                 </li>
+
+
+
                 @if(!Auth::user()->hasRole('agent'))
                     <li class="nav-item">
                         <a href="{{route('stores.index')}}" class="nav-link">
@@ -80,6 +83,12 @@
                     <a href="{{route('invoices.index')}}" class="nav-link">
                         <i class="nav-icon fas fa-file-invoice-dollar"></i>
                         <p>{{trans('Invoices')}}</p>
+                    </a>
+                </li>
+                <li class="nav-item ml-4">
+                    <a href="{{route('invoices.create')}}" class="nav-link">
+                        <i class="nav-icon fas fa-file-invoice-dollar"></i>
+                        <p>{{trans('add invoice')}}</p>
                     </a>
                 </li>
                 <li class="nav-item">

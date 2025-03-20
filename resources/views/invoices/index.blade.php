@@ -64,7 +64,7 @@
                                     <i class="fas fa-user"></i> {{ trans('client') }}
                                 </th>
                                 <th class="text-center">
-                                    <i class="fas fa-percent"></i> {{ trans('discount') }}
+                                    <i class="fas fa-pieces"></i> {{ trans('no_pieces') }}
                                 </th>
                                 <th class="text-center">
                                     <i class="fas fa-money-bill-wave"></i> {{ trans('net_total') }}
@@ -121,16 +121,17 @@
                 serverSide: true,
                 ajax: "{{ route('invoices.index') }}",
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'invoice_no', name: 'invoice_no' },
                     { data: 'store', name: 'store' }, // Store column
                     { data: 'client', name: 'client' },
-                    { data: 'discount', name: 'discount' },
+                    { data: 'pieces_no', name: 'pieces_no' },
                     { data: 'net_total', name: 'net_total' },
                     { data: 'total', name: 'total' },
                     { data: 'invoice_date', name: 'invoice_date' },
                     { data: 'actions', name: 'action', orderable: false, searchable: false },
                 ],
+                pageLength:100,
                 columnDefs: [
                     {
                         // Target the 'store' column index (2 in this case)

@@ -58,7 +58,7 @@
                                 <th class="text-center">
                                 {{--                                    <i class="fas fa-money-bill-wave"></i> --}}
                                 {{ trans('balance') }}</th>
-                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>
+{{--                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>--}}
                             </tr>
                             </thead>
                             <tbody>
@@ -92,17 +92,18 @@
                     // إعداد الجدول باستخدام DataTables
                     let table = $('#client-table').DataTable({
                         processing: true,
+                        pageLength: 100,
                         serverSide: true,
                         searching:true,
                         ajax: "{{ route('clients.index') }}",
                         columns: [
-                            { data: 'id', name: 'id' },
+                            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false }, // العمود التسلسلي
                             { data: 'name', name: 'name' , searchable: true},
                             { data: 'balance', name: 'balance' },
                             { data: 'store', name: 'store' , visible:userIsNotAgent},
                             { data: 'phone', name: 'phone' , visible:userIsNotAgent },
                             { data: 'address', name: 'address', searchable: true , visible:userIsNotAgent},
-                            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+                            // { data: 'actions', name: 'actions', orderable: false, searchable: false }
                         ],
                         columnDefs: [
                             {
@@ -163,14 +164,14 @@
                             var id = e.target.getAttribute('data-id')
                             var name = e.target.getAttribute('data-name')
                             var company_name = e.target.getAttribute('data-company_name')
-                            var phone = e.target.getAttribute('data-phone')
+                            // var phone = e.target.getAttribute('data-phone')
                             var address = e.target.getAttribute('data-address')
                             // var website = e.target.getAttribute('data-website')
                             var balance = e.target.getAttribute('data-balance')
 
                             document.getElementById('modal-client-name').innerText = name
                             document.getElementById('modal-client-companyName').innerText = company_name
-                            document.getElementById('modal-phone').innerText = phone
+                            // document.getElementById('modal-phone').innerText = phone
                             // document.getElementById('modal-client-website').innerText = website
                             document.getElementById('title').innerText = address
                             document.getElementById('modal-client-balance').innerText = address
