@@ -100,7 +100,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="number" name="quantity[]" class="form-control" placeholder="Enter quantity" required>
+                                            <input type="text" name="quantity[]" class="form-control" placeholder="Enter quantity" required>
                                         </td>
                                         <td>
                                             <input type="number" name="price[]" class="form-control" placeholder="Enter price" required>

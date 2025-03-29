@@ -26,6 +26,11 @@ class ReceiptVoucherController extends Controller
                 ->get(); // ✅ Fix: Execute query
 
             return DataTables::of($vouchers)
+                ->addIndexColumn()
+                ->addColumn('client_id', function ($invoice) {
+                    return $invoice->client ? '<a href="'.route('clients.show', $invoice->client->id).'" class="text-primary">'
+                        . e($invoice->client->name) . '</a>' : 'N/A';
+                })
                 ->addColumn('client', function ($voucher) {
                     return $voucher->client ? $voucher->client->name : 'N/A';
                 })
@@ -48,7 +53,7 @@ class ReceiptVoucherController extends Controller
                     </form>
                 </div>';
                 })
-                ->rawColumns(['actions'])
+                ->rawColumns(['actions' , 'client' , 'client_id'])
                 ->make(true);
         }
 

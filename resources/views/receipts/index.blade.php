@@ -48,7 +48,7 @@
                             <tr>
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-receipt"></i> {{ trans('voucher_no') }}</th>
-                                <th><i class="fas fa-envelope"></i> {{ trans('client_id') }}</th>
+                                <th><i class="fas fa-envelope mx-5 text-center"></i> {{ trans('client') }}</th>
                                 <th><i class="fas fa-at"></i> {{ trans('amount') }}</th>
                                 <th><i class="fas fa-phone"></i> {{ trans('payment_method') }}</th>
                                 <th><i class="fas fa-phone"></i> {{ trans('receipt_date') }}</th>
@@ -89,7 +89,7 @@
                         serverSide: true, // Enable server-side processing
                         ajax: "{{ route('receipts.index') }}", // Dynamic data route
                         columns: [
-                            { data: 'id', name: 'id' },
+                            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                             { data: 'voucher_no', name: 'voucher_no' },
                             { data: 'client_id', name: 'client_id' },
                             { data: 'amount', name: 'amount' },
@@ -143,7 +143,8 @@
                                 next: "Next",
                                 previous: "Previous"
                             }
-                        }
+                        },
+                        pageLength:100
                     });
 
                     //view-receipt modal
