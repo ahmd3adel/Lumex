@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-if ($request->ajax()) {
+if ($request->ajax()) { 
     $users = User::with([
         'roles:name', // Load only the name field of roles
         'store:id,name' // Load only the id and name fields of store
@@ -43,7 +43,6 @@ if ($request->ajax()) {
                 ->addColumn('roles', function ($user) {
                     return $user->roles->pluck('name')->join(', ');
                 }) ->addColumn('store', function ($user) {
-//                    return $user->store ? $user->store->name : 'N/A';
                     return $user->store
                         ? '<a href="#" class="open-store-modal" data-id="' . $user->store->id . '" data-location = "' . $user->store->location . '">' . $user->store->name . '</a>'
                         : '';

@@ -37,7 +37,7 @@
                 <!-- Card for the table -->
                 <div class="card p-4">
                     <div class="card-header">
-                        <h3 class="card-title">{{__('returns table')}}</h3>
+                        <h3 class="card-title text-capitalize">{{__('Returns Table')}}</h3>
                         <div class="card-tools">
                             <a class="btn btn-primary" href="{{route('returns.create')}}">
                                 <i class="fas fa-file-invoice-plus"></i> @lang('add return')
@@ -48,17 +48,16 @@
                     <!-- /.card-header -->
 
                     <div class="table-responsive">
-                        <table id="return-table" class="table table-bordered table-hover w-100 ">
+                        <table id="return-table" class="table table-bordered table-hover w-100 text-center">
                             <thead>
                             <tr>
-                                <th class="text-center"><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('return_no') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('store') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('client') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('return_date') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('total') }}</th>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('date') }}</th>
-                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
+                                <th class="text-center"> {{ trans('id') }}</th>
+                                <th> {{ trans('return_no') }}</th>
+                                <th> {{ trans('store') }}</th>
+                                <th> {{ trans('client') }}</th>
+                                <th> {{ trans('return_date') }}</th>
+                                <th> {{ trans('total') }}</th>
+                                <th><i class="fas fa-cog"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
                         </table>
@@ -104,7 +103,6 @@
                     { data: 'client', name: 'client' }, // Store column
                     { data: 'return_date', name: 'return_date' },
                     { data: 'total', name: 'total' },
-                    { data: 'return_date', name: 'return_date' },
                     { data: 'actions', name: 'actions', orderable: false, searchable: false },
                 ],
                 columnDefs: [

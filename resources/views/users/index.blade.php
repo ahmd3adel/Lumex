@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@section('title' , 'USERS PAGE')
+@section('title', trans($pageTitle))
 @section('breadcramp')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -20,7 +20,27 @@
             </div><!-- /.container-fluid -->
         </div>
 @endsection
+<style>
+    .text-primary {
+    color: #007bff;
+    font-weight: bold;
+}
 
+strong {
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+}
+
+@media (max-width: 767px) {
+    .col-md-6 {
+        width: 100%;
+    }
+}
+
+</style>
         @section('content')
             <div class="container-fluid">
                 <!-- Card for the table -->
@@ -28,11 +48,11 @@
                     <div class="card-header">
                         <h3 class="card-title">{{__('users table')}}</h3>
                         <div class="card-tools">
-                            <a class="btn btn-secondary btn-sm"  href="{{ route('users.trashed') }}">
+                            {{-- <a class="btn btn-secondary btn-sm"  href="{{ route('users.trashed') }}">
                                 <i class="fas fa-trash"></i> @lang('Trashed Users')
-                            </a>
+                            </a> --}}
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createUserModal">
-                                <i class="fas fa-user-plus"></i> @lang('add user')
+                                <i class="fas fa-user-plus"></i> {{trans('Add User')}} 
                             </button>
                         </div>
                     </div>
@@ -106,28 +126,28 @@
                             '<"row"<"col-md-12"t>>' + // Table
                             '<"row"<"col-md-6"i><"col-md-6"p>>', // Pagination and info
                         buttons: [
-                            {
-                                extend: 'pdfHtml5',
-                                text: '{{trans("Export To PDF")}}',
-                                className: 'btn btn-danger btn-sm',
-                                orientation: 'portrait',
-                                pageSize: 'A4',
-                                exportOptions: {
-                                    columns: [0, 1, 2, 3 , 4 , 5] // Exported columns
-                                },
-                                customize: function (doc) {
-                                    doc.content.splice(0, 0, {
-                                        text: 'User Report',
-                                        style: 'header',
-                                        alignment: 'center',
-                                        fontSize: 18,
-                                        margin: [0, 0, 0, 20]
-                                    });
-                                }
-                            },
+                            // {
+                            //     extend: 'pdfHtml5',
+                            //     text: '{{trans("Export To PDF")}}',
+                            //     className: 'btn btn-danger btn-sm',
+                            //     orientation: 'portrait',
+                            //     pageSize: 'A4',
+                            //     exportOptions: {
+                            //         columns: [0, 1, 2, 3 , 4 , 5] // Exported columns
+                            //     },
+                            //     customize: function (doc) {
+                            //         doc.content.splice(0, 0, {
+                            //             text: 'User Report',
+                            //             style: 'header',
+                            //             alignment: 'center',
+                            //             fontSize: 18,
+                            //             margin: [0, 0, 0, 20]
+                            //         });
+                            //     }
+                            // },
                             {
                                 extend: 'excelHtml5',
-                                text: 'Export to Excel',
+                                text: '{{trans('to excel')}}',
                                 className: 'btn btn-success btn-sm',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3] // Exported columns
@@ -136,10 +156,10 @@
                         ],
                         lengthMenu: [10, 25, 50, 100], // Rows per page options
                         language: {
-                            lengthMenu: "Show _MENU_ entries",
-                            info: "Showing _START_ to _END_ of _TOTAL_ entries",
+                            lengthMenu: "{{ trans('Show') }} _MENU_ {{ trans('entries') }}",
+                            info: "{{ trans('Showing') }} _START_ {{ trans('to') }} _END_ {{ trans('of') }} _TOTAL_ {{ trans('entries') }}",
                             search: "",
-                            searchPlaceholder: "Search...",
+                            searchPlaceholder: "{{trans('Search...')}}",
                             paginate: {
                                 first: "First",
                                 last: "Last",
@@ -386,9 +406,6 @@
                                 .catch(error => console.error('Error:', error));
                         }
                     });
-
-
-
                 });
                 // Utility functions
                 function resetForm(form) {
@@ -396,8 +413,6 @@
                     form.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
                     form.querySelectorAll('.invalid-feedback').forEach(error => error.remove());
                 }
-
-
                 function handleValidationErrors(form, errors) {
                     for (let key in errors) {
                         const input = form.querySelector(`[name="${key}"]`);
@@ -410,8 +425,6 @@
                         }
                     }
                 }
-
-
                 function disableButton(button, disable) {
                     if (disable) {
                         button.disabled = true;
@@ -421,11 +434,6 @@
                         button.innerHTML = 'Submit';
                     }
                 }
-
-
-
-
-
             </script>
 
 

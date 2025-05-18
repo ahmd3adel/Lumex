@@ -1,152 +1,204 @@
 @extends('layouts.index')
 @section('title', $pageTitle . ' PAGE')
-@section('breadcramp')
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <div class="content-header">
-            <div class="container-fluid ">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <h1 class="">{{trans('invoice')}}</h1>
-                    </div><!-- /.col -->
-                    <div class="col-sm-6">
-                        @parent
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">{{trans('Home')}}</a></li>
-                            <li class="breadcrumb-item active "> {{trans('invoice table')}} </li>
-                        </ol>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-@endsection
 
+@section('breadcramp')
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-sm-6">
+                    <h1 class="m-0">{{ __('invoice') }}</h1>
+                </div>
+                <div class="col-sm-6 text-sm-end">
+                    @parent
+                    <ol class="breadcrumb float-sm-right d-print-none">
+                        <li class="breadcrumb-item"><a href="#">{{ __('Home') }}</a></li>
+                        <li class="breadcrumb-item active">{{ __('invoice table') }}</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
 
 @section('content')
-            <section class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
+<style>
+    body {
+        background-color: #f9f9f9;
+    }
 
+    .table thead {
+        background-color: #37474f;
+        color: #fff;
+    }
 
-                            <!-- Main content -->
-                            <div class="invoice p-3 mb-3">
-                                <div class="row invoice-info">
-                                    <div class="col-sm-4 invoice-col">
-                                        From
-                                        <address>
-                                            <strong>{{$inv->store->name}}</strong><br>
-                                            {{$inv->store->location}}<br>
-                                            San Francisco, CA 94107<br>
-                                            Phone: (804) 123-5432<br>
-                                        </address>
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-sm-4 invoice-col">
-                                        To
-                                        <address>
-                                            <strong>{{$inv->client->company_name}}</strong><br>
-                                            795 Folsom Ave, Suite 600<br>
-                                            San Francisco, CA 94107<br>
-                                        </address>
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-sm-4 invoice-col">
-                                        <div class="col-sm-4 invoice-col">
-                                            no
-                                            <address>
-                                        <b>Invoice {{$inv->invoice_no}}</b><br>
-                                        <br>
-                                        <b>Pieces</b>:</b> {{$inv->pieces_no}}<br>
-                                            </address>
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
+    .invoice-info h5 {
+        font-size: 1.25rem;
+        color: #444;
+    }
 
-                                <!-- Table row -->
-                                <div class="row w-100">
-                                    <div class="col-12 table-responsive">
-                                        <table class="table table-striped">
-                                            <thead>
-                                            <tr>
-                                                <th>Qty</th>
-                                                <th>Price</th>
-                                                <th>Product</th>
-{{--                                                <th>Description</th>--}}
-                                                <th>Subtotal</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            @foreach($inv->products as $product)
-                                                <tr>
-                                                    <td>{{$product->quantity}}</td>
-                                                    <td>{{$product->unit_price}}</td>
-                                                    <td>{{$product->product->name}}</td>
-{{--                                                    <td>{{$product->description}}</td>--}}
-                                                    <td>{{$product->subtotal}}</td>
-                                                </tr>
-                                            @endforeach
+    .dt-buttons .btn {
+        margin-left: 5px;
+    }
 
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
+    @media print {
+        .d-print-none {
+            display: none !important;
+        }
 
-                                <div class="row">
-                                    <!-- accepted payments column -->
-                                    <div class="col-6">
-{{--                                        <p class="lead">Payment Methods:</p>--}}
-{{--                                        <img src="../../dist/img/credit/visa.png" alt="Visa">--}}
-{{--                                        <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">--}}
-{{--                                        <img src="../../dist/img/credit/american-express.png" alt="American Express">--}}
-{{--                                        <img src="../../dist/img/credit/paypal2.png" alt="Paypal">--}}
+        body {
+            background: white;
+        }
 
-                                        <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                                            Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-                                            plugg
-                                            dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                                        </p>
-                                    </div>
-                                    <!-- /.col -->
-                                    <div class="col-6">
-                                        <p class="lead">Amount Due 2/22/2014</p>
+        .shadow,
+        .shadow-sm {
+            box-shadow: none !important;
+        }
 
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tr>
-                                                    <th style="width:50%">Subtotal:</th>
-                                                    <td>{{$inv->total}}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Total:</th>
-                                                    <td>{{$inv->net_total}}</td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <!-- /.col -->
-                                </div>
-                                <!-- /.row -->
+        .container,
+        .content-wrapper {
+            width: 100% !important;
+            margin: 0;
+            padding: 0;
+        }
 
-                                <!-- this row will not appear when printing -->
-                                <div class="row no-print">
-                                    <div class="col-12">
-                                        <a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                                        <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
-                                            Payment
-                                        </button>
-                                        <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                                            <i class="fas fa-download"></i> Generate PDF
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- /.invoice -->
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </section>
+        .card,
+        .rounded {
+            border: none !important;
+        }
+
+        table {
+            font-size: 12px;
+        }
+
+        h4,
+        h5 {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<section class="content">
+    <div class="container-fluid">
+
+        <div class="text-center mb-4">
+            <h4><strong>فاتورة رقم: {{ $inv->invoice_no }}</strong></h4>
+        </div>
+
+        <div class="card border-0 shadow p-4">
+
+            <div class="row invoice-info mb-4 g-3">
+                <!-- من -->
+                <div class="col-md-4">
+                    <div class="p-4 rounded shadow-sm h-100" style="background-color: #e3f2fd; color: #0d47a1;">
+                        <h5 class="mb-3"><strong>من:</strong></h5>
+                        <address class="mb-0">
+                            <strong>{{ $inv->store->name }}</strong><br>
+                            {{ $inv->store->location }}<br>
+                            هاتف: (804) 123-5432
+                        </address>
+                    </div>
+                </div>
+
+                <!-- إلى -->
+                <div class="col-md-4">
+                    <div class="p-4 rounded shadow-sm h-100" style="background-color: #fce4ec; color: #880e4f;">
+                        <h5 class="mb-3"><strong>إلى:</strong></h5>
+                        <address class="mb-0">
+                            <strong>{{ $inv->client->name }}</strong><br>
+                            {{ $inv->client->address ?? 'العنوان غير متوفر' }}
+                        </address>
+                    </div>
+                </div>
+
+                <!-- تفاصيل -->
+                <div class="col-md-4">
+                    <div class="p-4 rounded shadow-sm h-100" style="background-color: #e8f5e9; color: #1b5e20;">
+                        <h5 class="mb-3"><strong>تفاصيل:</strong></h5>
+                        <address class="mb-0">
+                            <b>تاريخ الفاتورة:</b> {{ $inv->invoice_date }}<br>
+                            <b>عدد القطع:</b> {{ $inv->pieces_no }}<br>
+                            <b>الإجمالي:</b> {{ number_format($inv->net_total, 0) }}
+                        </address>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+<h4 class="mb-3">تفاصيل المنتجات</h4>
+<div class="table-responsive">
+    <table id="invoiceProductsTable" class="table table-bordered table-striped">
+        <thead class="bg-dark text-white text-center">
+            <tr >
+                <th class="text-center">#</th>
+                <th class="text-center"> اسم المنتج</th>
+                <th class="text-center">الكمية</th>
+                <th class="text-center">السعر</th>
+                <th class="text-center">السعر الجزئي</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+                <div class="mt-3 text-end">
+<div class="row justify-content-end mt-4">
+    <div class="col-md-6">
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <th style="width:50%">الإجمالي بدون خصم:</th>
+                    <td>{{ number_format($inv->total, 0) }} جنيه</td>
+                </tr>
+                <tr>
+                    <th>إجمالي الخصومات:</th>
+                    <td>{{ number_format($inv->discount, 0) }} جنيه</td>
+                </tr>
+                <tr>
+                    <th><strong>الصافي (الإجمالي الكلي):</strong></th>
+                    <td><strong>{{ number_format($inv->net_total, 0) }} جنيه</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4 d-print-none">
+            <button onclick="window.print()" class="btn btn-primary">
+                <i class="fas fa-print"></i> طباعة
+            </button>
+        </div>
+
+    </div>
+</section>
 @endsection
+
+@push('scripts')
+<script>
+    $(document).ready(function () {
+$('#invoiceProductsTable').DataTable({
+    processing: true,
+    serverSide: true,
+    ajax: '{{ route('invoices.show', $inv->id) }}',
+    columns: [
+        { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+        { data: 'product_name', name: 'product.name' },
+        { data: 'quantity', name: 'quantity' },
+        { data: 'price', name: 'price' },
+        
+        { data: 'subtotal', name: 'subtotal' }
+    ],
+    searching: false,
+    paging: false,
+    info: false,
+    ordering: false,
+    language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+    }
+});
+
+    });
+</script>
+@endpush

@@ -5,7 +5,7 @@
             <!-- Modal Header -->
             <div class="modal-header bg-primary">
                 <h5 class="modal-title text-white" id="userModalLabel">
-                    <i class="fas fa-user-circle"></i> User Details
+                    <i class="fas fa-user-circle"></i> {{ trans('User Details') }}
                 </h5>
 
                 <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
@@ -18,24 +18,26 @@
                 <div class="card card-primary card-outline shadow-none">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-user"></i> {{trans('Name')}}:</strong> <span id="modal-user-name" class="text-primary"></span></p>
-                                <p><strong><i class="fas fa-envelope"></i> {{trans('Email')}}:</strong> <span id="modal-user-email" class="text-primary"></span></p>
+                            <div class="col-md-6 mb-3">
+                                <p><strong><i class="fas fa-user"></i> {{ trans('Name') }}:</strong> <span id="modal-user-name" class="text-primary"></span></p>
                             </div>
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-briefcase"></i> {{trans('Role')}}: </strong> <span id="modal-user-role" class="text-primary"></span></p>
-                                <p><strong><i class="fas fa-calendar-alt"></i> Joined:</strong> <span id="modal-user-joined" class="text-primary"></span></p>
+                            <div class="col-md-6 mb-3">
+                                <p><strong><i class="fas fa-envelope"></i> {{ trans('Email') }}:</strong> <span id="modal-user-email" class="text-primary"></span></p>
                             </div>
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-briefcase"></i> {{trans('Username')}}:</strong> <span id="modal-username" class="text-primary"></span></p>
+                            <div class="col-md-6 mb-3">
+                                <p><strong><i class="fas fa-briefcase"></i> {{ trans('Username') }}:</strong> <span id="modal-username" class="text-primary"></span></p>
                             </div>
-
-                            <div class="col-md-6">
-                                <p><strong><i class="fas fa-calendar-alt"></i> {{trans('Phone')}}:</strong> <span id="modal-phone" class="text-primary"></span></p>
+                            <div class="col-md-6 mb-3">
+                                <p><strong><i class="fas fa-briefcase"></i> {{ trans('Role') }}:</strong> <span id="modal-user-role" class="text-primary"></span></p>
                             </div>
-
-
+                            <div class="col-md-6 mb-3">
+                                <p><strong><i class="fas fa-calendar-alt"></i> {{ trans('Joined') }}:</strong> <span id="modal-user-joined" class="text-primary"></span></p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p><strong><i class="fas fa-calendar-alt"></i> {{ trans('Phone') }}:</strong> <span id="modal-phone" class="text-primary"></span></p>
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>

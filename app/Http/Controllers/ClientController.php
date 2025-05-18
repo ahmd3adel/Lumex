@@ -161,25 +161,22 @@ class ClientController extends Controller
     public function show($clientId)
     {
         $client = Client::findOrFail($clientId);
-
-        // جلب جميع المعاملات الخاصة بالعميل (فواتير، مرتجعات، دفعات) بترتيب زمني
         $transactions = collect([]);
 
-        // جلب الفواتير (تزيد الرصيد)
         $invoices = Invoice::where('client_id', $clientId)
-            ->select('id', 'pieces_no' , 'invoice_no as reference_no', 'total as amount', 'invoice_date as date')
+            ->select('id', 'pieces_no' , 'invoice_no as reference_no', 'total as amount', 'invoice_date as date' , 'net_total')
             ->get()
             ->map(function ($invoice) {
                 return [
                     'type' => 'invoice',
                     'id' => $invoice->id,
                     'reference_no' => $invoice->reference_no,
-                    'amount' => $invoice->amount,
+                    'amount' => $invoice->net_total,
                     'pieces_no' => $invoice->pieces_no,
                     'date' => $invoice->date,
+                    'net_total' => $invoice->net_total,
                 ];
             });
-        // جلب المرتجعات (تخصم من الرصيد)
         $returns = ReturnGoods::where('client_id', $clientId)
             ->select('id','pieces_no' , 'return_no as reference_no', 'net_total as amount', 'return_date as date')
             ->get()
@@ -194,7 +191,6 @@ class ClientController extends Controller
                 ];
             });
 
-        // جلب الدفعات (تخصم من الرصيد)
         $payments = ReceiptVoucher::where('client_id', $clientId)
             ->select('id', 'voucher_no as reference_no', 'amount', 'receipt_date as date')
             ->get()
@@ -214,8 +210,8 @@ class ClientController extends Controller
             ->merge($payments)
             ->sortBy('date')
             ->values();
-
-        return view('clients.show', compact('client', 'transactions'));
+$pageTitle = $client->name;
+        return view('clients.show', compact('client', 'transactions' , 'pageTitle'));
     }
 
 

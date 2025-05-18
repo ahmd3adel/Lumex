@@ -8,7 +8,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 {{--    <title>{{config('app.name')}} | @yield('title')</title>--}}
-    <title>{{trans('Home')}} | @yield('title')</title>
+    <title>{{trans('El-NOUR')}} | @yield('title')</title>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.min.css">
 

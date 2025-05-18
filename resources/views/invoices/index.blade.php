@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@section('title', $pageTitle . ' PAGE')
+@section('title', trans($pageTitle))
 @push('style')
     <style>
         .custom-modal-width {
@@ -18,13 +18,13 @@
             <div class="container-fluid ">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h1 class="">{{trans('invoice')}}</h1>
+                        <h1 class="">{{trans('invoices table')}}</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         @parent
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="#">{{trans('Home')}}</a></li>
-                            <li class="breadcrumb-item active "> {{trans('invoice table')}} </li>
+                            <li class="breadcrumb-item active "> {{trans('invoices')}} </li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -67,11 +67,12 @@
                                     <i class="fas fa-pieces"></i> {{ trans('no_pieces') }}
                                 </th>
                                 <th class="text-center">
-                                    <i class="fas fa-money-bill-wave"></i> {{ trans('net_total') }}
-                                </th>
-                                <th class="text-center">
                                     <i class="fas fa-wallet"></i> {{ trans('total') }}
                                 </th>
+                                <th class="text-center">
+                                    <i class="fas fa-money-bill-wave"></i> {{ trans('net_total') }}
+                                </th>
+                         
                                 <th class="text-center">
                                     <i class="fas fa-calendar-alt"></i> {{ trans('invoice_date') }}
                                 </th>
@@ -126,12 +127,16 @@
                     { data: 'store', name: 'store' }, // Store column
                     { data: 'client', name: 'client' },
                     { data: 'pieces_no', name: 'pieces_no' },
-                    { data: 'net_total', name: 'net_total' },
                     { data: 'total', name: 'total' },
+                    { data: 'net_total', name: 'net_total' },
+                    
                     { data: 'invoice_date', name: 'invoice_date' },
                     { data: 'actions', name: 'action', orderable: false, searchable: false },
                 ],
-                pageLength:100,
+                pageLength: 200,
+lengthMenu: [[50, 100, 200], [50, 100, 200]],
+
+
                 columnDefs: [
                     {
                         // Target the 'store' column index (2 in this case)
@@ -171,7 +176,6 @@
                         }
                     }
                 ],
-                lengthMenu: [10, 25, 50, 100],
                 language: {
                     lengthMenu: "Show _MENU_ entries",
                     info: "Showing _START_ to _END_ of _TOTAL_ entries",
