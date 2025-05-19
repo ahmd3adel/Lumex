@@ -2,6 +2,7 @@
 
 @section('title', $pageTitle)
 @section('styles')
+
 <style>
     footer.main-footer {
         width: 100%
@@ -103,6 +104,20 @@
 </div>
 
 
+
+<!-- أزرار العمليات -->
+<!-- أزرار العمليات -->
+<div class="mb-3 d-print-none">
+    <a href="{{ route('invoices.create') }}?client_id={{ $client->id }}" class="btn btn-success me-2">
+        <i class="fas fa-file-invoice-dollar"></i> إضافة فاتورة
+    </a>
+    <a href="{{ route('returns.create') }}?client_id={{ $client->id }}" class="btn btn-warning me-2">
+        <i class="fas fa-undo"></i> إضافة مرتجع
+    </a>
+    <a href="{{ route('invoices.create') }}?client_id={{ $client->id }}" class="btn btn-danger">
+        <i class="fas fa-money-bill-wave"></i> إضافة دفعة
+    </a>
+</div>
 
 
 

@@ -51,12 +51,15 @@
                             <!-- Client -->
                             <div class="col-lg-6 mb-3">
                                 <label for="client_id" class="form-label">{{trans('Client')}}</label>
-                                <select id="client_id" name="client_id" class="form-control" required>
-                                    <option value="">{{ trans('Select Client') }}</option>
-                                    @foreach($clients as $client)
-                                        <option value="{{$client->id}}">{{$client->name}}</option>
-                                    @endforeach
-                                </select>
+<select id="client_id" name="client_id" class="form-control" required>
+    <option value="">{{ trans('Select Client') }}</option>
+    @foreach($clients as $client)
+        <option value="{{ $client->id }}" 
+            {{ (isset($selectedClientId) && $selectedClientId == $client->id) ? 'selected' : '' }}>
+            {{ $client->name }}
+        </option>
+    @endforeach
+</select>
                             </div>
 
                             <!-- Store -->

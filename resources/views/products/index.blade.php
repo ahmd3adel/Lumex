@@ -51,8 +51,7 @@
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('price') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('quantity') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('Status') }}</th>
-                                <th><i class="fas fa-phone"></i> {{ trans('description') }}</th>
+                                {{-- <th><i class="fas fa-user"></i> {{ trans('Status') }}</th> --}}
                                 <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>
 
 
@@ -92,8 +91,7 @@
                             { data: 'name', name: 'name' },
                             { data: 'price', name: 'price' },
                             { data: 'quantity', name: 'quantity' },
-                            { data: 'status', name: 'status' },
-                            { data: 'description', name: 'description' },
+                            // { data: 'status', name: 'status' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +

@@ -24,10 +24,29 @@ class Invoice extends Model
         return $this->belongsTo(Store::class);
     }
 
-    public function products()
-    {
-        return $this->hasMany(InvoiceDetails::class, 'invoice_id');
-    }
+    // public function products()
+    // {
+    //     return $this->hasMany(InvoiceDetails::class, 'invoice_id');
+    // }
+
+//     public function products()
+// {
+//     return $this->hasMany(InvoiceDetails::class)->whereHas('product');
+// }
+
+public function products()
+{
+    return $this->hasMany(InvoiceDetails::class, 'invoice_id')->whereHas('product');
+}
+
+
+// public function products()
+// {
+//     return $this->hasMany(InvoiceDetails::class)
+//         ->whereHas('product', function ($q) {
+//             $q->where('store_id', auth()->user()->store_id);
+//         });
+// }
 
 
     protected static function booted()
