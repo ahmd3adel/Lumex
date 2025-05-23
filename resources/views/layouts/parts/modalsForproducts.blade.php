@@ -13,7 +13,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-6">
-                        <p><strong>Name:</strong> <span id="modal-product-name" class="text-primary"></span></p>
+                        <p><strong>{{trans('name')}}</strong> <span id="modal-product-name" class="text-primary"></span></p>
                         <p><strong>Price:</strong> $<span id="modal-product-price" class="text-primary"></span></p>
                     </div>
                     <div class="col-md-6">
@@ -54,20 +54,20 @@
                     <div class="row">
                         <!-- Name Field -->
                         <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter product name" required>
+                            <label for="name" class="form-label">{{trans('name')}}</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="{{ trans('Enter product name') }}" required>
                         </div>
                         <!-- SKU Field -->
                         <!-- Price Field -->
                         <div class="col-md-6 mb-3">
-                            <label for="price" class="form-label">Price</label>
+                            <label for="price" class="form-label">{{trans('Price')}}</label>
                             <input type="number" class="form-control" id="price" name="price" placeholder="Enter product price" step="0.01" required>
                         </div>
                     </div>
                     <div class="row">
                         <!-- Quantity Field -->
                         <div class="col-md-6 mb-3">
-                            <label for="quantity" class="form-label">Quantity</label>
+                            <label for="quantity" class="form-label">{{trans('Quantity')}}</label>
                             <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Enter product quantity" required>
                         </div>
 {{--                        <div id="storeFieldWrapper" class="col-md-6 mb-3">--}}
@@ -83,7 +83,7 @@
                     <div class="row">
                         <!-- Description Field -->
                         <div class="col-md-12 mb-3">
-                            <label for="description" class="form-label">Description</label>
+                            <label for="description" class="form-label">{{trans('Discription')}}</label>
                             <textarea class="form-control" id="description" name="description" rows="3" placeholder="Enter product description"></textarea>
                         </div>
                     </div>

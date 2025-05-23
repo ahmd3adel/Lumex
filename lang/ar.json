@@ -127,7 +127,7 @@
     "Product Name": "الكمية ",
     "Price": "السعر",
     "Subtotal": "السعر الجزئي",
-    "Quantity": "اسم الصنف",
+    "Quantity": " الكمية",
     "Create Invoice": "انشاء فاتورة",
     "Enter quantity": "ادخل الكمية",
     "Return Pieces": " قطع المرتجع",
@@ -136,5 +136,7 @@
     "add deduction": "إضافة خصم" ,
     "Deduction": " خصم" ,
     "Deductions": "خصم",
+    "Discription": "الوصف",
+    "Enter product name": "ادخل اسم الموديل",
     "Invoice Number": "رقم الفاتورة"
 }

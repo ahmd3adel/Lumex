@@ -163,13 +163,21 @@ public function getClientsByStore(Request $request)
 {
     $storeId = $request->store_id;
 
-    // لو في صلاحية معينة للأدمن، ممكن تضيف تحقق هنا مثلاً:
-    // if (!Auth::user()->is_admin) return response()->json(['error' => 'Unauthorized'], 403);
+    // Remove or modify this admin check if agents should access it
+    // if (!Auth::user()->hasRole('admin')) {
+    //     return response()->json(['error' => 'غير مصرح'], 403);
+    // }
 
-    $clients = Client::where('store_id', $storeId)->select('id', 'name')->get();
+    $clients = Client::where('store_id', $storeId)
+                   ->select('id', 'name')
+                   ->get();
 
-    return response()->json(['clients' => $clients]);
+    return response()->json([
+        'clients' => $clients,
+        'message' => $clients->isEmpty() ? 'لا يوجد عملاء لهذا المتجر' : ''
+    ]);
 }
+
 
 
     /**

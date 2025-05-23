@@ -53,11 +53,12 @@
                                 <th class="text-center"><i class="fas fa-user"></i> {{ trans('name') }}</th>
 {{--                                <th class="text-center"><i class="fas fa-store"></i> {{ trans('store') }}</th>--}}
                                 <th class="text-center"><i class="fas fa-store"></i> {{ trans('balance') }}</th>
-                                <th class="text-center"><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
-                                <th class="text-center"><i class="fas fa-map-marker-alt"></i> {{ trans('address') }}</th>
+                                <th class="text-center"><i class="fas fa-map-marker-alt"></i> {{ trans('store') }}</th>
+                                                                <th class="text-center"><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
+
                                 <th class="text-center">
                                 {{--                                    <i class="fas fa-money-bill-wave"></i> --}}
-                                {{ trans('balance') }}</th>
+                                {{ trans('address') }}</th>
 {{--                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>--}}
                             </tr>
                             </thead>

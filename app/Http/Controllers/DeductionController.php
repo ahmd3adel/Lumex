@@ -92,6 +92,8 @@ public function index(\Illuminate\Http\Request $request)
      */
 public function store(StoreDeductionRequest $request)
 {
+
+    // dd($request->all());
     // إذا كان المستخدم وكيل، نأخذ store_id من المستخدم نفسه
     $storeId = Auth::user()->hasRole('agent') ? Auth::user()->store_id : $request->store_id;
 
@@ -101,6 +103,7 @@ public function store(StoreDeductionRequest $request)
         'client_id'  => 'required|exists:clients,id',
         'amount'     => 'required|numeric|min:0',
         'reason'     => 'nullable|string',
+        'date'     => 'nullable',
     ];
 
     if (!Auth::user()->hasRole('agent')) {
@@ -119,7 +122,7 @@ public function store(StoreDeductionRequest $request)
         'store_id'     => $storeId,
         'amount'       => $validated['amount'],
         'notes'        => $validated['reason'] ?? null,
-        'receipt_date' => now(),
+        'receipt_date' => $validated['date'],
         'created_by'   => auth()->id(),
     ];
 

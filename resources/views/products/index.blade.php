@@ -47,10 +47,10 @@
                             <tr>
 
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('Store') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('store') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('price') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('quantity') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('Price') }}</th>
+                                <th><i class="fas fa-user"></i> {{ trans('Quantity') }}</th>
                                 {{-- <th><i class="fas fa-user"></i> {{ trans('Status') }}</th> --}}
                                 <th><pre class="p-0 m-0">        <i class="fas fa-cogs"> </i>{{ trans('actions') }}        </pre></th>
 

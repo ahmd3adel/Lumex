@@ -103,18 +103,17 @@
                                     </thead>
                                     <tbody id="product-list">
                                     <tr>
-                                        <td>
-                                            <select class="form-control" name="product_id[]">
-                                                <option value="">Select Product</option>
-                                                @foreach($products as $product)
-                                                    <option value="{{ $product->id }}"
-                                                            @if($lastProduct && $product->id == $lastProduct->product->id) selected @endif>
-                                                        {{ $product->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-
-                                        </td>
+                                       <td>
+    <select class="form-control" name="product_id[]">
+        <option value="">Select Product</option>
+        @foreach($products as $product)
+            <option value="{{ $product->id }}"
+                @if(isset($lastProduct) && $product->id == optional($lastProduct)->product_id) selected @endif>
+                {{ $product->name }}
+            </option>
+        @endforeach
+    </select>
+</td>
                                         <td>
 <input type="text" name="quantity[]" class="form-control"
        placeholder="{{ trans('Enter quantity') }}"
@@ -308,6 +307,7 @@
 <script>
     $(document).ready(function () {
         $('#store_id').on('change', function () {
+
             var storeId = $(this).val();
             if (storeId) {
                 $.ajax({
