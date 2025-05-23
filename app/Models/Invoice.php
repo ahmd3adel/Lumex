@@ -58,8 +58,8 @@ public function products()
             }
         });
 
-//        parent::boot();
-//        static::observe(GlobalModelObserver::class);
+       parent::boot();
+       static::observe(GlobalModelObserver::class);
     }
 
 

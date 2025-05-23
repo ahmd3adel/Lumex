@@ -32,6 +32,11 @@ class Client extends Model
     {
         return $this->hasMany(ReceiptVoucher::class);
     }
+
+        public function deductions()
+    {
+        return $this->hasMany(Deduction::class);
+    }
     protected static function booted()
     {
         static::addGlobalScope('client', function (Builder $builder) {

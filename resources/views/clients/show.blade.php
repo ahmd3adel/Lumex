@@ -66,6 +66,24 @@
         white-space: nowrap;
         vertical-align: middle;
     }
+    .table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    padding: 10px 12px;
+}
+
+.table thead th {
+    background-color: #343a40;
+    color: white;
+    font-weight: bold;
+}
+
+.table tfoot td {
+    font-weight: bold;
+    background-color: #f8f9fa;
+}
+
 </style>
 @endsection
 
@@ -103,10 +121,6 @@
     </div>
 </div>
 
-
-
-<!-- أزرار العمليات -->
-<!-- أزرار العمليات -->
 <div class="mb-3 d-print-none">
     <a href="{{ route('invoices.create') }}?client_id={{ $client->id }}" class="btn btn-success me-2">
         <i class="fas fa-file-invoice-dollar"></i> إضافة فاتورة
@@ -124,98 +138,128 @@
     <div class="card p-4">
         <div class="card-body">
             <table id="transactionsTable" class="table table-bordered table-striped text-center align-middle">
-                <thead class="table-dark">
-                    <tr>
-                        <th>{{ trans('Reference No') }}</th>
-                        <th>{{ trans('Pieces') }}</th>
-                        <th>{{ trans('Invoice') }}</th>
-                        <th>{{ trans('Return') }}</th>
-                        <th>{{ trans('Payment') }}</th>
-                        <th class="bg-primary text-white">{{ trans('Balance') }}</th>
-                        <th>{{ trans('Date') }}</th>
-                        <th class="d-print-none">{{ trans('Actions') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $balance = 0;
-                        $totalInvoice = 0;
-                        $totalReturn = 0;
-                        $totalPayment = 0;
-                        $totalInvoicePieces = 0;
-                        $totalReturnPieces = 0;
-                    @endphp
-                    @foreach($transactions as $transaction)
-                        @php
-                            $balance += $transaction['amount'];
-                            if ($transaction['type'] == 'invoice') {
-                                $totalInvoice += $transaction['amount'];
-                                $totalInvoicePieces += $transaction['pieces_no'];
-                            } elseif ($transaction['type'] == 'return') {
-                                $totalReturn += $transaction['amount'];
-                                $totalReturnPieces += $transaction['pieces_no'];
-                            } elseif ($transaction['type'] == 'payment') {
-                                $totalPayment += $transaction['amount'];
-                            }
-                            $rowClass = match ($transaction['type']) {
-                                'invoice' => 'table-success',
-                                'return'  => 'table-warning',
-                                'payment' => 'table-danger',
-                                default   => '',
-                            };
-                        @endphp
-                        <tr class="{{ $rowClass }}">
-                            <td><strong>{{ $transaction['reference_no'] }}</strong></td>
-                            <td class="fw-bold @if($transaction['type'] == 'invoice') text-success @elseif($transaction['type'] == 'return') text-warning @endif">
-                                @if($transaction['type'] == 'invoice')
-                                    +{{ number_format($transaction['pieces_no'], 0) }}
-                                @elseif($transaction['type'] == 'return')
-                                    -{{ number_format($transaction['pieces_no'], 0) }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="text-success fw-bold">
-                                @if ($transaction['type'] == 'invoice')
-                                    <a href="{{ route('invoices.show', $transaction['id']) }}" class="text-success text-decoration-none">
-                                        {{ number_format($transaction['amount'], 0) }}
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td class="text-warning fw-bold">
-                                {{ $transaction['type'] == 'return' ? number_format($transaction['amount'], 0) : '-' }}
-                            </td>
-                            <td class="text-danger fw-bold">
-                                {{ $transaction['type'] == 'payment' ? number_format($transaction['amount'], 0) : '-' }}
-                            </td>
-                            <td class="fw-bold bg-light">
-                                {{ number_format($balance, 0) }}
-                            </td>
-                            <td>
-                                <span class="badge bg-secondary">
-                                    {{ \Carbon\Carbon::parse($transaction['date'])->format('d-m-Y') }}
-                                </span>
-                            </td>
-                            <td class="d-print-none text-nowrap align-middle">
-                                @if($transaction['type'] == 'invoice')
-                                    <a href="{{ route('invoices.edit', $transaction['id']) }}" class="btn btn-sm btn-success" title="تعديل الفاتورة">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                @elseif($transaction['type'] == 'return')
-                                    <a href="{{ route('returns.edit', $transaction['id']) }}" class="btn btn-sm btn-warning" title="تعديل المرتجع">
-                                        <i class="fas fa-exchange-alt"></i>
-                                    </a>
-                                @elseif($transaction['type'] == 'payment')
-                                    <a href="{{ route('invoices.edit', $transaction['id']) }}" class="btn btn-sm btn-danger" title="تعديل الدفعة">
-                                        <i class="fas fa-money-bill-wave"></i>
-                                    </a>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
+<thead class="table-dark">
+    <tr>
+        <th>{{ trans('Reference No') }}</th>
+        <th>{{ trans('Pieces') }}</th>
+        <th>{{ trans('Invoice') }}</th>
+        <th>{{ trans('Return') }}</th> <!-- بدل الخصم -->
+        <th class="">{{ trans('Deduction') }}</th> <!-- بدل المرتجع -->
+        <th>{{ trans('Payment') }}</th>
+        <th class="bg-primary text-white">{{ trans('Balance') }}</th>
+        <th>{{ trans('Date') }}</th>
+        <th class="d-print-none">{{ trans('Actions') }}</th>
+    </tr>
+</thead>
+<tbody>
+    @php
+        $balance = 0;
+        $totalInvoice = 0;
+        $totalReturn = 0;
+        $totalPayment = 0;
+        $totalDeduction = 0;
+        $totalInvoicePieces = 0;
+        $totalReturnPieces = 0;
+    @endphp
+
+    @foreach($transactions as $transaction)
+        @php
+            $balance += $transaction['amount'];
+
+            if ($transaction['type'] === 'invoice') {
+                $totalInvoice += $transaction['amount'];
+                $totalInvoicePieces += $transaction['pieces_no'];
+            } elseif ($transaction['type'] === 'return') {
+                $totalReturn += $transaction['amount'];
+                $totalReturnPieces += $transaction['pieces_no'];
+            } elseif ($transaction['type'] === 'deduction') {
+                $totalDeduction += $transaction['amount']; // ← تصحيح هنا
+            } elseif ($transaction['type'] === 'payment') {
+                $totalPayment += $transaction['amount'];
+            }
+
+            $rowClass = match ($transaction['type']) {
+                'invoice' => 'table-success',
+                'return' => 'table-warning',
+                'payment' => 'table-danger',
+                'deduction' => 'table-info', // لون مميز للخصم
+                default => '',
+            };
+        @endphp
+
+        <tr class="{{ $rowClass }}">
+            {{-- رقم المرجع --}}
+            <td><strong>{{ $transaction['reference_no'] }}</strong></td>
+            {{-- عدد القطع --}}
+            <td class="fw-bold text-center @if($transaction['type'] === 'invoice') text-success @elseif($transaction['type'] === 'return') text-warning @endif">
+                @if($transaction['type'] === 'invoice')
+                    +{{ number_format($transaction['pieces_no'], 0) }}
+                @elseif($transaction['type'] === 'return')
+                    -{{ number_format($transaction['pieces_no'], 0) }}
+                @else
+                    -
+                @endif
+            </td>
+            {{-- مبلغ الفاتورة --}}
+            <td class="text-success fw-bold text-center">
+                @if ($transaction['type'] === 'invoice')
+                    <a href="{{ route('invoices.show', $transaction['id']) }}" class="text-success text-decoration-none">
+                        {{ number_format($transaction['amount'], 0) }}
+                    </a>
+                @else
+                    -
+                @endif
+            </td>
+            {{-- مبلغ المرتجع --}}
+            <td class="text-warning fw-bold text-center">
+                {{ $transaction['type'] === 'return' ? number_format($transaction['amount'], 0) : '-' }}
+            </td>
+
+            {{-- مبلغ الخصم --}}
+            <td class="text-info fw-bold text-center">
+                {{ $transaction['type'] === 'deduction' ? number_format($transaction['amount'], 0) : '-' }}
+            </td>
+
+            {{-- مبلغ الدفعة --}}
+            <td class="text-danger fw-bold text-center">
+                {{ $transaction['type'] === 'payment' ? number_format($transaction['amount'], 0) : '-' }}
+            </td>
+
+            {{-- الرصيد --}}
+            <td class="fw-bold bg-light text-center">
+                {{ number_format($balance, 0) }}
+            </td>
+
+            {{-- التاريخ --}}
+            <td class="text-center">
+                <span class="badge bg-secondary">
+                    {{ \Carbon\Carbon::parse($transaction['date'])->format('d-m-Y') }}
+                </span>
+            </td>
+
+            {{-- التحكم --}}
+            <td class="d-print-none text-nowrap align-middle text-center">
+                @if($transaction['type'] === 'invoice')
+                    <a href="{{ route('invoices.edit', $transaction['id']) }}" class="btn btn-sm btn-success" title="تعديل الفاتورة">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                @elseif($transaction['type'] === 'return')
+                    <a href="{{ route('returns.edit', $transaction['id']) }}" class="btn btn-sm btn-warning" title="تعديل المرتجع">
+                        <i class="fas fa-exchange-alt"></i>
+                    </a>
+                @elseif($transaction['type'] === 'payment')
+                    <a href="{{ route('invoices.edit', $transaction['id']) }}" class="btn btn-sm btn-danger" title="تعديل الدفعة">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </a>
+                @elseif($transaction['type'] === 'deduction')
+                    <a href="{{ route('invoices.edit', $transaction['id']) }}" class="btn btn-sm btn-info" title="تعديل الخصم">
+                        <i class="fas fa-percentage"></i>
+                    </a>
+                @endif
+            </td>
+        </tr>
+    @endforeach
+</tbody>
                 <tfoot class="table-dark">
                     <tr>
                         <td></td>
@@ -226,6 +270,7 @@
                         </td>
                         <td class="text-success fw-bold">{{ number_format($totalInvoice, 0) }}</td>
                         <td class="text-warning fw-bold">{{ number_format($totalReturn, 0) }}</td>
+                        <td class="text-info fw-bold">{{ number_format($totalDeduction, 0) }}</td>
                         <td class="text-danger fw-bold">{{ number_format($totalPayment, 0) }}</td>
                         <td class="fw-bold bg-primary text-white">{{ number_format($balance, 0) }}</td>
                         <td></td>

@@ -132,5 +132,9 @@
     "Enter quantity": "ادخل الكمية",
     "Return Pieces": " قطع المرتجع",
     "Invoice Date": " تاريخ الفاتورة",
+    "Additions": "إضافة",
+    "add deduction": "إضافة خصم" ,
+    "Deduction": " خصم" ,
+    "Deductions": "خصم",
     "Invoice Number": "رقم الفاتورة"
 }

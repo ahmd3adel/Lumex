@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Models\Deduction;
 use App\Models\Invoice;
 use App\Models\ReceiptVoucher;
 use App\Models\ReturnGoods;
@@ -37,6 +38,9 @@ class ClientController extends Controller
                     },
                     'payments as total_payments' => function ($query) {
                         $query->select(DB::raw("COALESCE(SUM(amount), 0)"));
+                    },
+                    'deductions as total_deductions' => function ($query) {
+                        $query->select(DB::raw("COALESCE(SUM(amount), 0)"));
                     }
                 ])
                 ->get();
@@ -45,7 +49,7 @@ class ClientController extends Controller
                 ->addIndexColumn()
                 ->addColumn('balance', function ($client) {
                     // حساب الرصيد = الفواتير - المرتجعات - الدفعات
-                    $balance = $client->total_invoices - $client->total_returns - $client->total_payments;
+                    $balance = $client->total_invoices - $client->total_returns - $client->total_payments - $client->total_deductions;
                     return '<span class="badge bg-' . ($balance >= 0 ? 'success' : 'danger') . '">
                             ' . number_format($balance, 0) . '
                         </span>';
@@ -155,6 +159,19 @@ class ClientController extends Controller
         }
     }
 
+public function getClientsByStore(Request $request)
+{
+    $storeId = $request->store_id;
+
+    // لو في صلاحية معينة للأدمن، ممكن تضيف تحقق هنا مثلاً:
+    // if (!Auth::user()->is_admin) return response()->json(['error' => 'Unauthorized'], 403);
+
+    $clients = Client::where('store_id', $storeId)->select('id', 'name')->get();
+
+    return response()->json(['clients' => $clients]);
+}
+
+
     /**
      * Display the specified resource.
      */
@@ -204,10 +221,28 @@ class ClientController extends Controller
                 ];
             });
 
+
+$deductions = Deduction::where('client_id', $clientId)
+    ->select('id', 'voucher_no as reference_no', 'amount', 'receipt_date as date')
+    ->get()
+    ->map(function ($deduction) {
+        return [
+            'type' => 'deduction',
+            'id' => $deduction->id,
+            'reference_no' => $deduction->reference_no,
+            'amount' => -$deduction->amount, // بالسالب لأنه يُخصم من الرصيد
+            'date' => $deduction->date,
+        ];
+    });
+
+
+
         // دمج كل العمليات وترتيبها حسب التاريخ
-        $transactions = $transactions->merge($invoices)
+        $transactions = $transactions
+            ->merge($invoices)
             ->merge($returns)
             ->merge($payments)
+            ->merge($deductions)
             ->sortBy('date')
             ->values();
 $pageTitle = $client->name;

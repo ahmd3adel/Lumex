@@ -9,22 +9,22 @@ use App\Models\Product;
 use App\Models\Store;
 use App\Http\Requests\StoreInvoiceRequest;
 use App\Http\Requests\UpdateInvoiceRequest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Request;
+
 
 class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+       if (request()->ajax()) {
             $storeId = Auth::user()->store_id;
 
             $invoices = Invoice::with(['client:id,name', 'store:id,name'])
                 ->select('id', 'invoice_no', 'client_id', 'store_id', 'total', 'pieces_no', 'net_total', 'invoice_date', 'created_at')
-                ->where('store_id', $storeId)
                 ->orderBy('invoice_no', 'asc')
                 ->get();
 
@@ -80,81 +80,90 @@ class InvoiceController extends Controller
         $lastInvoiceDate = Invoice::latest()->first();
         $lastProduct = $lastInvoice ? InvoiceDetails::where('invoice_id', $lastInvoice->id)->latest()->first() : null;
 
-        $selectedClientId = $request->query('client_id');
+        $selectedClientId = request()->query('client_id');
 
         return view('invoices.add', compact('pageTitle', 'clients', 'products', 'stores', 'lastInvoice', 'lastInvoiceDate', 'lastProduct', 'selectedClientId'));
     }
 
-    public function store(StoreInvoiceRequest $request)
-    {
-        DB::beginTransaction();
+public function store(StoreInvoiceRequest $request)
+{
+    DB::beginTransaction();
 
-        try {
-            $storeId = Auth::user()->hasRole('agent') ? Auth::user()->store_id : $request->store_id;
-            $validated = $request->validated();
+    try {
+        // تحديد المتجر حسب نوع المستخدم
+        $storeId = Auth::user()->hasRole('agent') ? Auth::user()->store_id : $request->store_id;
 
-            if (empty($validated['product_id'])) {
-                throw new \Exception('No products selected');
-            }
+        // استخدام الفاليديشن الجاهز من Form Request
+        $validated = $request->validated();
 
-            $invoice = Invoice::create([
-                'invoice_no' => $validated['invoice_no'],
-                'invoice_date' => $validated['invoice_date'],
-                'client_id' => $validated['client_id'],
-                'discount' => $validated['discount'] ?? 0,
-                'created_by' => Auth::id(),
-                'total' => $validated['total'],
-                'net_total' => $validated['total'] - ($validated['discount'] ?? 0),
-                'store_id' => $storeId,
-                'pieces_no' => array_sum($validated['quantity']),
-                'status' => 'pending'
-            ]);
-
-            $productData = [];
-            $totalPieces = 0;
-
-            foreach ($validated['product_id'] as $key => $productId) {
-                $product = Product::find($productId);
-                if (!$product) {
-                    throw new \Exception("Product with ID {$productId} not found");
-                }
-
-                $quantity = (int) $validated['quantity'][$key];
-                $price = (float) $validated['price'][$key];
-
-                if ($quantity <= 0 || $price <= 0) {
-                    throw new \Exception('Invalid quantity or price for product: ' . $product->name);
-                }
-
-                $productData[] = [
-                    'invoice_id' => $invoice->id,
-                    'product_id' => $productId,
-                    'quantity' => $quantity,
-                    'unit_price' => $price,
-                    'subtotal' => $quantity * $price,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ];
-
-                $totalPieces += $quantity;
-            }
-
-            DB::table('invoice_products')->insert($productData);
-            $invoice->update(['pieces_no' => $totalPieces]);
-
-            DB::commit();
-
-            return redirect()->route('invoices.index')->with('success', 'تم إنشاء الفاتورة بنجاح');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error('Invoice creation failed: ' . $e->getMessage());
-            return redirect()->back()->withInput()->with('error', 'فشل إنشاء الفاتورة: ' . $e->getMessage());
+        // التأكد من أن هناك منتجات مختارة
+        if (empty($validated['product_id']) || !is_array($validated['product_id'])) {
+            throw new \Exception('لم يتم اختيار أي منتج.');
         }
+
+        // إنشاء الفاتورة
+        $invoice = Invoice::create([
+            'invoice_no'   => $validated['invoice_no'],
+            'invoice_date' => $validated['invoice_date'],
+            'client_id'    => $validated['client_id'],
+            'discount'     => $validated['discount'] ?? 0,
+            'created_by'   => Auth::id(),
+            'total'        => $validated['total'],
+            'net_total'    => $validated['total'] - ($validated['discount'] ?? 0),
+            'store_id'     => $storeId,
+            'pieces_no'    => 0, // سنحسبها بعدين
+        ]);
+
+        $productData = [];
+        $totalPieces = 0;
+
+        foreach ($validated['product_id'] as $key => $productId) {
+            $product = Product::find($productId);
+            if (!$product) {
+                throw new \Exception("المنتج رقم {$productId} غير موجود.");
+            }
+
+            $quantity = (int) $validated['quantity'][$key];
+            $price = (float) $validated['price'][$key];
+
+            if ($quantity <= 0 || $price <= 0) {
+                throw new \Exception('الكمية أو السعر غير صالح للمنتج: ' . $product->name);
+            }
+
+            $productData[] = [
+                'invoice_id' => $invoice->id,
+                'product_id' => $productId,
+                'quantity'   => $quantity,
+                'unit_price' => $price,
+                'subtotal'   => $quantity * $price,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+
+            $totalPieces += $quantity;
+        }
+
+        // إدخال تفاصيل المنتجات دفعة واحدة
+        DB::table('invoice_details')->insert($productData);
+
+        // تحديث عدد القطع
+        $invoice->update(['pieces_no' => $totalPieces]);
+
+        DB::commit();
+
+        return redirect()->route('invoices.index')->with('success', 'تم إنشاء الفاتورة بنجاح');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        \Log::error('Invoice creation failed: ' . $e->getMessage());
+
+        return redirect()->back()->withInput()->with('error', 'فشل إنشاء الفاتورة: ' . $e->getMessage());
     }
+}
+
 
     public function show(Request $request, $invoiceId)
     {
-if ($request->ajax()) {
+if (request()->ajax()) {
     $inv = Invoice::with(['products.product'])
         ->where('id', $invoiceId)
         ->firstOrFail();

@@ -91,6 +91,20 @@
                     </a>
                 </li>
 
+                                <li class="nav-item">
+                    <a href="{{ route('receipts.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-receipt me-2"></i>
+                        <p>{{ trans('Additions') }}</p>
+                    </a>
+                </li>
+
+                     <li class="nav-item">
+                    <a href="{{ route('deductions.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-receipt me-2"></i>
+                        <p>{{ trans('Deductions') }}</p>
+                    </a>
+                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

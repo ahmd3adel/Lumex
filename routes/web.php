@@ -58,6 +58,7 @@ Route::group(
             require __DIR__.'/returns.php';
 //            require __DIR__.'/payments.php';
             require __DIR__.'/receipts.php';
+            require __DIR__.'/deductions.php';
         });
         });
 

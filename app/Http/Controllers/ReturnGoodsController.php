@@ -171,8 +171,22 @@ class ReturnGoodsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ReturnGoods $returnGoods)
-    {
-        //
+public function destroy(ReturnGoods $return)
+{
+    \Log::info('تم الوصول إلى دالة الحذف للمرتجع ID: ' . $return->id);
+
+    try {
+        $return->delete();
+        return redirect()->back()->with('success', 'تم حذف المرتجع بنجاح');
+    } catch (\Exception $e) {
+        \Log::error('فشل حذف المرتجع:', [
+            'message' => $e->getMessage(),
+        ]);
+
+        return redirect()->back()->with('error', 'حدث خطأ أثناء محاولة حذف المرتجع');
     }
 }
+  }
+
+
+

@@ -48,6 +48,19 @@
                                 <input type="date" id="invoice_date" value="{{$lastInvoiceDate->invoice_date}}" name="invoice_date" class="form-control" required>
                             </div>
 
+                                                        <!-- Store -->
+                            @if(!Auth::user()->hasRole('agent'))
+                            <div class="col-lg-6 mb-3">
+                                <label for="store_id" class="form-label">Store</label>
+                                <select id="store_id" name="store_id" class="form-control" required>
+                                    <option value="">{{ trans('Select Store') }}</option>
+                                    @foreach($stores as $store)
+                                        <option value="{{$store->id}}">{{$store->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @endif
+
                             <!-- Client -->
                             <div class="col-lg-6 mb-3">
                                 <label for="client_id" class="form-label">{{trans('Client')}}</label>
@@ -62,22 +75,11 @@
 </select>
                             </div>
 
-                            <!-- Store -->
-                            @if(!Auth::user()->hasRole('agent'))
-                            <div class="col-lg-6 mb-3">
-                                <label for="store_id" class="form-label">Store</label>
-                                <select id="store_id" name="store_id" class="form-control" required>
-                                    <option value="">{{ trans('Select Store') }}</option>
-                                    @foreach($stores as $store)
-                                        <option value="{{$store->id}}">{{$store->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            @endif
+
                             <!-- Discount -->
                             <div class="col-lg-6 mb-3">
                                 <label for="discount" class="form-label">{{ trans('Discount') }}</label>
-                                <input type="text" id="discount" name="discount" class="form-control" placeholder="{{trans('Enter discount')}}">
+                                <input type="number" id="discount" name="discount" class="form-control" placeholder="{{trans('Enter discount')}}">
                             </div>
                         </div>
                         <hr>
@@ -114,8 +116,9 @@
 
                                         </td>
                                         <td>
-                                            <input type="text" name="quantity[]" class="form-control" placeholder="{{trans('Enter quantity')}}" value="{{$lastProduct->quantity}}" required>
-                                        </td>
+<input type="text" name="quantity[]" class="form-control"
+       placeholder="{{ trans('Enter quantity') }}"
+       value="{{ $lastProduct ? $lastProduct->quantity : '' }}" required>                                        </td>
                                         <td>
 <input
     type="number"
@@ -123,7 +126,7 @@
     class="form-control"
     placeholder="Enter price"
     step="any"
-    value="{{ $lastProduct->unit_price }}"
+    value="{{ $lastProduct ? $lastProduct->unit_price : '' }}"
     required
     onkeydown="return event.keyCode !== 38 && event.keyCode !== 40"
     onwheel="this.blur()"
@@ -300,4 +303,34 @@
         });
 
     </script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#store_id').on('change', function () {
+            var storeId = $(this).val();
+            if (storeId) {
+                $.ajax({
+                    url: '{{ route("get.clients.by.store") }}',
+                    type: 'GET',
+                    data: { store_id: storeId },
+                    success: function (response) {
+                        var clientSelect = $('#client_id');
+                        clientSelect.empty();
+                        clientSelect.append('<option value="">اختر العميل</option>');
+                        $.each(response.clients, function (key, client) {
+                            clientSelect.append('<option value="' + client.id + '">' + client.name + '</option>');
+                        });
+                    },
+                    error: function () {
+                        alert('حدث خطأ أثناء تحميل العملاء.');
+                    }
+                });
+            } else {
+                $('#client_id').html('<option value="">اختر العميل</option>');
+            }
+        });
+    });
+</script>
+
 @endpush
