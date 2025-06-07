@@ -20,8 +20,6 @@ return new class extends Migration
             $table->decimal('subtotal', 15, 2); // Total price for the quantity
 
             $table->timestamps(); // Created and updated timestamps
-
-            // Foreign key constraints
             $table->foreign('invoice_id')->references('id')->on('invoices')->onDelete('cascade');
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
 

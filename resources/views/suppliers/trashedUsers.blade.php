@@ -1,5 +1,5 @@
 @extends('layouts.index')
-@section('title', trans($pageTitle))
+@section('title' , 'TRASHED PAGE')
 @section('breadcramp')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -19,28 +19,8 @@
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
-@endsection
-<style>
-    .text-primary {
-    color: #007bff;
-    font-weight: bold;
-}
+        @endsection
 
-strong {
-    color: #333;
-}
-
-p {
-    font-size: 14px;
-}
-
-@media (max-width: 767px) {
-    .col-md-6 {
-        width: 100%;
-    }
-}
-
-</style>
         @section('content')
             <div class="container-fluid">
                 <!-- Card for the table -->
@@ -48,20 +28,22 @@ p {
                     <div class="card-header">
                         <h3 class="card-title">{{__('users table')}}</h3>
                         <div class="card-tools">
-                            {{-- <a class="btn btn-secondary btn-sm"  href="{{ route('users.trashed') }}">
+                            <a class="btn btn-secondary btn-sm"  href="{{ route('users.trashed') }}">
                                 <i class="fas fa-trash"></i> @lang('Trashed Users')
-                            </a> --}}
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#createUserModal">
-                                <i class="fas fa-user-plus"></i> {{trans('Add User')}} 
-                            </button>
+                            </a>
+                            <a class="btn btn-primary btn-sm" href="{{route('users.index')}}">
+                                <i class="fas fa-user"></i> @lang('users')
+                            </a>
+
+
+
                         </div>
                     </div>
                     <!-- /.card-header -->
 
-                    <div class="table-responsive">
+                    <div class="table-responsive ">
                         <table id="user-table" class="table table-bordered table-hover w-100">
                             <thead>
-
                             <tr>
                                 <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
                                 <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
@@ -70,14 +52,9 @@ p {
                                 <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
                                 <th><i class="fas fa-user-tag"></i> {{ trans('roles') }}</th>
                                 <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('store') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('created by') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('updated by') }}</th>
-                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"></i>{{ trans('actions') }}             </pre></th>
+                                <th><i class="fas fa-cogs"></i> {{ trans('actions') }}</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            </tbody>
                         </table>
                     </div>
 
@@ -87,19 +64,18 @@ p {
                 <!-- /.card -->
             </div>
 
-        @include('layouts.parts.modalsForUsers')
+            @include('layouts.parts.modals')
 
         @endsection
 
         @push('cssModal')
             <link rel="stylesheet" href="{{asset('dist/css/myCustomTable.css')}}">
         @endpush
-@push('jsModal')
+        @push('jsModal')
 
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
-
 
 
                 $(document).ready(function () {
@@ -107,7 +83,7 @@ p {
                     let table = $('#user-table').DataTable({
                         processing: true, // Show loading indicator
                         serverSide: true, // Enable server-side processing
-                        ajax: "{{ route('users.index') }}", // Dynamic data route
+                        ajax: "{{ route('users.trashed') }}", // Dynamic data route
                         columns: [
                             { data: 'id', name: 'id' },
                             { data: 'name', name: 'name' },
@@ -116,19 +92,34 @@ p {
                             { data: 'phone', name: 'phone' },
                             { data: 'roles', name: 'roles', orderable: false, searchable: false },
                             { data: 'status', name: 'status' },
-                            { data: 'store', name: 'store.name' , searchable: true },
-                            { data: 'created by', name: 'created by' },
-                            { data: 'updated by', name: 'updated by' },
                             { data: 'action', name: 'action', orderable: false, searchable: false }
-
                         ],
                         dom: '<"row d-flex align-items-center p-3"<"col-md-3 col-12"l><"col-md-6 col-12 text-md-end text-center"B><"col-md-3 col-12"f>>' +
                             '<"row"<"col-md-12"t>>' + // Table
                             '<"row"<"col-md-6"i><"col-md-6"p>>', // Pagination and info
                         buttons: [
                             {
+                                extend: 'pdfHtml5',
+                                text: '{{trans("Export To PDF")}}',
+                                className: 'btn btn-danger btn-sm',
+                                orientation: 'portrait',
+                                pageSize: 'A4',
+                                exportOptions: {
+                                    columns: [0, 1, 2, 3 , 4 , 5] // Exported columns
+                                },
+                                customize: function (doc) {
+                                    doc.content.splice(0, 0, {
+                                        text: 'User Report',
+                                        style: 'header',
+                                        alignment: 'center',
+                                        fontSize: 18,
+                                        margin: [0, 0, 0, 20]
+                                    });
+                                }
+                            },
+                            {
                                 extend: 'excelHtml5',
-                                text: '{{trans('to excel')}}',
+                                text: 'Export to Excel',
                                 className: 'btn btn-success btn-sm',
                                 exportOptions: {
                                     columns: [0, 1, 2, 3] // Exported columns
@@ -137,10 +128,10 @@ p {
                         ],
                         lengthMenu: [10, 25, 50, 100], // Rows per page options
                         language: {
-                            lengthMenu: "{{ trans('Show') }} _MENU_ {{ trans('entries') }}",
-                            info: "{{ trans('Showing') }} _START_ {{ trans('to') }} _END_ {{ trans('of') }} _TOTAL_ {{ trans('entries') }}",
+                            lengthMenu: "Show _MENU_ entries",
+                            info: "Showing _START_ to _END_ of _TOTAL_ entries",
                             search: "",
-                            searchPlaceholder: "{{trans('Search...')}}",
+                            searchPlaceholder: "Search...",
                             paginate: {
                                 first: "First",
                                 last: "Last",
@@ -356,44 +347,23 @@ p {
                                 }
                             })
                             .catch(error => {
+                                console.error('Error:', error);
                                 Swal.fire('Error', 'An unexpected error occurred.', 'error');
                             })
                             .finally(() => disableButton(submitButton, false));
                     });
-
-                    // store details modal
-                    document.addEventListener('click', function (e) {
-                        if (e.target.classList.contains('open-store-modal')) {
-                            e.preventDefault();
-                            const storeId = e.target.getAttribute('data-id');
-                            fetch(`/users/store/${storeId}`, {
-                                method: 'GET',
-                                headers: {
-                                    'Accept': 'application/json'
-                                },
-                            })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (data.success) {
-                                        document.getElementById('modal-store-name').innerText = data.data.name;
-                                        document.getElementById('modal-store-location').innerText = data.data.location;
-                                        // Show the modal
-                                        const modal = new bootstrap.Modal(document.getElementById('storeModal'));
-                                        modal.show();
-                                    } else {
-                                        alert('faild')
-                                    }
-                                })
-                                .catch(error => console.error('Error:', error));
-                        }
-                    });
                 });
+
+
+
                 // Utility functions
                 function resetForm(form) {
                     form.reset();
                     form.querySelectorAll('.is-invalid').forEach(input => input.classList.remove('is-invalid'));
                     form.querySelectorAll('.invalid-feedback').forEach(error => error.remove());
                 }
+
+
                 function handleValidationErrors(form, errors) {
                     for (let key in errors) {
                         const input = form.querySelector(`[name="${key}"]`);
@@ -406,6 +376,8 @@ p {
                         }
                     }
                 }
+
+
                 function disableButton(button, disable) {
                     if (disable) {
                         button.disabled = true;
@@ -415,6 +387,7 @@ p {
                         button.innerHTML = 'Submit';
                     }
                 }
+
             </script>
 
 

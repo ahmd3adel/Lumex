@@ -100,8 +100,6 @@ class ProductController extends Controller
     $creator = Auth::user();
     $request->validate([
         'name' => 'required|string|min:3|max:255|regex:/^(?!\d+$).*$/|unique:users,name',
-//        'price' => 'required',
-//        'quantity' => 'required',
     ]);
     try {
 

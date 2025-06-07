@@ -59,6 +59,10 @@ Route::group(
 //            require __DIR__.'/payments.php';
             require __DIR__.'/receipts.php';
             require __DIR__.'/deductions.php';
+            require __DIR__.'/suppliers.php';
+            require __DIR__.'/supplier_invoices.php';
+            require __DIR__.'/supplier_products.php';
+            require __DIR__.'/online_payments.php';
         });
         });
 
