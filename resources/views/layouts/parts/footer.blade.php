@@ -1,4 +1,4 @@
-<footer class="main-footer w-100">
+<footer class="main-footer">
     <!-- الجانب الأيمن -->
     <div class="float-right d-none d-sm-inline">
         <strong>الإصدار: 1.0.0</strong>

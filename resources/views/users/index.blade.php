@@ -26,6 +26,8 @@
     font-weight: bold;
 }
 
+
+
 strong {
     color: #333;
 }
@@ -60,21 +62,25 @@ p {
 
                     <div class="table-responsive">
                         <table id="user-table" class="table table-bordered table-hover w-100">
+
                             <thead>
 
-                            <tr>
-                                <th><i class="fas fa-hashtag"></i> {{ trans('id') }}</th>
-                                <th><i class="fas fa-user"></i> {{ trans('name') }}</th>
-                                <th><i class="fas fa-envelope"></i> {{ trans('email') }}</th>
-                                <th><i class="fas fa-at"></i> {{ trans('username') }}</th>
-                                <th><i class="fas fa-phone"></i> {{ trans('phone') }}</th>
-                                <th><i class="fas fa-user-tag"></i> {{ trans('roles') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('status') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('store') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('created by') }}</th>
-                                <th><i class="fas fa-toggle-on"></i> {{ trans('updated by') }}</th>
-                                <th><pre class="p-0 m-0">        <i class="fas fa-cogs"></i>{{ trans('actions') }}             </pre></th>
-                            </tr>
+<tr>
+    <th><i class="fas fa-hashtag me-1"></i> {{ trans('id') }}</th>
+    <th><i class="fas fa-user me-1"></i> {{ trans('name') }}</th>
+    <th><i class="fas fa-envelope me-1"></i> {{ trans('email') }}</th>
+    <th><i class="fas fa-at me-1"></i> {{ trans('username') }}</th>
+    <th><i class="fas fa-phone me-1"></i> {{ trans('phone') }}</th>
+    <th><i class="fas fa-user-tag me-1"></i> {{ trans('roles') }}</th>
+    <th><i class="fas fa-check-circle me-1"></i> {{ trans('status') }}</th>
+    <th><i class="fas fa-warehouse me-1"></i> {{ trans('store') }}</th>
+    <th><i class="fas fa-user-plus me-1"></i> {{ trans('created by') }}</th>
+    <th><i class="fas fa-user-edit me-1"></i> {{ trans('updated by') }}</th>
+                                <th class="text-center ">
+                                    <pre class="p-0 m-0">         <i class="fas fa-cogs"></i>{{ trans('actions') }}         </pre>
+
+                                </th></tr>
+
                             </thead>
                             <tbody>
                             </tbody>

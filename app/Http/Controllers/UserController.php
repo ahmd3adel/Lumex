@@ -60,23 +60,20 @@ if ($request->ajax()) {
                 })
 
         ->addColumn('action', function ($user) {
-            return '
-    <div class="action-buttons d-flex align-items-center flex-wrap gap-1">
-        <!-- زر العرض -->
-<button type="button" class="btn btn-info btn-sm view-user"
-        data-id="' . htmlspecialchars($user->id) . '"
-        data-name="' . htmlspecialchars($user->name) . '"
-        data-username="' . htmlspecialchars($user->username) . '"
-        data-phone="' . htmlspecialchars($user->phone) . '"
-        data-role="' . htmlspecialchars($user->roles->pluck('name')->join(', ')) . '"
-        data-joined="' . $user->created_at->format('Y-m-d H:i:s') . '"
-        data-store_id="' . htmlspecialchars($user->store_id) . '"
-        data-email="' . htmlspecialchars($user->email) . '">
-    <i class="fas fa-eye"></i> ' . trans('view') . '
-</button>
+return '
+    <div class="action-buttons d-flex flex-wrap align-items-center gap-1">
+        <button type="button" class="btn btn-info btn-sm view-user"
+                data-id="' . htmlspecialchars($user->id) . '"
+                data-name="' . htmlspecialchars($user->name) . '"
+                data-username="' . htmlspecialchars($user->username) . '"
+                data-phone="' . htmlspecialchars($user->phone) . '"
+                data-role="' . htmlspecialchars($user->roles->pluck("name")->join(", ")) . '"
+                data-joined="' . $user->created_at->format("Y-m-d H:i:s") . '"
+                data-store_id="' . htmlspecialchars($user->store_id) . '"
+                data-email="' . htmlspecialchars($user->email) . '">
+            <i class="fas fa-eye"></i> ' . trans('view') . '
+        </button>
 
-
-        <!-- زر التعديل -->
         <button type="button" class="btn btn-warning btn-sm edit-user"
                 data-id="' . htmlspecialchars($user->id) . '"
                 data-name="' . htmlspecialchars($user->name) . '"
@@ -87,15 +84,16 @@ if ($request->ajax()) {
             <i class="fas fa-edit"></i> ' . trans('Edit') . '
         </button>
 
-        <!-- زر الحذف -->
-        <form action="' . route('users.destroy', $user->id) . '" method="POST" class="delete d-inline-block">
+        <form action="' . route('users.destroy', $user->id) . '" method="POST" class="d-inline-block">
             ' . csrf_field() . method_field('DELETE') . '
             <button type="submit" class="btn btn-danger btn-sm">
                 <i class="fas fa-trash"></i> ' . trans('Delete') . '
             </button>
         </form>
     </div>
-    ';
+';
+
+
         })
 
 
@@ -289,7 +287,7 @@ if ($request->ajax()) {
                 })
                 ->addColumn('action', function ($user) {
                     return '
-<div class="action-buttons d-flex flex-wrap justify-content-start gap-1">
+<div class="action-buttons">
     <button class="btn btn-info btn-sm view-user"
             data-id="' . $user->id . '"
             data-name="' . $user->name . '"

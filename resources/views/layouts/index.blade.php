@@ -29,13 +29,8 @@
   <!-- Main Footer -->
   @include('layouts.parts.footer')
 </div>
-<!-- ./wrapper -->
 
-<!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
-
-<script src="plugins/jquery/jquery.min.js"></script>
 @include('layouts.parts.scripts')
 @stack('scripts')
 </body>
